@@ -8,7 +8,7 @@ import ArchiveServiceWear from './ArchiveServiceWear';
 import {createBackpackSocket} from './ArchiveBackpackMotion';
 import {createAuthoredLocomotion,applyAuthoredLocomotion} from './ArchiveHumanMotion';
 import {configureModelCulling} from './ArchiveModelCulling';
-import {runtimeAssetUrl} from './RuntimeAssets';
+import {runtimeAssetUrl,runtimeStaticAssetUrl} from './RuntimeAssets';
 
 // Downloaded, redistributable CC0 assets. Provenance and checksums live next to
 // the files in public/assets/ready-models/CREDITS.md; these are not generated
@@ -52,7 +52,7 @@ function cloneMaterials(object,variant=0,worker=false){
 
 /** A photographed botanical model with actual irregular leaves, bark and pot. */
 export function ImportedTree({time,position=[2.02,.18,2.04],height=2.2,rotation=0}){
- const {scene}=useGLTF(PLANT),{gl}=useThree();
+ const {scene}=useGLTF(runtimeStaticAssetUrl(PLANT)),{gl}=useThree();
  const model=useMemo(()=>{
   const root=scene.clone(true),bounds=new THREE.Box3().setFromObject(root),size=bounds.getSize(new THREE.Vector3());
   const fit=height/size.y,center=bounds.getCenter(new THREE.Vector3()),materials=cloneMaterials(root);

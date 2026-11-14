@@ -97,3 +97,21 @@
 
 .archive-editorial__index::before{content:"";width:22px;height:2px;background:var(--archive-crimson);align-self:center;flex-shrink:0}
 .archive-editorial__direction{border-top:1px solid #1b252826;padding-top:14px}
+
+/* Reserve the central scene on compact screens instead of covering its detail. */
+.archive-editorial{top:calc(clamp(116px,14.5svh,158px) + var(--journey-safe-top,0px))}
+@media(max-width:760px){
+ .archive-editorial{top:calc(94px + var(--journey-safe-top,0px));left:max(6%,calc(12px + var(--journey-safe-left,0px)));width:88%;gap:9px}
+ .archive-editorial__index{font-size:8px;gap:8px;letter-spacing:.12em}
+ .archive-editorial__index::before{width:16px}
+ .archive-editorial .archive-editorial__title{font-size:clamp(29px,8.1vw,38px);line-height:1.04}
+ .archive-editorial .archive-editorial__description{display:none}
+ .archive-editorial__direction{display:none}
+}
+@media(max-height:520px) and (orientation:landscape){
+ .archive-editorial{top:calc(76px + var(--journey-safe-top,0px));left:max(4%,calc(12px + var(--journey-safe-left,0px)));width:28%;gap:8px}
+ .archive-editorial__index{font-size:7px;gap:6px;letter-spacing:.10em}
+ .archive-editorial__index::before{width:14px}
+ .archive-editorial .archive-editorial__title{font-size:clamp(25px,3.3vw,34px)}
+ .archive-editorial .archive-editorial__description,.archive-editorial__direction{display:none}
+}

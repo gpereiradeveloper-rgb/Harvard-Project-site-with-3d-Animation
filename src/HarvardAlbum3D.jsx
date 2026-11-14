@@ -3,6 +3,7 @@ import {Canvas, useFrame, useThree} from '@react-three/fiber';
 import {Environment, Lightformer, RoundedBox} from '@react-three/drei';
 import * as THREE from 'three';
 import {useViewportRenderQuality} from './RenderQuality';
+import {fitAlbumViewport} from './AlbumViewport';
 import './HarvardAlbum3D.css';
 
 const PAGE_W = 5.55, PAGE_H = 6.65, BOARD = .16;
@@ -65,15 +66,18 @@ function pageMap(side,portrait) {
   });
 }
 
-function outerCoverMap() {
-  return canvasTexture(3072,4096,(ctx,w,h)=>{
+function outerCoverMap(portrait=false,height=2048) {
+  return canvasTexture(height*.75,height,(ctx,textureWidth,textureHeight)=>{
+    ctx.scale(textureWidth/3072,textureHeight/4096);
+    let w=3072,h=4096;
+    if(portrait){ctx.translate(w/2,h/2);ctx.rotate(Math.PI/2);ctx.translate(-h/2,-w/2);[w,h]=[h,w];}
     ctx.fillStyle='#253644';ctx.fillRect(0,0,w,h);const random=seeded(1636);
     for(let i=0;i<65000;i++){ctx.fillStyle=`rgba(225,218,194,${random()*.045})`;ctx.fillRect(random()*w,random()*h,1,2);}
-    ctx.strokeStyle='#b69b63';ctx.lineWidth=4;ctx.strokeRect(158,158,w-316,h-316);ctx.lineWidth=1.5;ctx.strokeRect(183,183,w-366,h-366);
-    ctx.fillStyle='#d9c59b';ctx.textAlign='center';ctx.font='41px Georgia,serif';ctx.fillText('CAMBRIDGE · MASSACHUSETTS',w/2,506);
-    ctx.strokeStyle='#c5ac77';drawShield(ctx,w/2,1225,3.0);
-    ctx.font='306px Georgia,serif';ctx.fillText('HARVARD',w/2,2198);ctx.font='italic 161px Georgia,serif';ctx.fillText('An atlas of ideas.',w/2,2487);
-    ctx.beginPath();ctx.moveTo(w*.43,2820);ctx.lineTo(w*.57,2820);ctx.stroke();ctx.font='93px Georgia,serif';ctx.fillText('VERITAS',w/2,3146);ctx.font='53px Georgia,serif';ctx.fillText('EST. 1636',w/2,3570);
+    ctx.strokeStyle='#b69b63';ctx.lineWidth=4;ctx.strokeRect(w*.0514,h*.0386,w*.8972,h*.9228);ctx.lineWidth=1.5;ctx.strokeRect(w*.0596,h*.0447,w*.8808,h*.9106);
+    ctx.fillStyle='#d9c59b';ctx.textAlign='center';ctx.font=`${w*.01335}px Georgia,serif`;ctx.fillText('CAMBRIDGE · MASSACHUSETTS',w/2,h*.1235);
+    ctx.strokeStyle='#c5ac77';drawShield(ctx,w/2,h*.299,w*.0009766);
+    ctx.font=`${Math.min(w*.0996,h*.095)}px Georgia,serif`;ctx.fillText('HARVARD',w/2,h*.5366);ctx.font=`italic ${Math.min(w*.0524,h*.07)}px Georgia,serif`;ctx.fillText('An atlas of ideas.',w/2,h*.6072);
+    ctx.beginPath();ctx.moveTo(w*.43,h*.6885);ctx.lineTo(w*.57,h*.6885);ctx.stroke();ctx.font=`${w*.0303}px Georgia,serif`;ctx.fillText('VERITAS',w/2,h*.7681);ctx.font=`${w*.01725}px Georgia,serif`;ctx.fillText('EST. 1636',w/2,h*.8716);
   });
 }
 
@@ -95,15 +99,16 @@ function assembled(frame,order) {
 }
 
 function Bookmark({frame,order,reduced,color}) {
+  const lastGeometry=useRef(-1);
   const geometry=useMemo(()=>{const g=new THREE.PlaneGeometry(.082,.46,1,15);g.translate(0,-.23,0);return g;},[]);
   const base=useMemo(()=>new Float32Array(geometry.attributes.position.array),[geometry]);
   useEffect(()=>()=>geometry.dispose(),[geometry]);
-  useFrame(()=>{const p=geometry.attributes.position,time=frame.clock||0;for(let i=0;i<p.count;i++){const x=base[i*3],y=base[i*3+1],u=-y/.46;p.setXYZ(i,x+(reduced?0:Math.sin(time*.72+order*.9-u*2.3)*.017*u*u),y,Math.sin(u*2.3)*.024+(reduced?0:Math.sin(time*.85+order-u*3)*.028*u*u));}p.needsUpdate=true;geometry.computeVertexNormals();});
+  useFrame(()=>{const tick=reduced?0:Math.floor((frame.clock||0)*30);if(lastGeometry.current===tick)return;lastGeometry.current=tick;const p=geometry.attributes.position,time=tick/30;for(let i=0;i<p.count;i++){const x=base[i*3],y=base[i*3+1],u=-y/.46;p.setXYZ(i,x+(reduced?0:Math.sin(time*.72+order*.9-u*2.3)*.017*u*u),y,Math.sin(u*2.3)*.024+(reduced?0:Math.sin(time*.85+order-u*3)*.028*u*u));}p.needsUpdate=true;geometry.computeVertexNormals();});
   return <mesh geometry={geometry} position={[.27,-1.05,.025]} rotation-z={order%2?.09:-.07} castShadow><meshPhysicalMaterial color={color} roughness={.72} sheen={.7} sheenColor="#ead7a7" side={THREE.DoubleSide}/></mesh>;
 }
 
 function ArchiveNote({side,portrait,fabric,frame,reduced}) {
-  const ref=useRef(),order=side==='left'?0:1;
+  const ref=useRef(),lastGeometry=useRef(''),order=side==='left'?0:1;
   const texture=useMemo(()=>canvasTexture(1024,640,(ctx,w,h)=>{drawPaper(ctx,w,h);ctx.textAlign='left';ctx.fillStyle='#43505a';ctx.font='italic 72px Georgia,serif';ctx.fillText(order?'A new question.':'Notes from the atlas.',90,175);ctx.strokeStyle='#b09b7044';ctx.lineWidth=1.4;for(let y=250;y<540;y+=76){ctx.beginPath();ctx.moveTo(95,y);ctx.lineTo(w-100-(y%3)*17,y);ctx.stroke();}ctx.font='21px Georgia,serif';ctx.fillStyle='#9b8254';ctx.fillText('HARVARD · VERITAS',95,574);}),[order]);
   const geometry=useMemo(()=>new THREE.PlaneGeometry(1.18,.78,18,10),[]),base=useMemo(()=>new Float32Array(geometry.attributes.position.array),[geometry]);
   useEffect(()=>()=>{texture.dispose();geometry.dispose();},[texture,geometry]);
@@ -113,6 +118,7 @@ function ArchiveNote({side,portrait,fabric,frame,reduced}) {
     const x=portrait?(side==='left'?1.85:-1.85):(side==='left'?-1.85:1.85),y=portrait?(side==='left'?-2.20:2.20):-2.31;
     ref.current.position.set(x+(1-build)*(side==='left'?-.32:.32),y-(1-build)*.32,.12+(1-build)*.55+ambient*Math.sin(time*.52+order)*.012);
     ref.current.rotation.set((1-build)*-.23,0,(portrait?-Math.PI/2:0)+(side==='left'?-.105:.085)+(1-build)*.12);
+    const tick=ambient?Math.floor(time*30):0,key=`${tick}:${ambient}`;if(lastGeometry.current===key)return;lastGeometry.current=key;
     const p=geometry.attributes.position;for(let i=0;i<p.count;i++){const x0=base[i*3],y0=base[i*3+1],u=(x0+.59)/1.18,v=(y0+.39)/.78;p.setXYZ(i,x0,y0,Math.sin(u*Math.PI)*.014+Math.pow(u,3)*(.026+ambient*Math.sin(time*.65+order+v*1.2)*.019));}p.needsUpdate=true;geometry.computeVertexNormals();
   });
   return <mesh ref={ref} geometry={geometry} castShadow receiveShadow><meshStandardMaterial map={texture} bumpMap={fabric.fibre} bumpScale={.0016} roughness={.96} side={THREE.DoubleSide}/></mesh>;
@@ -163,13 +169,33 @@ function MiniVolume({volume,index,side,portrait,fabric,frame,selected,hovered,on
   </group>;
 }
 
+
+function AlbumShadowBudget({frame,quality,active}){
+  const {gl}=useThree(),sample=useRef({time:0,opening:-1,progress:-1,selection:null});
+  useEffect(()=>{const previous=gl.shadowMap.autoUpdate;gl.shadowMap.autoUpdate=quality==='cinema';gl.shadowMap.needsUpdate=true;return()=>{gl.shadowMap.autoUpdate=previous;gl.shadowMap.needsUpdate=true;};},[gl,quality]);
+  useFrame((_,delta)=>{
+    if(!active||document.hidden||quality==='cinema')return;
+    const s=sample.current;s.time+=Math.min(delta,.1);
+    const command=Math.abs(s.opening-frame.opening)>.0001||Math.abs(s.progress-frame.progress)>.0001||s.selection!==frame.selection;
+    if(command||(!frame.paused&&s.time>=1/30)||frame.selection){gl.shadowMap.needsUpdate=true;s.time=0;s.opening=frame.opening;s.progress=frame.progress;s.selection=frame.selection;}
+  },-2);
+  return null;
+}
+
 function AlbumScene({motion,quality,reduced,paused,active,selected,hovered,onHover,onSelect,onDelivered,onOpened,onReady}) {
   const root=useRef(),hinge=useRef(),spine=useRef(),progress=useRef(0),opening=useRef(0),ambientClock=useRef(0),selectionClock=useRef(0),lastSelection=useRef(null),ready=useRef(false),wasOpen=useRef(false);
   const {camera,size,gl}=useThree();
   const portrait=size.width/size.height<.88;
-  const fabric=useMemo(fabricMaps,[]),leftMap=useMemo(()=>pageMap('left',portrait),[portrait]),rightMap=useMemo(()=>pageMap('right',portrait),[portrait]),coverMap=useMemo(outerCoverMap,[]);
-  const frame=useMemo(()=>({opening:0,progress:0,clock:0,paused:false,selection:null,selectionElapsed:0}),[]),eye=useMemo(()=>new THREE.Vector3(),[]);
-  useEffect(()=>()=>{Object.values(fabric).forEach(t=>t.dispose());coverMap.dispose();},[fabric,coverMap]);
+  const [safe,setSafe]=useState({top:0,bottom:0});
+  const framing=useRef({key:'',value:null});
+  useEffect(()=>{const host=gl.domElement.closest('.harvard-journey');if(!host)return;const style=getComputedStyle(host);setSafe({top:parseFloat(style.getPropertyValue('--journey-safe-top'))||0,bottom:parseFloat(style.getPropertyValue('--journey-safe-bottom'))||0});},[gl,size.width,size.height]);
+  useEffect(()=>{camera.position.set(0,portrait?.25:1.35,16.3);camera.lookAt(0,0,0);camera.updateProjectionMatrix();camera.updateMatrixWorld();},[camera,portrait,size.width,size.height]);
+  useEffect(()=>{gl.domElement.style.cursor=hovered&&active?'pointer':'auto';},[gl,hovered,active]);
+  const coverHeight=quality==='cinema'||Math.max(size.width,size.height)>1600?4096:2048;
+  const fabric=useMemo(fabricMaps,[]),leftMap=useMemo(()=>pageMap('left',portrait),[portrait]),rightMap=useMemo(()=>pageMap('right',portrait),[portrait]),coverMap=useMemo(()=>outerCoverMap(portrait,coverHeight),[portrait,coverHeight]);
+  const frame=useMemo(()=>({opening:0,progress:0,clock:0,paused:false,selection:null,selectionElapsed:0}),[]);
+  useEffect(()=>()=>{Object.values(fabric).forEach(t=>t.dispose());},[fabric]);
+  useEffect(()=>()=>coverMap.dispose(),[coverMap]);
   useEffect(()=>()=>leftMap.dispose(),[leftMap]);useEffect(()=>()=>rightMap.dispose(),[rightMap]);
   useFrame((state,delta)=>{
     if(!root.current||!hinge.current)return;
@@ -183,25 +209,23 @@ function AlbumScene({motion,quality,reduced,paused,active,selected,hovered,onHov
     const o=opening.current;frame.opening=o;frame.progress=progress.current;frame.clock=ambientClock.current;frame.paused=paused;frame.selection=selected;frame.selectionElapsed=selectionClock.current;
     hinge.current.rotation.y=-Math.PI*o;hinge.current.position.z=.995-o*1.015;
     if(spine.current){spine.current.scale.z=1-o*.81;spine.current.position.z=.30-o*.44;}
-    eye.set(0,portrait?.25:1.35,16.3);camera.position.copy(eye);camera.lookAt(0,0,0);camera.updateProjectionMatrix();
-    const viewH=2*eye.length()*Math.tan(THREE.MathUtils.degToRad(36)/2),viewW=viewH*size.width/size.height;
-    const contentW=portrait?PAGE_H:PAGE_W*2,contentH=portrait?PAGE_W*2:PAGE_H,scale=Math.min(viewW*.94/contentW,viewH*.91/contentH);
-    root.current.scale.setScalar(scale);root.current.rotation.set(0,0,portrait?Math.PI/2:0);
-    // Closed cover is centred; the object expands into a complete, fitted spread.
-    const offset=(1-o)*PAGE_W*.5*scale;
-    root.current.position.set(portrait?0:-offset,portrait?-offset:0,0);
+    const key=`${size.width}:${size.height}:${Math.round(o*2000)}:${Boolean(selected)}:${safe.top}:${safe.bottom}`;
+    if(framing.current.key!==key){framing.current={key,value:fitAlbumViewport({width:size.width,height:size.height,opening:o,selected:Boolean(selected),safeTop:safe.top,safeBottom:safe.bottom})};}
+    const fit=framing.current.value;
+    root.current.scale.setScalar(fit.scale);root.current.rotation.set(0,0,portrait?Math.PI/2:0);
+    root.current.position.set(...fit.position);
     const opened=o>.94;if(opened!==wasOpen.current){wasOpen.current=opened;onOpened(opened);}
     gl.domElement.dataset.albumProgress=progress.current.toFixed(4);gl.domElement.dataset.albumOpening=o.toFixed(4);gl.domElement.dataset.albumSelection=selected||'';gl.domElement.dataset.albumLayout=portrait?'portrait':'landscape';gl.domElement.dataset.albumAmbientTime=ambientClock.current.toFixed(3);gl.domElement.dataset.albumAssembled=ALBUM_VOLUMES.filter((_,order)=>assembled(frame,order)>.99).length;
-    gl.domElement.style.cursor=hovered&&active?'pointer':'auto';
     if(!ready.current){ready.current=true;onReady?.();}
   },-1);
   const cloth={color:'#263846',normalMap:fabric.normal,normalScale:new THREE.Vector2(.19,.19),roughnessMap:fabric.rough,roughness:.97,sheen:.15,sheenColor:'#b4bcc0'};
   const paperMaterial={bumpMap:fabric.fibre,bumpScale:.0026,roughnessMap:fabric.rough,roughness:.99};
   return <>
+    <AlbumShadowBudget frame={frame} quality={quality} active={active}/>
     <ambientLight intensity={.42}/><hemisphereLight args={['#fff5df','#575041',1.1]}/>
     <spotLight position={[-5,8,13]} angle={.7} penumbra={.9} intensity={285} decay={2} color="#fff2d4" castShadow shadow-mapSize-width={quality==='cinema'?2048:1536} shadow-mapSize-height={quality==='cinema'?2048:1536} shadow-camera-near={1} shadow-camera-far={40} shadow-bias={-.0002}/>
     <directionalLight position={[7,-2,5]} intensity={1.1} color="#d9e5ec"/>
-    <Environment resolution={256}><Lightformer position={[-5,5,8]} rotation-y={.35} scale={[5,9,1]} intensity={1.6} color="#fff5de"/><Lightformer position={[6,1,7]} rotation-y={-.5} scale={[4,8,1]} intensity={1.1} color="#e5edf2"/></Environment>
+    <Environment resolution={256} frames={1}><Lightformer position={[-5,5,8]} rotation-y={.35} scale={[5,9,1]} intensity={1.6} color="#fff5de"/><Lightformer position={[6,1,7]} rotation-y={-.5} scale={[4,8,1]} intensity={1.1} color="#e5edf2"/></Environment>
     <mesh position={[0,0,-1.05]} receiveShadow><planeGeometry args={[55,55]}/><meshStandardMaterial color="#c5b79c" bumpMap={fabric.fibre} bumpScale={.012} roughness={1}/></mesh>
     <group ref={root}>
       <RoundedBox args={[PAGE_W+.15,PAGE_H+.17,BOARD]} radius={.055} smoothness={4} position={[PAGE_W/2,0,-.29]} castShadow receiveShadow><meshPhysicalMaterial {...cloth}/></RoundedBox>
@@ -236,6 +260,8 @@ class AlbumBoundary extends React.Component {
 /** Full-viewport physical folio. Parent supplies BOOK-LOCAL scroll progress 0..1. */
 export default function HarvardAlbum3D({motion,quality='high',reduced=false,paused=false,active=true,onVolume,onReady}) {
   const profile=useViewportRenderQuality(quality),zero=useRef({progress:0});
+  const [visible,setVisible]=useState(()=>!document.hidden);
+  useEffect(()=>{const sync=()=>setVisible(!document.hidden);document.addEventListener('visibilitychange',sync);return()=>document.removeEventListener('visibilitychange',sync);},[]);
   const [selected,setSelected]=useState(null),[hovered,setHovered]=useState(null),[opened,setOpened]=useState(false),[failed,setFailed]=useState(false);
   const delivered=useRef(false),callback=useRef(onVolume),resetTimer=useRef();callback.current=onVolume;
   useEffect(()=>{if(!active){clearTimeout(resetTimer.current);setSelected(null);setHovered(null);delivered.current=false;}},[active]);
@@ -243,7 +269,7 @@ export default function HarvardAlbum3D({motion,quality='high',reduced=false,paus
   const select=id=>{if(!active||selected)return;if(failed){callback.current?.(id);return;}clearTimeout(resetTimer.current);delivered.current=false;setSelected(id);};
   const handoff=id=>{if(delivered.current)return;delivered.current=true;callback.current?.(id);resetTimer.current=setTimeout(()=>{setSelected(null);setHovered(null);},350);};
   return <section className={`harvard-album-3d ${opened?'ha3-open':'ha3-closed'} ${selected?'ha3-selecting':''}`} aria-label="Harvard album with six interactive volumes" data-active={active}>
-    <div className="ha3-canvas"><AlbumBoundary onVolume={onVolume} onFailure={()=>setFailed(true)}><Canvas dpr={profile.dpr} shadows={{type:THREE.PCFSoftShadowMap}} frameloop={active?'always':'demand'} camera={{position:[0,1.35,16.3],fov:36,near:.1,far:65}} gl={{alpha:true,antialias:true,powerPreference:'high-performance'}} fallback={<span aria-hidden="true">Harvard’s visual album.</span>} onCreated={({gl})=>{gl.domElement.setAttribute('aria-hidden','true');gl.setClearColor('#000000',0);gl.outputColorSpace=THREE.SRGBColorSpace;gl.toneMapping=THREE.ACESFilmicToneMapping;gl.toneMappingExposure=1.08;}}><Suspense fallback={null}><AlbumScene motion={motion||zero.current} quality={quality} reduced={reduced} paused={paused} active={active} selected={selected} hovered={hovered} onHover={setHovered} onSelect={select} onDelivered={handoff} onOpened={setOpened} onReady={onReady}/></Suspense></Canvas></AlbumBoundary></div>
+    <div className="ha3-canvas"><AlbumBoundary onVolume={onVolume} onFailure={()=>setFailed(true)}><Canvas dpr={profile.dpr} shadows={{type:THREE.PCFSoftShadowMap}} frameloop={active&&visible?'always':'demand'} camera={{position:[0,1.35,16.3],fov:36,near:.1,far:65}} gl={{alpha:true,antialias:true,powerPreference:'high-performance'}} fallback={<span aria-hidden="true">Harvard’s visual album.</span>} onCreated={({gl})=>{gl.domElement.setAttribute('aria-hidden','true');gl.setClearColor('#000000',0);gl.outputColorSpace=THREE.SRGBColorSpace;gl.toneMapping=THREE.ACESFilmicToneMapping;gl.toneMappingExposure=1.08;}}><Suspense fallback={null}><AlbumScene motion={motion||zero.current} quality={quality} reduced={reduced} paused={paused} active={active} selected={selected} hovered={hovered} onHover={setHovered} onSelect={select} onDelivered={handoff} onOpened={setOpened} onReady={onReady}/></Suspense></Canvas></AlbumBoundary></div>
     <div className="ha3-instruction" aria-hidden="true"><span>{opened?'SIX VOLUMES. NEW PERSPECTIVES.':'AN ALBUM TO DISCOVER.'}</span><p>{selected?'Opening the volume…':opened?'Choose a book. Keep discovering.':'Scroll to open — or choose a volume.'}</p></div>
     <nav className="ha3-volume-nav" aria-label="Album volumes">{ALBUM_VOLUMES.map((volume,index)=><button key={volume.id} onClick={()=>select(volume.id)} onPointerEnter={()=>setHovered(volume.id)} onPointerLeave={()=>setHovered(null)} onFocus={()=>setHovered(volume.id)} onBlur={()=>setHovered(null)} disabled={Boolean(selected)||!active} aria-label={`Open ${volume.title}`}><span>{String(index+1).padStart(2,'0')}</span>{volume.title}</button>)}</nav>
     <p className="ha3-sr" role="status" aria-live="polite">{selected?`Opening ${ALBUM_VOLUMES.find(v=>v.id===selected)?.title}`:opened?'Album open. Choose one of the six volumes.':'Album closed. Scroll to open it or choose a volume from the controls.'}</p>

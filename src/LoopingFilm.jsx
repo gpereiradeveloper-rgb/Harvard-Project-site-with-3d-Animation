@@ -284,7 +284,7 @@ const LoopingFilm = forwardRef(function LoopingFilm({
   }, [active, reducedMotion]);
 
   return <div className="looping-film" data-film-status={status} data-film-source={selected.current === 1 ? 'fallback' : 'primary'}>
-    {poster && <img ref={image=>{if(image?.complete&&image.naturalWidth)onPosterReady?.();}} className="looping-film__poster" src={poster} alt="" aria-hidden="true" draggable="false" onLoad={onPosterReady} onError={onPosterReady} style={{ transition: 'none' }} />}
+    {poster && <img ref={image=>{if(image?.complete&&image.naturalWidth)onPosterReady?.();}} className="looping-film__poster" fetchPriority="high" decoding="async" src={poster} alt="" aria-hidden="true" draggable="false" onLoad={onPosterReady} onError={onPosterReady} style={{ transition: 'none' }} />}
     {sources.current.map((source, index) => source && <video
       key={index}
       ref={element => { videos.current[index] = element; }}

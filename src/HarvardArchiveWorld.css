@@ -8,3 +8,6 @@
 .has-receiving-focus .archive-editorial,.has-receiving-focus .archive-world-hotspot,.has-receiving-focus .hj-world-label{visibility:hidden!important;pointer-events:none!important}
 @media(max-width:760px){.archive-receiving-focus{right:5%;bottom:132px;min-height:44px;padding:10px 13px;font-size:10px}}
 @media(prefers-reduced-motion:reduce){.archive-receiving-focus{transition:none}}
+.archive-receiving-focus{bottom:calc(80px + var(--journey-safe-bottom,0px));right:max(4%,calc(12px + var(--journey-safe-right,0px)));max-width:calc(100% - 24px);text-align:center}
+@media(max-width:760px){.archive-receiving-focus{bottom:calc(116px + var(--journey-safe-bottom,0px));min-height:44px;font-size:11px}}
+@media(max-height:520px) and (orientation:landscape){.archive-receiving-focus{bottom:calc(64px + var(--journey-safe-bottom,0px));min-height:40px;font-size:10px}}

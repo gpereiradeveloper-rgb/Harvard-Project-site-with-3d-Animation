@@ -2,11 +2,13 @@ import React,{Suspense,useEffect,useMemo,useRef,useState} from 'react';
 import './HarvardArchiveWorld.css';
 import {Canvas,useFrame,useThree} from '@react-three/fiber';
 import ArchiveFrameBudget from './ArchiveFrameBudget';
+import gsap from 'gsap';
 import {Environment,Html,Lightformer,RoundedBox} from '@react-three/drei';
 import {EffectComposer,N8AO,Bloom} from '@react-three/postprocessing';
 import * as THREE from 'three';
 import {RoundedBoxGeometry} from 'three/addons/geometries/RoundedBoxGeometry.js';
-import {useViewportRenderQuality} from './RenderQuality';
+import {useViewportRenderQuality,getMinimumAutoRenderScale} from './RenderQuality';
+import {archiveSafeFrame,fitArchiveBounds,ARCHIVE_OVERVIEW_BOUNDS,ARCHIVE_RECEIVING_BOUNDS} from './ArchiveViewport';
 import ArchiveKinetics from './ArchiveKinetics';
 import ArchiveRigidBatch from './ArchiveRigidBatch';
 import ArchiveCourier from './ArchiveRealCourier';
@@ -34,6 +36,7 @@ const EDGE_ROD=new THREE.CylinderGeometry(1,1,1,16);
 const clamp=n=>THREE.MathUtils.clamp(Number(n)||0,0,1);
 const smooth=(value,a=0,b=1)=>{const n=clamp((value-a)/(b-a));return n*n*(3-2*n);};
 const EMPTY_MOTION={progress:0};
+const updateStaticTransform=object=>object.updateMatrix();
 function randomGenerator(seed=1636){return()=>{seed=(seed*16807)%2147483647;return(seed-1)/2147483646;};}
 
 function materialAssets(){
@@ -89,7 +92,7 @@ function materialAssets(){
 }
 
 function PhotoFinish({assets}){
- const {gl}=useThree(),finishes=useRef([]);
+ const {gl,size,invalidate}=useThree(),mobileMaps=useRef(size.width<760).current;
  useEffect(()=>{
   let alive=true,expired=false;const loaded=[],loader=new THREE.TextureLoader();
   const deadline=setTimeout(()=>{expired=true;loaded.forEach(t=>t.dispose());},20000);
@@ -117,34 +120,31 @@ function PhotoFinish({assets}){
    mat.normalScale.setScalar(type==='plaster'?.025:type==='floor'?.035:.065);mat.needsUpdate=true;
   };
   Promise.all([
-   Promise.all([load('floor-color-4k.jpg',true),load('floor-normal-2k.jpg'),load('floor-roughness-2k.jpg')]),
-   Promise.all([load('stone-color-2k.jpg',true),load('stone-normal-2k.jpg'),load('stone-roughness-2k.jpg')])
+   Promise.all([load('floor-color-web.jpg',true),load(mobileMaps?'floor-normal-1k.png':'floor-normal-2k.jpg'),load(mobileMaps?'floor-roughness-1k.png':'floor-roughness-2k.jpg')]),
+   Promise.all([load(mobileMaps?'stone-color-1k.jpg':'stone-color-2k.jpg',true),load(mobileMaps?'stone-normal-1k.png':'stone-normal-2k.jpg'),load(mobileMaps?'stone-roughness-1k.png':'stone-roughness-2k.jpg')])
   ]).then(([wood,stone])=>{
    clearTimeout(deadline);if(!alive||expired||[...wood,...stone].some(t=>!t))return;
    assets.mats.floor.color.set('#f2f2ec');assets.mats.floor.roughness=.36;
    assets.mats.wood.color.set('#e1d4bd');assets.mats.wood.roughness=.30;
    assets.mats.walnut.color.set('#96785c');assets.mats.walnut.roughness=.39;
    apply(assets.mats.floor,wood,'floor');apply(assets.mats.wood,wood,'wood');apply(assets.mats.walnut,wood,'wood');apply(assets.mats.stone,stone,'plaster');
+   invalidate();
   }).catch(()=>{clearTimeout(deadline);expired=true;loaded.forEach(t=>t.dispose());});
-  return()=>{alive=false;clearTimeout(deadline);finishes.current=[];loaded.forEach(t=>t.dispose());};
- },[assets,gl]);
- useFrame((_,dt)=>finishes.current.forEach(f=>{
-  f.blend.value=Math.min(1,f.blend.value+Math.min(dt,.05)*.7);
-  f.mat.normalScale.setScalar(f.target*f.blend.value);
- }));
+  return()=>{alive=false;clearTimeout(deadline);loaded.forEach(t=>t.dispose());};
+ },[assets,gl,mobileMaps,invalidate]);
  return null;
 }
 
 // Imported table UVs, colour maps and geometry are retained. A separate varnish
 // lobe makes the wide tabletops read as finished furniture under studio light.
 function ImportedTableFinish(){
- const {scene}=useThree(),state=useRef({elapsed:0,next:0,groups:new WeakSet(),materials:new Map()});
+ const {scene}=useThree(),state=useRef({elapsed:0,next:0,groups:new WeakSet(),materials:new Map(),tables:0});
  useEffect(()=>()=>state.current.materials.forEach(m=>m.dispose()),[]);
  useFrame((_,dt)=>{
-  const s=state.current;s.elapsed+=dt;if(s.elapsed<s.next)return;s.next=s.elapsed+1;
+  const s=state.current;if(s.tables>=5)return;s.elapsed+=dt;if(s.elapsed<s.next)return;s.next=s.elapsed+1;
   scene.traverse(group=>{
    if(group.userData?.collectionModel!=='painted_wooden_table'||s.groups.has(group))return;
-   s.groups.add(group);group.traverse(mesh=>{
+   s.groups.add(group);s.tables++;group.traverse(mesh=>{
     if(!mesh.isMesh)return;
     const finish=source=>{
      if(s.materials.has(source))return s.materials.get(source);
@@ -153,6 +153,7 @@ function ImportedTableFinish(){
      material.normalScale?.multiplyScalar(.45);material.needsUpdate=true;s.materials.set(source,material);return material;
     };
     mesh.material=Array.isArray(mesh.material)?mesh.material.map(finish):finish(mesh.material);
+    mesh.updateMatrix();mesh.matrixAutoUpdate=false;
    });
   });
  });return null;
@@ -169,7 +170,7 @@ function Batch({items,geometry,material}){
   ref.current.instanceMatrix.needsUpdate=true;if(ref.current.instanceColor)ref.current.instanceColor.needsUpdate=true;
   ref.current.computeBoundingSphere();
  },[items]);
- return <instancedMesh ref={ref} args={[geometry,material,items.length]} castShadow receiveShadow frustumCulled={false}/>;
+ return <instancedMesh ref={ref} args={[geometry,material,items.length]} matrixAutoUpdate={false} onUpdate={updateStaticTransform} castShadow receiveShadow frustumCulled={false}/>;
 }
 
 function atelierLayout(){
@@ -249,10 +250,11 @@ function atelierLayout(){
 }
 
 function ConstructedWorld({motion,assets}){
- const groups=useRef({}),layout=useMemo(atelierLayout,[]);
+ const groups=useRef({}),layout=useMemo(atelierLayout,[]),lastProgress=useRef(-1),layers=useMemo(()=>Object.keys(layout),[layout]);
  useFrame(()=>{
   const p=clamp(motion.progress);
-  for(const [index,name] of Object.keys(layout).entries()){
+  if(lastProgress.current===p)return;lastProgress.current=p;
+  for(const [index,name] of layers.entries()){
    const group=groups.current[name];if(!group)continue;
    const f=smooth(p,index*.035,.23+index*.045);
    group.position.y=(1-f)*(name==='floor'?-.22:.65+index*.08);
@@ -264,10 +266,10 @@ function ConstructedWorld({motion,assets}){
 }
 
 function Cube({p,s,mat,rotation,children}){
- return <mesh position={p} scale={s} rotation={rotation} geometry={EDGE_BOX} material={mat} castShadow receiveShadow dispose={null}>{children}</mesh>;
+ return <mesh position={p} scale={s} rotation={rotation} geometry={EDGE_BOX} material={mat} matrixAutoUpdate={false} onUpdate={updateStaticTransform} castShadow receiveShadow dispose={null}>{children}</mesh>;
 }
 function Rod({p,r=.035,h=1,mat,rotation}){
- return <mesh position={p} rotation={rotation} scale={[r,h,r]} geometry={EDGE_ROD} material={mat} castShadow receiveShadow dispose={null}/>;
+ return <mesh position={p} rotation={rotation} scale={[r,h,r]} geometry={EDGE_ROD} material={mat} matrixAutoUpdate={false} onUpdate={updateStaticTransform} castShadow receiveShadow dispose={null}/>;
 }
 
 // A single cast plinth joins the archive and receiving wing. Its stepped outline
@@ -643,8 +645,8 @@ function GoldRoute({assets}){
  return <mesh geometry={geometry} material={assets.mats.gold}/>;
 }
 function ArchiveHotspot({position,id,kicker,name,onSelect,motion,focused}){
- const {size}=useThree(),compact=size.width<700,button=useRef();
- useFrame(()=>{if(button.current){const visible=clamp(motion.progress)<.67&&!focused;button.current.style.visibility=visible?'visible':'hidden';button.current.inert=!visible;}});
+ const {size}=useThree(),compact=size.width<700,button=useRef(),lastVisible=useRef();
+ useFrame(()=>{if(button.current){const visible=clamp(motion.progress)<.67&&!focused;if(lastVisible.current===visible)return;lastVisible.current=visible;button.current.style.visibility=visible?'visible':'hidden';button.current.inert=!visible;}});
  const calculatePosition=(el,camera,viewport)=>{
   const p=new THREE.Vector3().setFromMatrixPosition(el.matrixWorld).project(camera),margin=compact?61:114;
   return[THREE.MathUtils.clamp((p.x*.5+.5)*viewport.width,margin,viewport.width-margin),THREE.MathUtils.clamp((-p.y*.5+.5)*viewport.height,80,viewport.height-76)];
@@ -666,7 +668,11 @@ function ReceivingFocusVisibility({motion,active,focused,onFocus,button}){
 }
 function Director({motion,onReady,reduced,focused}){
  const inspect=useMemo(()=>import.meta.env.DEV?new URLSearchParams(window.location.search).get('inspect'):null,[]);
- const {camera,size,gl}=useThree(),ready=useRef(false),focusBlend=useRef(0),overlayHidden=useRef(false),previous=useRef({p:-1,width:0,height:0,reduced:null});
+ const {camera,size,gl,invalidate}=useThree(),ready=useRef(false),focusBlend=useRef(0),overlayHidden=useRef(false),previous=useRef({p:-1,width:0,height:0,reduced:null});
+ const deviceInsets=useMemo(()=>{
+  const style=getComputedStyle(gl.domElement.closest('.harvard-journey')||gl.domElement);
+  return{safeTop:parseFloat(style.getPropertyValue('--journey-safe-top'))||0,safeBottom:parseFloat(style.getPropertyValue('--journey-safe-bottom'))||0};
+ },[gl,size.width,size.height]);
  useEffect(()=>()=>gl.domElement.closest('.harvard-journey')?.classList.remove('has-receiving-focus'),[gl]);
  const vectors=useMemo(()=>({target:new THREE.Vector3(),base:new THREE.Vector3(),direction:new THREE.Vector3(),right:new THREE.Vector3(),screenUp:new THREE.Vector3(),offset:new THREE.Vector3(),up:new THREE.Vector3(0,0,-1),entry:new THREE.Vector3(4.23,1.65,-2.18),receivingPosition:new THREE.Vector3(),receivingTarget:new THREE.Vector3(9.4,1.2,-2.1),corners:[-6.9,13.9].flatMap(x=>[-.9,5.2].flatMap(y=>[-8.1,9.45].map(z=>new THREE.Vector3(x,y,z)))),path:new THREE.CatmullRomCurve3([new THREE.Vector3(),new THREE.Vector3(10,11,9),new THREE.Vector3(6.1,6,-.2),new THREE.Vector3(4.3,3.6,-1.6),new THREE.Vector3(4.23,2.4,-2.18),new THREE.Vector3(4.23,1.72,-2.18)],false,'centripetal')}),[]);
  useFrame((_,dt)=>{
@@ -674,6 +680,7 @@ function Director({motion,onReady,reduced,focused}){
   const goal=focused&&p<.67?1:0;
   focusBlend.current=reduced?goal:THREE.MathUtils.damp(focusBlend.current,goal,4,Math.min(dt,.1));
   if(Math.abs(focusBlend.current-goal)<.001)focusBlend.current=goal;
+  else invalidate();
   const blend=focusBlend.current,hide=goal>0||blend>.02;
   if(overlayHidden.current!==hide){overlayHidden.current=hide;gl.domElement.closest('.harvard-journey')?.classList.toggle('has-receiving-focus',hide);}
   const last=previous.current;if(last.p===p&&last.width===size.width&&last.height===size.height&&last.reduced===reduced&&last.blend===blend)return;
@@ -682,34 +689,32 @@ function Director({motion,onReady,reduced,focused}){
   // altering the production camera or the operation's shared clock.
   if(inspect==='receiving'){
    camera.position.set(16,9.5,10.5);camera.up.set(0,1,0);camera.lookAt(9.4,1.2,-2.1);
-   camera.fov=32;camera.zoom=1;camera.near=.1;camera.far=100;camera.updateProjectionMatrix();
+   camera.fov=32;camera.zoom=1;camera.near=.1;camera.far=100;camera.clearViewOffset();camera.updateProjectionMatrix();
    gl.domElement.dataset.worldInspect='receiving';
    if(!ready.current){ready.current=true;onReady?.();}return;
   }
   // A long-lens establishing view keeps the approved isometric composition.
   // The last part is a perspective dolly through the actual open drawer.
   const overview=Math.min(p,.66),angle=THREE.MathUtils.lerp(.72,.54,smooth(overview,.12,.66));
-  const {target,base,direction,right,screenUp,offset,corners,path,entry,up}=vectors;
-  target.set(portrait?2.35:2.45,1.1,1.75);
+  const {target,base,direction,path,entry,up}=vectors;
+  target.set(portrait?3.1:2.45,1.1,portrait?1.0:1.75);
   direction.set(Math.sin(angle)*22,17.8,Math.cos(angle)*22).normalize();
-  right.set(direction.z,0,-direction.x).normalize();screenUp.crossVectors(direction,right).normalize();
-  const tangent=Math.tan(THREE.MathUtils.degToRad(9)),aspect=size.width/Math.max(1,size.height);
-  let distance=0;
+  const frame=archiveSafeFrame(size.width,size.height,deviceInsets);
+  const overviewFit=fitArchiveBounds({bounds:ARCHIVE_OVERVIEW_BOUNDS,target:target.toArray(),direction:direction.toArray(),width:size.width,height:size.height,frame});
   // Fit the whole joined maquette, including its receiving bay and service
   // street, rather than reusing the dimensions of the former square base.
-  for(const corner of corners){offset.subVectors(corner,target);const depth=offset.dot(direction);distance=Math.max(distance,depth+Math.abs(offset.dot(right))/(tangent*aspect),depth+Math.abs(offset.dot(screenUp))/tangent);}
-  distance*=portrait?1.055:1.045;
-  base.copy(direction).multiplyScalar(distance).add(target);
+  base.fromArray(overviewFit.position);
   const dive=reduced?0:smooth(p,.67,1);
   camera.fov=THREE.MathUtils.lerp(18,43,smooth(dive,0,.68));camera.up.set(0,1,0).lerp(up,smooth(dive,.25,.83)).normalize();
   if(dive>0){path.points[0].copy(base);path.getPoint(dive,camera.position);target.lerp(entry,smooth(dive,0,.70));}
   else camera.position.copy(base);
   if(blend>0){
    const {receivingPosition,receivingTarget}=vectors;
-   receivingTarget.set(10.35,1.3,-.65);
+   receivingTarget.set(10.2,1.75,-2.95);
    // A close live perspective on the scanner, its loading side and the rack.
    // Portrait moves back along the same sightline to retain the whole station.
-   receivingPosition.set(3.6,3.8,5.8).multiplyScalar(Math.max(1,.90/Math.max(.25,aspect))).add(receivingTarget);
+   const receivingFit=fitArchiveBounds({bounds:ARCHIVE_RECEIVING_BOUNDS,target:receivingTarget.toArray(),direction:[3.6,3.8,5.8],width:size.width,height:size.height,fov:32,frame});
+   receivingPosition.fromArray(receivingFit.position);
    camera.position.lerp(receivingPosition,blend);target.lerp(receivingTarget,blend);
    camera.fov=THREE.MathUtils.lerp(camera.fov,32,blend);camera.up.lerp(new THREE.Vector3(0,1,0),blend).normalize();
   }
@@ -720,6 +725,8 @@ function Director({motion,onReady,reduced,focused}){
   camera.near=Math.max(.004,Math.min(.8,camera.position.distanceTo(target)*.025));
   camera.far=Math.max(50,camera.position.length()+45);
   camera.lookAt(target);camera.zoom=1;
+  const framing=1-smooth(dive,.04,.70);
+  camera.setViewOffset(size.width,size.height,overviewFit.offsetX*framing,overviewFit.offsetY*framing,size.width,size.height);
   camera.updateProjectionMatrix();
   gl.domElement.dataset.worldDive=dive.toFixed(4);
   gl.domElement.dataset.worldCameraY=camera.position.y.toFixed(4);
@@ -727,8 +734,8 @@ function Director({motion,onReady,reduced,focused}){
  });return null;
 }
 function PlacedObjects({motion,children}){
- const ref=useRef();
- useFrame(()=>{const f=smooth(clamp(motion.progress),.14,.41);ref.current.position.y=(1-f)*.65;ref.current.scale.setScalar(1);});
+ const ref=useRef(),lastProgress=useRef(-1);
+ useFrame(()=>{const p=clamp(motion.progress);if(lastProgress.current===p)return;lastProgress.current=p;const f=smooth(p,.14,.41);ref.current.position.y=(1-f)*.65;ref.current.scale.setScalar(1);});
  return <group ref={ref}>{children}</group>;
 }
 function RenderMetrics({active}){
@@ -782,7 +789,7 @@ function AtelierStudioLight({quality}){
  </>;
 }
 
-function Scene({motion,reduced,paused,active,onReady,onSelect,quality,focused,onFocus,focusButton,onAutoScale}){
+function Scene({motion,reduced,paused,active,onReady,onSelect,quality,focused,onFocus,focusButton,onAutoScale,minimumScale}){
  const {gl}=useThree();
  const qa=useMemo(()=>import.meta.env.DEV?new URLSearchParams(window.location.search):null,[]);
  const time=useRef(Math.max(0,Number(qa?.get('worldTime'))||0)),assets=useMemo(materialAssets,[]);
@@ -800,26 +807,26 @@ function Scene({motion,reduced,paused,active,onReady,onSelect,quality,focused,on
  },-100);
  return <>
   <color attach="background" args={['#f5f4ef']}/>
-  <ArchiveFrameBudget quality={quality} active={active} paused={paused||reduced} motion={motion} onScale={onAutoScale}/>
+  <ArchiveFrameBudget quality={quality} active={active} paused={paused||reduced} motion={motion} onScale={onAutoScale} minimumScale={minimumScale}/>
   <AtelierStudioLight quality={quality}/>
   <mesh rotation={[-Math.PI/2,0,0]} position={[0,-.91,0]} receiveShadow><planeGeometry args={[200,200]}/><meshStandardMaterial color="#f5f4ef" roughness={.82}/></mesh>
   <AtelierPlinth assets={assets}/>
   <ConstructedWorld motion={motion} assets={assets}/>
   <ReceivingArchitecture assets={assets}/>
-  <ArchiveWarehouseHandling time={time}/>
+  <Suspense fallback={null}><ArchiveWarehouseHandling time={time}/></Suspense>
   <ArchiveStreets assets={assets} time={time}/>
   <Cube p={[0,.05,4.57]} s={[11.85,.09,.59]} mat={assets.mats.ivory}/>
   <Cube p={[0,.101,4.84]} s={[11.85,.02,.025]} mat={assets.mats.gold}/>
   <PhotoFinish assets={assets}/>
   <ImportedTableFinish/>
-  <PlacedObjects motion={motion}><ArchiveCollectionModels time={time}/><ArchiveDeskDetails assets={assets}/>
+  <PlacedObjects motion={motion}><Suspense fallback={null}><ArchiveCollectionModels time={time}/></Suspense><ArchiveDeskDetails assets={assets}/>
   <Suspense fallback={null}><ReadyArchiveTable position={[1.7,.095,.5]} width={1.5} depth={.65} height={.90}/><ReadyArchiveTable position={[-2.75,.095,.6]} width={3.5} depth={1.55} height={1.135}/><ReadyArchiveTable position={[3.5,.095,-1.2]} width={3} depth={1.45} height={1.025}/></Suspense>
   <OpenFolio assets={assets} time={time}/><ArchiveMotion assets={assets} time={time} motion={motion}/>
   <Suspense fallback={null}><ImportedTree time={time} position={[4.9,.095,3.8]} height={2.2}/></Suspense>
   <Cube p={[4.65,.38,2.75]} s={[1.3,.58,1.3]} mat={assets.mats.stone}/><Cube p={[4.65,.69,2.75]} s={[1.33,.025,1.33]} mat={assets.mats.gold}/><Globe assets={assets} time={time}/>
-  <ArchiveScholars assets={assets} time={time}/><ArchivePress assets={assets} time={time}/>
+  <Suspense fallback={null}><ArchiveScholars assets={assets} time={time}/></Suspense><ArchivePress assets={assets} time={time}/>
   <ArchiveKinetics time={time} materials={assets.mats} reduced={reduced}/></PlacedObjects>
-  <ArchiveCourier assets={assets} time={time}/><ArchiveStreetPorter assets={assets} time={time}/><ArchiveGroundLogistics assets={assets} time={time}/>
+  <Suspense fallback={null}><ArchiveCourier assets={assets} time={time}/></Suspense><Suspense fallback={null}><ArchiveStreetPorter assets={assets} time={time}/></Suspense><Suspense fallback={null}><ArchiveGroundLogistics assets={assets} time={time}/></Suspense>
   <ArchiveKnowledgeEngine assets={assets} time={time} position={[8.5,3.7,-7.30]}/>
   <Plaque position={[-1.24,4.64,-3.97]} title="THE IDEAS ATELIER" subtitle="HARVARD · A WORLD OF POSSIBILITIES" width={4.0}/>
   <Plaque position={[0,-.52,5.287]} title="VERITAS" subtitle="A LIVING ARCHIVE · 1636" width={2.5}/>
@@ -836,11 +843,28 @@ function Scene({motion,reduced,paused,active,onReady,onSelect,quality,focused,on
  </>;
 }
 
+/** Paused/reduced motion stays responsive to scrolling without idle GPU work. */
+function WorldMotionFrames({motion,enabled}){
+ const {invalidate}=useThree();
+ useEffect(()=>{
+  if(!enabled)return;
+  let previous=-1;
+  const update=()=>{const p=clamp(motion.progress);if(document.hidden||p===previous)return;previous=p;invalidate();};
+  update();gsap.ticker.add(update);
+  return()=>gsap.ticker.remove(update);
+ },[motion,enabled,invalidate]);
+ return null;
+}
+
 export default function HarvardArchiveWorld({motion=EMPTY_MOTION,quality='high',reduced=false,paused=false,active=true,onReady,onSelect}){
- const profile=useViewportRenderQuality(quality),[focused,setFocused]=useState(false),[autoScale,setAutoScale]=useState(1),focusButton=useRef();
+ const profile=useViewportRenderQuality(quality),[focused,setFocused]=useState(false),[autoScale,setAutoScale]=useState(1),[pageVisible,setPageVisible]=useState(()=>!document.hidden),focusButton=useRef();
+ const minimumScale=getMinimumAutoRenderScale(profile),renderScale=quality==='auto'?Math.max(minimumScale,autoScale):1;
  useEffect(()=>setAutoScale(1),[quality]);
- return <div className="archive-world-canvas-stage" onKeyDown={event=>{if(event.key==='Escape'&&focused){event.preventDefault();setFocused(false);}}}><Canvas shadows={{type:THREE.PCFSoftShadowMap}} dpr={quality==='auto'?profile.dpr*autoScale:profile.dpr} frameloop={active?'always':'demand'} camera={{position:[30,34,34],fov:18,near:.006,far:250}} gl={{antialias:false,alpha:false,powerPreference:'high-performance'}} onCreated={({gl})=>{gl.toneMapping=THREE.ACESFilmicToneMapping;gl.toneMappingExposure=.88;gl.transmissionResolutionScale=.35;gl.setClearColor('#f5f4ef',1);}} style={{width:'100%',height:'100%',touchAction:'pan-y'}}>
-  <Scene motion={motion} reduced={reduced} paused={paused} active={active} onReady={onReady} onSelect={onSelect} quality={quality} focused={focused} onFocus={setFocused} focusButton={focusButton} onAutoScale={setAutoScale}/>
+ useEffect(()=>{const update=()=>setPageVisible(!document.hidden);document.addEventListener('visibilitychange',update);return()=>document.removeEventListener('visibilitychange',update);},[]);
+ const visible=active&&pageVisible;
+ return <div className="archive-world-canvas-stage" onKeyDown={event=>{if(event.key==='Escape'&&focused){event.preventDefault();setFocused(false);}}}><Canvas shadows={{type:THREE.PCFSoftShadowMap}} dpr={profile.dpr*renderScale} frameloop={visible&&!paused&&!reduced?'always':'demand'} camera={{position:[30,34,34],fov:18,near:.006,far:250}} gl={{antialias:false,alpha:false,powerPreference:'high-performance'}} onCreated={({gl})=>{gl.toneMapping=THREE.ACESFilmicToneMapping;gl.toneMappingExposure=.88;gl.transmissionResolutionScale=.35;gl.setClearColor('#f5f4ef',1);}} style={{width:'100%',height:'100%',touchAction:'pan-y'}}>
+  <WorldMotionFrames motion={motion} enabled={visible&&(paused||reduced)}/>
+  <Scene motion={motion} reduced={reduced} paused={paused} active={visible} onReady={onReady} onSelect={onSelect} quality={quality} focused={focused} onFocus={setFocused} focusButton={focusButton} onAutoScale={setAutoScale} minimumScale={minimumScale}/>
  </Canvas>
  <button ref={focusButton} className="archive-receiving-focus" type="button" aria-pressed={focused} onClick={()=>setFocused(value=>!value)}>
   <span aria-hidden="true">{focused?'↙':'⌗'}</span>{focused?'Back to the atelier':'Explore the 3D scanner'}<span aria-hidden="true">{focused?'':'↗'}</span>

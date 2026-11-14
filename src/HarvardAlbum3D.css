@@ -7,3 +7,10 @@
 @media(prefers-reduced-motion:reduce){.harvard-album-3d *{transition:none!important}}
 .ha3-volume-nav>button{font-size:10px}.ha3-volume-nav>button>span{font-size:8px}
 @media(max-aspect-ratio:88/100){.ha3-volume-nav>button{font-size:9.5px;min-height:40px}.ha3-volume-nav>button>span{font-size:7px}}
+
+/* Keep every volume reachable without a six-button row escaping a narrow screen. */
+.ha3-volume-nav{bottom:80px;max-width:calc(100% - 28px)}
+.ha3-volume-nav>button{min-height:44px;font-size:11px}
+.ha3-instruction{top:16px}
+@media(max-aspect-ratio:88/100){.ha3-volume-nav{grid-template-columns:repeat(3,minmax(0,1fr));gap:0 12px;bottom:116px;width:min(88%,460px)}.ha3-volume-nav>button{min-height:44px;font-size:11px;justify-content:center;text-align:center;white-space:normal}.ha3-volume-nav>button>span{display:none}}
+@media(max-height:520px) and (min-aspect-ratio:88/100){.ha3-instruction{display:none}.ha3-volume-nav{bottom:64px;gap:14px;display:flex}.ha3-volume-nav>button{min-height:40px;font-size:10px}}

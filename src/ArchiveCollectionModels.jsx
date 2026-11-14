@@ -3,6 +3,7 @@ import {useGLTF} from '@react-three/drei';
 import {clone} from 'three/addons/utils/SkeletonUtils.js';
 import * as THREE from 'three';
 import ArchiveRigidBatch from './ArchiveRigidBatch';
+import {runtimeStaticAssetUrl} from './RuntimeAssets';
 
 const ROOT = '/assets/collection-models/';
 const LAMP = ROOT + 'desk_lamp_arm_01-1k.glb';
@@ -14,7 +15,7 @@ const BOOKS = '/assets/ready-models/encyclopedias/book_encyclopedia_web.gltf';
 // Clone only the object hierarchy: geometry, UVs and original 1K PBR maps stay
 // shared in the loader cache, including the source lamp's articulated mesh.
 function useCollectionModel(url, size, dimension, anchor = 'floor') {
-  const {scene} = useGLTF(url);
+  const {scene} = useGLTF(runtimeStaticAssetUrl(url));
   return useMemo(() => {
     const model = clone(scene);
     model.updateMatrixWorld(true);

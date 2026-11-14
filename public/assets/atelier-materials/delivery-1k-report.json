@@ -1,0 +1,92 @@
+[
+  {
+    "source": "floor-color-4k.jpg",
+    "output": "floor-color-web.jpg",
+    "sourceDimensions": [
+      4096,
+      4096
+    ],
+    "runtimeDimensions": [
+      1024,
+      1024
+    ],
+    "sourceBytes": 10771881,
+    "runtimeBytes": 584992,
+    "encoding": "JPEG quality96"
+  },
+  {
+    "source": "floor-normal-2k.jpg",
+    "output": "floor-normal-1k.png",
+    "sourceDimensions": [
+      2048,
+      2048
+    ],
+    "runtimeDimensions": [
+      1024,
+      1024
+    ],
+    "sourceBytes": 1863576,
+    "runtimeBytes": 1118045,
+    "encoding": "PNG, lossless after resize"
+  },
+  {
+    "source": "floor-roughness-2k.jpg",
+    "output": "floor-roughness-1k.png",
+    "sourceDimensions": [
+      2048,
+      2048
+    ],
+    "runtimeDimensions": [
+      1024,
+      1024
+    ],
+    "sourceBytes": 2267559,
+    "runtimeBytes": 688114,
+    "encoding": "PNG, lossless after resize"
+  },
+  {
+    "source": "stone-color-2k.jpg",
+    "output": "stone-color-1k.jpg",
+    "sourceDimensions": [
+      2048,
+      2048
+    ],
+    "runtimeDimensions": [
+      1024,
+      1024
+    ],
+    "sourceBytes": 2568315,
+    "runtimeBytes": 663991,
+    "encoding": "JPEG quality96"
+  },
+  {
+    "source": "stone-normal-2k.jpg",
+    "output": "stone-normal-1k.png",
+    "sourceDimensions": [
+      2048,
+      2048
+    ],
+    "runtimeDimensions": [
+      1024,
+      1024
+    ],
+    "sourceBytes": 3379814,
+    "runtimeBytes": 1968986,
+    "encoding": "PNG, lossless after resize"
+  },
+  {
+    "source": "stone-roughness-2k.jpg",
+    "output": "stone-roughness-1k.png",
+    "sourceDimensions": [
+      2048,
+      2048
+    ],
+    "runtimeDimensions": [
+      1024,
+      1024
+    ],
+    "sourceBytes": 1604444,
+    "runtimeBytes": 835559,
+    "encoding": "PNG, lossless after resize"
+  }
+]
