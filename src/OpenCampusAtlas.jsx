@@ -4,6 +4,7 @@ import workerUrl from 'maplibre-gl/dist/maplibre-gl-worker.mjs?worker&url';
 import 'maplibre-gl/dist/maplibre-gl.css';
 import gsap from 'gsap';
 import {openAtlasCameraAt,OPEN_ATLAS_LANDMARKS} from './OpenCampusAtlasCamera';
+import landmarkRoofs from './data/harvard-campus-landmarks.json';
 import './OpenCampusAtlas.css';
 
 // Official Vite setup: https://openfreemap.org/quick_start/
@@ -11,7 +12,7 @@ setWorkerUrl(workerUrl);
 const STYLE='https://tiles.openfreemap.org/styles/liberty';
 const SOURCE='harvard-open-buildings';
 const BUILDINGS='harvard-campus-buildings';
-const PALETTE={paper:'#ebe4d6',park:'#c6c9b1',water:'#9daeb0',road:'#f9f3e7',line:'#c9bfae',ink:'#263e4b',building:'#d9c9ab'};
+const PALETTE={paper:'#f1eee6',park:'#adc297',water:'#92b8bb',road:'#fffaf0',line:'#cfcbbf',ink:'#3a504b',building:'#d2cec1'};
 
 function finishMap(map){
  const style=map.getStyle(),layers=style.layers||[];
@@ -21,19 +22,33 @@ function finishMap(map){
   else if(layer.type==='fill-extrusion')map.setLayoutProperty(layer.id,'visibility','none');
   else if(layer.type==='fill'){
    if(sourceLayer==='water')map.setPaintProperty(layer.id,'fill-color',PALETTE.water);
-   else if(sourceLayer==='landcover'||sourceLayer==='park')map.setPaintProperty(layer.id,'fill-color',PALETTE.park);
+   else if(sourceLayer==='landcover'||sourceLayer==='park'){
+    map.setPaintProperty(layer.id,'fill-color',PALETTE.park);
+    map.setPaintProperty(layer.id,'fill-opacity',sourceLayer==='park'?.88:.68);
+   }else if(sourceLayer==='landuse'){
+    map.setPaintProperty(layer.id,'fill-color',/school/.test(id)?'#dae2cd':/pitch|track/.test(id)?'#bdcca9':'#e9e6dc');
+   }
    else if(sourceLayer==='building'){
     map.setPaintProperty(layer.id,'fill-color',PALETTE.building);
     map.setPaintProperty(layer.id,'fill-outline-color',PALETTE.line);
    }
   }else if(layer.type==='line'&&sourceLayer==='transportation'){
    map.setPaintProperty(layer.id,'line-color',/casing|outline|rail/.test(id)?PALETTE.line:PALETTE.road);
+  }else if(layer.type==='line'&&sourceLayer==='park'){
+   map.setPaintProperty(layer.id,'line-color','#92a983');
+   map.setPaintProperty(layer.id,'line-opacity',.35);
   }else if(layer.type==='symbol'){
-   if(sourceLayer==='poi'||/housenumber/.test(id))map.setLayoutProperty(layer.id,'visibility','none');
+   if(sourceLayer==='poi'||/housenumber|shield/.test(id))map.setLayoutProperty(layer.id,'visibility','none');
    else if(layer.layout?.['text-field']){
     map.setPaintProperty(layer.id,'text-color',PALETTE.ink);
     map.setPaintProperty(layer.id,'text-halo-color',PALETTE.paper);
     map.setPaintProperty(layer.id,'text-halo-width',1.4);
+    if(sourceLayer==='transportation_name'){
+     // Campus architecture and the four editorial landmarks lead the frame.
+     map.setLayoutProperty(layer.id,'icon-image','');
+     map.setLayoutProperty(layer.id,'text-size',11);
+     map.setPaintProperty(layer.id,'text-opacity',.68);
+    }
    }
   }
  }
@@ -48,7 +63,16 @@ function finishMap(map){
   paint:{'fill-extrusion-color':PALETTE.building,'fill-extrusion-opacity':1,'fill-extrusion-vertical-gradient':true,
    'fill-extrusion-height':['interpolate',['linear'],['zoom'],14,0,15,['max',height,3]],
    'fill-extrusion-base':['interpolate',['linear'],['zoom'],14,0,15,base]}},labels);
- map.setLight({anchor:'viewport',position:[1.4,210,38],color:'#fff3dd',intensity:.46});
+ // Isolated real footprint polygons: a small colored roof cap identifies the
+ // destination without recoloring thousands of polygons merged in the tiles.
+ // Keep it above the provider's roof plane to avoid coincident surfaces.
+ map.addSource('harvard-landmark-roofs',{type:'geojson',data:landmarkRoofs});
+ map.addLayer({id:'harvard-landmark-roofs',type:'fill-extrusion',source:'harvard-landmark-roofs',minzoom:15,
+  paint:{'fill-extrusion-color':['match',['get','landmark'],'church','#a84445','widener','#8e5a50','#b4a17c'],
+   'fill-extrusion-height':['+',['get','render_height'],.30],
+   'fill-extrusion-base':['+',['get','render_height'],.08],
+   'fill-extrusion-opacity':1,'fill-extrusion-vertical-gradient':false}},labels);
+ map.setLight({anchor:'viewport',position:[1.4,210,45],color:'#fff7eb',intensity:.35});
 }
 
 /** Public, no-key cartographic 3D. Building footprints/heights are OpenStreetMap data. */
@@ -85,12 +109,15 @@ export default function OpenCampusAtlas({motion,active=true,onReady,onError,onSe
   controller.current={activity};status('loading-style');
   try{
    map=new LibreMap({container:host.current,style:STYLE,...openAtlasCameraAt(motion?.progress||0,mobile.matches),
-    minZoom:13,maxZoom:20,maxPitch:60,attributionControl:false,cooperativeGestures:true,pixelRatio:Math.min(devicePixelRatio||1,mobile.matches?1.35:1.5),
+    // The page owns this guided camera. Map wheel/touch handlers would consume
+    // its scroll or paint the cooperative-gesture scrim over the entire scene.
+    interactive:false,scrollZoom:false,cooperativeGestures:false,
+    minZoom:13,maxZoom:20,maxPitch:60,attributionControl:false,pixelRatio:Math.min(devicePixelRatio||1,mobile.matches?1.35:1.5),
     canvasContextAttributes:{antialias:true},renderWorldCopies:false,fadeDuration:0,trackResize:false,
     dragRotate:false,touchPitch:false,locale:{'Map.Title':'Harvard campus in 3D'}});
    map.repaint=false;
-   map.addControl(new AttributionControl({compact:false,customAttribution:'<a href="https://openfreemap.org/" target="_blank" rel="noopener noreferrer">OpenFreeMap</a>'}),'bottom-right');
-   map.getCanvas().setAttribute('aria-label','Harvard in 3D. Scroll the page to continue; use two fingers or hold Ctrl to explore the map.');
+   map.addControl(new AttributionControl({compact:false}),'bottom-right');
+   map.getCanvas().setAttribute('aria-label','Harvard in 3D. Scroll to approach Memorial Church. Select a landmark to discover its story.');
    const loaded=()=>{
     if(!alive||failed)return;
     try{

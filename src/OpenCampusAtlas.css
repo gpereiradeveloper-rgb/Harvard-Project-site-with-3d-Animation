@@ -1,4 +1,4 @@
-.open-campus-atlas{position:absolute;inset:0;width:100%;height:100%;background:#ebe4d6;color:#263e4b;pointer-events:auto}
+.open-campus-atlas{position:absolute;inset:0;width:100%;height:100%;background:#f1eee6;color:#263e4b;pointer-events:auto}
 .open-campus-atlas .maplibregl-canvas{outline:none;touch-action:pan-y}
 .open-campus-atlas .maplibregl-canvas:focus-visible{outline:2px solid #963f4b;outline-offset:-4px}
 .open-campus-atlas .maplibregl-ctrl-bottom-right{right:10px;bottom:9px;max-width:calc(100% - 20px);z-index:9}
@@ -6,11 +6,10 @@
 .open-campus-atlas .maplibregl-ctrl-attrib a{color:#304754;text-decoration:underline;text-underline-offset:2px}
 .open-campus-atlas .maplibregl-ctrl-attrib-inner{display:block!important}
 .open-campus-atlas .maplibregl-ctrl-attrib-button{display:none!important}
-.open-campus-atlas .oca-landmark{display:flex;flex-direction:column;align-items:center;gap:7px;min-width:44px;min-height:44px;padding:5px 8px;background:none;border:0;color:#263e4b;cursor:pointer;box-shadow:none;white-space:nowrap}
+.open-campus-atlas .oca-landmark{display:flex;flex-direction:column-reverse;align-items:center;gap:7px;min-width:44px;min-height:44px;padding:5px 8px;background:none;border:0;color:#263e4b;cursor:pointer;box-shadow:none;white-space:nowrap}
 .open-campus-atlas .oca-landmark-dot{width:11px;height:11px;border:2px solid #fff8e8;border-radius:50%;background:#294554;box-shadow:0 0 0 1px #29455480,0 3px 9px #263e4b42}
 .open-campus-atlas .oca-landmark-label{padding:5px 8px;border:1px solid #d2c4ac;border-radius:3px;background:#fff9edf2;font:600 10px/1.2 'Manrope',Arial,sans-serif;letter-spacing:.015em;box-shadow:0 4px 12px #263e4b12}
 .open-campus-atlas .oca-landmark.is-destination .oca-landmark-dot{width:14px;height:14px;background:#963f4b;box-shadow:0 0 0 4px #963f4b24,0 3px 10px #263e4b33}
 .open-campus-atlas .oca-landmark.is-destination .oca-landmark-label{color:#fff5e4;background:#783440;border-color:#783440}
 .open-campus-atlas .oca-landmark:hover .oca-landmark-label,.open-campus-atlas .oca-landmark:focus-visible .oca-landmark-label{outline:2px solid #a84d57;outline-offset:3px}
-.open-campus-atlas .maplibregl-cooperative-gesture-screen{font:500 13px/1.5 'Manrope',Arial,sans-serif;background:#132c3bce}
 @media(max-width:700px){.open-campus-atlas .maplibregl-ctrl-bottom-right{bottom:6px;right:6px;max-width:calc(100% - 12px)}.open-campus-atlas .maplibregl-ctrl-attrib{font-size:9px;padding:3px 5px!important}.open-campus-atlas .oca-landmark-label{font-size:9px;padding:5px 6px}.open-campus-atlas .oca-landmark{gap:5px}}

@@ -2,6 +2,8 @@
 .harvard-journey .header{position:fixed;z-index:70;background:linear-gradient(#0a172263,transparent);pointer-events:none}
 .harvard-journey .header button,.harvard-journey .header nav{pointer-events:auto}
 .harvard-journey.is-album{--fg:#263746;--muted:#6d624f;--stroke:#26374640}
+.harvard-journey.is-campus{--fg:#263e3b;--muted:#57645a;--stroke:#263e3b40}
+.harvard-journey.is-campus .header{background:linear-gradient(#f1eee6f5,transparent);padding-bottom:35px}
 .harvard-journey.is-album .header{background:linear-gradient(#e8dfcbe8,transparent);padding-bottom:38px}
 .hj-track{height:1000svh;position:relative;overflow-anchor:none}
 .hj-stage{height:100svh;position:sticky;top:0;overflow:hidden;isolation:isolate;background:#d9ccb5}

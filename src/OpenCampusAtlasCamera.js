@@ -4,17 +4,17 @@ const mix=(a,b,t)=>a+(b-a)*t;
 
 // Geographic look-at points, not an indoor route or a surveyed entrance.
 export const OPEN_ATLAS_STOPS=Object.freeze([
- {at:0,center:[-71.1172,42.3743],zoom:15.35,pitch:42,bearing:8},
- {at:.28,center:[-71.1169,42.3746],zoom:16.05,pitch:48,bearing:5},
- {at:.56,center:[-71.1162,42.3746],zoom:16.85,pitch:54,bearing:2},
- {at:.80,center:[-71.1161,42.37475],zoom:17.50,pitch:58,bearing:0},
- {at:1,center:[-71.11603,42.37487],zoom:18.05,pitch:60,bearing:0},
+ {at:0,center:[-71.1171,42.37425],zoom:16.35,pitch:43,bearing:-12},
+ {at:.28,center:[-71.11675,42.37445],zoom:16.70,pitch:46,bearing:-8},
+ {at:.56,center:[-71.11630,42.37465],zoom:17.25,pitch:49,bearing:-4},
+ {at:.80,center:[-71.11612,42.37480],zoom:17.85,pitch:52,bearing:0},
+ {at:1,center:[-71.11603,42.37487],zoom:18.40,pitch:54,bearing:0},
 ]);
 
 export const OPEN_ATLAS_LANDMARKS=Object.freeze([
  {id:'yard',name:'Harvard Yard',coordinates:[-71.1175,42.3745]},
- {id:'memorial',name:'Memorial Hall',coordinates:[-71.1150,42.3761]},
- {id:'university',name:'University Hall',coordinates:[-71.1171,42.3745]},
+ {id:'memorial',name:'Memorial Hall',coordinates:[-71.11508825,42.37597755]},
+ {id:'university',name:'University Hall',coordinates:[-71.11708191,42.37445437]},
  {id:'church',name:'Memorial Church',coordinates:[-71.11603,42.37491]},
 ]);
 
