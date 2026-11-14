@@ -22,4 +22,4 @@ Campus inspiration: @Harvard University (select the official page in the mention
 Title: Harvard Veritas — The Living Archive
 Tags: 3d animation, interactive website, threejs, webgl, creative coding, immersive, editorial design, motion design, 3d illustration, portfolio
 
-Publication status: prepared; not posted until the destination confirms success.
+LinkedIn publication confirmed on November 14, 2026 on Guilherme Pereira’s profile. The English post includes the official Harvard University mention, project/source links and the hashtags above. Dribbble publication remains pending.
