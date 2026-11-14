@@ -30,3 +30,35 @@ derivatives. Browser validation remains necessary for final appearance.
 Authors and licenses remain those listed in the adjacent source-specific credits,
 including Poly Haven CC0, MakeHuman-derived people CC0, and the CC BY 4.0 product
 models/Google Scanned Objects bag.
+
+## Lossless mesh delivery and texture transfer refinement
+
+The current runtime adds `EXT_meshopt_compression` with the `NONE` filter and
+codec version 0 for broad decoder compatibility. No vertex quantization,
+triangle reordering, texture resizing, rig changes or animation resampling are
+part of this packing step. `scripts/pack-runtime-meshopt.mjs` decodes every
+output buffer view using the exact MeshoptDecoder included by the installed
+Drei/three-stdlib loader and compares the bytes to the previous runtime asset.
+All accessors, nodes, skins, animation clips, image bytes and material metadata
+remain unchanged. Full results and SHA-256 hashes are in
+`meshopt-delivery-report.json`.
+
+| Existing delivery | Packed delivery | Savings |
+| --- | --- | --- |
+| Desktop people + laptop, tablet, bag: 15.45 MB | 12.74 MB | 2.72 MB |
+| Mobile people + same devices: 11.97 MB | 9.26 MB | 2.72 MB |
+| Plant geometry package: 5.82 MB | 3.84 MB | 1.97 MB |
+| Encyclopedia geometry package: 2.64 MB | 1.45 MB | 1.19 MB |
+
+Plant and encyclopedia GLBs retain their original external 2K JPEG maps, so the
+last two rows compare geometry packages, not their unchanged texture transfers.
+Existing uncompressed assets remain available. Devices without WebAssembly use
+the prior paths; devices without WebP keep their PNG/JPEG character fallback.
+
+The six photographic floor/stone maps are also available as prepared 1K delivery
+files in `atelier-materials/`, with an exact report in
+`atelier-materials/delivery-1k-report.json`. The 10.77 MB floor colour was
+previously downloaded and downsampled to 1024 pixels at runtime. Its new 0.585 MB
+JPEG supplies that same 1024-pixel target directly, avoiding the 4K image decode.
+Mobile normal and roughness derivatives are lossless PNG after 1K resampling;
+desktop normal/roughness maps retain their previous resolution.

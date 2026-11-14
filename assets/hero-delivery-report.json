@@ -1,0 +1,22 @@
+{
+  "masterDimensions": [
+    2560,
+    1440
+  ],
+  "durationSeconds": 5.167,
+  "desktopVideoDimensions": [
+    1920,
+    1080
+  ],
+  "phoneVideoDimensions": [
+    720,
+    1440
+  ],
+  "bytes": {
+    "harvard-cinematic-hd.mp4": 2608427,
+    "harvard-cinematic-portrait.mp4": 1080426,
+    "harvard-cinematic-poster-hd.webp": 375002,
+    "harvard-cinematic-poster-portrait.webp": 136306
+  },
+  "note": "Higher-resolution derivatives of the existing AI-generated cover. No new generation; source and licensing in CREDITS-atlas.md."
+}
