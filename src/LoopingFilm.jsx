@@ -284,7 +284,7 @@ const LoopingFilm = forwardRef(function LoopingFilm({
   }, [active, reducedMotion]);
 
   return <div className="looping-film" data-film-status={status} data-film-source={selected.current === 1 ? 'fallback' : 'primary'}>
-    {poster && <img className="looping-film__poster" src={poster} alt="" aria-hidden="true" draggable="false" onLoad={onPosterReady} style={{ transition: 'none' }} />}
+    {poster && <img ref={image=>{if(image?.complete&&image.naturalWidth)onPosterReady?.();}} className="looping-film__poster" src={poster} alt="" aria-hidden="true" draggable="false" onLoad={onPosterReady} onError={onPosterReady} style={{ transition: 'none' }} />}
     {sources.current.map((source, index) => source && <video
       key={index}
       ref={element => { videos.current[index] = element; }}
@@ -304,7 +304,7 @@ const LoopingFilm = forwardRef(function LoopingFilm({
     />)}
     {(status === 'blocked' || status === 'error') && <div className="looping-film__notice" role="status">
       <button type="button" onClick={() => controller.current.play()} style={{ pointerEvents: 'auto' }}>
-        {status === 'error' ? 'Tentar reproduzir novamente' : 'Reproduzir animação'}
+        {status === 'error' ? 'Try playback again' : 'Play animation'}
       </button>
     </div>}
   </div>;

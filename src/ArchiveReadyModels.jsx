@@ -8,13 +8,14 @@ import ArchiveServiceWear from './ArchiveServiceWear';
 import {createBackpackSocket} from './ArchiveBackpackMotion';
 import {createAuthoredLocomotion,applyAuthoredLocomotion} from './ArchiveHumanMotion';
 import {configureModelCulling} from './ArchiveModelCulling';
+import {runtimeAssetUrl} from './RuntimeAssets';
 
 // Downloaded, redistributable CC0 assets. Provenance and checksums live next to
 // the files in public/assets/ready-models/CREDITS.md; these are not generated
 // approximations of a designer's proprietary meshes.
 const PLANT='/assets/ready-models/potted-plant/potted_plant_01_web.gltf';
-const SAM='/assets/ready-models/sam-locomotion-crowd-lod.glb';
-const HARPER='/assets/ready-models/harper-walk-crowd-lod.glb';
+const SAM='/assets/ready-models/sam-locomotion-runtime.glb';
+const HARPER='/assets/ready-models/harper-walk-runtime.glb';
 const Y=new THREE.Vector3(0,1,0);
 
 function cloneMaterials(object,variant=0,worker=false){
@@ -70,25 +71,34 @@ function snapshot(object){return{object,position:object.position.clone(),quatern
 function restore(entry){entry.object.position.copy(entry.position);entry.object.quaternion.copy(entry.quaternion);entry.object.scale.copy(entry.scale);}
 function worldPosition(object){return object.getWorldPosition(new THREE.Vector3());}
 
+// The actor and rest skeleton are updated once before solving. Read those
+// matrices directly instead of making each hand/foot query walk all ancestors.
+function updateBoneWorld(bone){
+ bone.updateMatrix();bone.matrixWorld.multiplyMatrices(bone.parent.matrixWorld,bone.matrix);bone.matrixWorldNeedsUpdate=false;
+}
+function matrixQuaternion(object,target,scratch){object.matrixWorld.decompose(scratch.matrixPosition,target,scratch.matrixScale);return target;}
+function lowerBonePath(upper,lower){const path=[];let bone=lower;while(bone&&bone!==upper){path.push(bone);bone=bone.parent;}return path.reverse();}
+function updateLowerPath(chain){chain.lowerPath.forEach(updateBoneWorld);}
+
 function createChain(root,upperName,lowerName,endName,side,leg=false){
  const upper=root.getObjectByName(upperName),lower=root.getObjectByName(lowerName),end=root.getObjectByName(endName);
  if(!upper||!lower||!end)return null;
  const a=worldPosition(upper),b=worldPosition(lower),c=worldPosition(end);
  const qa=upper.getWorldQuaternion(new THREE.Quaternion()),qb=lower.getWorldQuaternion(new THREE.Quaternion());
  return{upper,lower,end,side,leg,lengthA:a.distanceTo(b),lengthB:b.distanceTo(c),axisA:b.clone().sub(a).normalize().applyQuaternion(qa.invert()),axisB:c.clone().sub(b).normalize().applyQuaternion(qb.invert()),endQ:end.getWorldQuaternion(new THREE.Quaternion()),
-  start:new THREE.Vector3(),target:new THREE.Vector3(),direction:new THREE.Vector3(),pole:new THREE.Vector3(),elbow:new THREE.Vector3(),delta:new THREE.Vector3(),axis:new THREE.Vector3(),parentScale:new THREE.Vector3(),q:new THREE.Quaternion(),qParent:new THREE.Quaternion(),qCurrent:new THREE.Quaternion(),authoredUpper:new THREE.Quaternion(),authoredLower:new THREE.Quaternion(),reachError:0};
+  lowerPath:lowerBonePath(upper,lower),matrixPosition:new THREE.Vector3(),matrixScale:new THREE.Vector3(),inverseParent:new THREE.Matrix4(),start:new THREE.Vector3(),target:new THREE.Vector3(),direction:new THREE.Vector3(),pole:new THREE.Vector3(),elbow:new THREE.Vector3(),delta:new THREE.Vector3(),axis:new THREE.Vector3(),parentScale:new THREE.Vector3(),q:new THREE.Quaternion(),qParent:new THREE.Quaternion(),qCurrent:new THREE.Quaternion(),authoredUpper:new THREE.Quaternion(),authoredLower:new THREE.Quaternion(),reachError:0};
 }
 
 function aim(bone,axis,direction,s){
- bone.getWorldQuaternion(s.qCurrent);s.axis.copy(axis).applyQuaternion(s.qCurrent).normalize();
+ matrixQuaternion(bone,s.qCurrent,s);s.axis.copy(axis).applyQuaternion(s.qCurrent).normalize();
  s.q.setFromUnitVectors(s.axis,direction.normalize()).multiply(s.qCurrent);
- bone.parent.getWorldQuaternion(s.qParent).invert();bone.quaternion.copy(s.qParent.multiply(s.q));bone.updateMatrixWorld(true);
+ matrixQuaternion(bone.parent,s.qParent,s).invert();bone.quaternion.copy(s.qParent.multiply(s.q));updateBoneWorld(bone);
 }
 
 function solveChain(chain,target,actor,actorScale){
  if(!chain)return;
  const s=chain;
- s.upper.getWorldPosition(s.start);s.target.copy(target);actor.localToWorld(s.target);
+ s.start.setFromMatrixPosition(s.upper.matrixWorld);s.target.copy(target).applyMatrix4(actor.matrixWorld);
  s.direction.subVectors(s.target,s.start);const distance=s.direction.length();s.direction.normalize();
  // Protract the shoulder by at most 5.5cm for the final reach; imported arm
  // lengths and bone scales stay intact. This models scapular travel rather
@@ -97,10 +107,10 @@ function solveChain(chain,target,actor,actorScale){
  if(!s.leg&&distance>a+b-.0001){
   const shift=Math.min(distance-a-b+.00015,.055*actorScale);
   s.delta.copy(s.direction).multiplyScalar(shift);
-  s.upper.parent.getWorldQuaternion(s.qParent).invert();
-  s.upper.parent.getWorldScale(s.parentScale);
+  matrixQuaternion(s.upper.parent,s.qParent,s).invert();
+  s.parentScale.setFromMatrixScale(s.upper.parent.matrixWorld);
   s.delta.applyQuaternion(s.qParent).divide(s.parentScale);
-  s.upper.position.add(s.delta);s.upper.updateMatrixWorld(true);s.upper.getWorldPosition(s.start);
+  s.upper.position.add(s.delta);updateBoneWorld(s.upper);updateLowerPath(s);s.start.setFromMatrixPosition(s.upper.matrixWorld);
   s.direction.subVectors(s.target,s.start).normalize();
  }
  const adjusted=s.target.distanceTo(s.start),d=THREE.MathUtils.clamp(adjusted,.015,a+b-.0001);
@@ -110,12 +120,12 @@ function solveChain(chain,target,actor,actorScale){
  const along=(a*a-b*b+d*d)/(2*d),bend=Math.sqrt(Math.max(0,a*a-along*along));
  s.elbow.copy(s.start).addScaledVector(s.direction,along).addScaledVector(s.pole,bend);
  s.delta.subVectors(s.elbow,s.start);aim(s.upper,s.axisA,s.delta,s);
- s.lower.getWorldPosition(s.start);s.delta.subVectors(s.target,s.start);aim(s.lower,s.axisB,s.delta,s);
+ updateLowerPath(s);s.start.setFromMatrixPosition(s.lower.matrixWorld);s.delta.subVectors(s.target,s.start);aim(s.lower,s.axisB,s.delta,s);
  if(s.leg){
   // MakeHuman's foot effectors are siblings of its torso, rather than children
   // of the calves. Preserve their independent planted position and rotation.
-  s.end.position.copy(s.target);s.end.parent.worldToLocal(s.end.position);
-  actor.getWorldQuaternion(s.q);s.q.multiply(s.endQ);s.end.parent.getWorldQuaternion(s.qParent).invert();s.end.quaternion.copy(s.qParent.multiply(s.q));s.end.updateMatrixWorld(true);
+  s.end.position.copy(s.target).applyMatrix4(s.inverseParent.copy(s.end.parent.matrixWorld).invert());
+  matrixQuaternion(actor,s.q,s);s.q.multiply(s.endQ);matrixQuaternion(s.end.parent,s.qParent,s).invert();s.end.quaternion.copy(s.qParent.multiply(s.q));updateBoneWorld(s.end);
  }
 }
 
@@ -125,7 +135,7 @@ function solveChain(chain,target,actor,actorScale){
  * sequencing remain the authority, so books, stamps and parcels stay in sync.
  */
 export function ImportedScholar({pose,actorRef,actorScale=1,variant=0,time,walk=false,backpack=false,backpackHome,worker=false}){
- const source=variant%2?HARPER:SAM;
+ const source=runtimeAssetUrl(variant%2?HARPER:SAM,{mobileVariant:true});
  const {scene,animations}=useGLTF(source),local=useRef();
  const data=useMemo(()=>{
   const model=cloneSkeleton(scene),materials=cloneMaterials(model,variant,worker);
@@ -145,7 +155,7 @@ export function ImportedScholar({pose,actorRef,actorScale=1,variant=0,time,walk=
   const mixer=new THREE.AnimationMixer(model),clip=animations.find(c=>c.name==='Walk_Relaxed')||animations[0];
   if(walk&&clip)mixer.clipAction(clip).play();
   const backpackSocket=createBackpackSocket(spine,actorScale),locomotion=createAuthoredLocomotion(holder,animations);
-  return{holder,model,materials,bones,pelvis,head,spine,chains,mixer,backpackSocket,locomotion,p:new THREE.Vector3(),q:new THREE.Quaternion(),q2:new THREE.Quaternion(),axis:new THREE.Vector3(1,0,0),worldScale:new THREE.Vector3(),actorScale,bindPelvis:pelvis?worldPosition(pelvis).y:.55};
+  return{holder,model,materials,bones,pelvis,head,spine,chains,mixer,backpackSocket,locomotion,p:new THREE.Vector3(),inverseParent:new THREE.Matrix4(),q:new THREE.Quaternion(),q2:new THREE.Quaternion(),axis:new THREE.Vector3(1,0,0),worldScale:new THREE.Vector3(),actorScale,bindPelvis:pelvis?worldPosition(pelvis).y:.55};
  },[scene,animations,variant,walk,worker,actorScale]);
  useEffect(()=>()=>{data.mixer.stopAllAction();data.mixer.uncacheRoot(data.model);data.materials.forEach(m=>m.dispose());},[data]);
  useFrame(()=>{
@@ -154,17 +164,17 @@ export function ImportedScholar({pose,actorRef,actorScale=1,variant=0,time,walk=
   if(!pose||!data.pelvis)return;
   data.bones.forEach(restore);
   const walkWeight=applyAuthoredLocomotion(data.locomotion,pose);
-  data.holder.updateMatrixWorld(true);
   // Standing task targets used the former 0.55m toy pelvis. Seat targets are
   // already tied to the actual stool height, so preserve those independently.
   const pelvisHeight=Number.isFinite(pose.pelvisAbsolute)?pose.pelvisAbsolute:pose.pelvis>=.70?pose.pelvis:.83/data.actorScale+pose.pelvis-.55;
-  data.p.set(0,pelvisHeight,0);actor.localToWorld(data.p);data.pelvis.position.copy(data.p);data.pelvis.parent.worldToLocal(data.pelvis.position);
-  data.holder.updateMatrixWorld(true);
+  data.pelvis.parent.updateWorldMatrix(true,false);
+  data.p.set(0,pelvisHeight,0).applyMatrix4(actor.matrixWorld);data.pelvis.position.copy(data.p).applyMatrix4(data.inverseParent.copy(data.pelvis.parent.matrixWorld).invert());
   // The upper torso leans independently; IK then reattaches the hands to the
   // book or instrument after that change in posture.
-  if(data.spine){data.spine.rotateX(pose.lean||0);data.spine.updateMatrixWorld(true);}
-  if(data.head){data.head.rotateX(pose.headPitch||0);data.head.rotateZ(pose.headYaw||0);data.head.updateMatrixWorld(true);}
-  actor.getWorldScale(data.worldScale);
+  if(data.spine)data.spine.rotateX(pose.lean||0);
+  if(data.head){data.head.rotateX(pose.headPitch||0);data.head.rotateZ(pose.headYaw||0);}
+  data.holder.updateMatrixWorld(true);
+  data.worldScale.setFromMatrixScale(actor.matrixWorld);
   data.chains.forEach((chain,i)=>{
    if(!chain)return;
    const taskWeight=i<2?1-walkWeight*(1-(pose.handTaskWeight??1)):1;
@@ -175,9 +185,10 @@ export function ImportedScholar({pose,actorRef,actorScale=1,variant=0,time,walk=
    if(taskWeight<.9999){
     chain.upper.quaternion.slerpQuaternions(chain.authoredUpper,chain.upper.quaternion,taskWeight);
     chain.lower.quaternion.slerpQuaternions(chain.authoredLower,chain.lower.quaternion,taskWeight);
-    chain.upper.updateMatrixWorld(true);
    }
   });
+  // Propagate fingers and other descendants once, after all four chains settle.
+  data.holder.updateMatrixWorld(true);
  },-1);
  return <group ref={local} name={'imported-CC0-scholar-'+variant}><primitive object={data.holder} dispose={null}/>{backpack&&<ArchiveBackpack pose={pose} actorRef={actorRef||local} actorScale={data.actorScale} socket={data.backpackSocket} home={backpackHome}/>} {worker&&<ArchiveServiceWear pose={pose} actorRef={actorRef} head={data.head}/>}</group>;
 }

@@ -3,12 +3,13 @@ import {useFrame} from '@react-three/fiber';
 import {useGLTF} from '@react-three/drei';
 import * as THREE from 'three';
 import {BACKPACK_HEIGHT,backpackHomeAt,backpackScratch,updateBackpackTransform} from './ArchiveBackpackMotion';
+import {runtimeAssetUrl} from './RuntimeAssets';
 
-const MODEL='/assets/study-devices/jansport-backpack-web.glb';
+const MODEL='/assets/study-devices/jansport-backpack-runtime.glb';
 
 /** Google Research's photographed JanSport school bag, with original UVs/straps. */
 export default function ArchiveBackpack({pose,actorRef,socket,home}){
- const root=useRef(),fallbackHome=useRef(null),{scene}=useGLTF(MODEL);
+ const root=useRef(),fallbackHome=useRef(null),{scene}=useGLTF(runtimeAssetUrl(MODEL));
  const scratch=useMemo(backpackScratch,[]);
  const kit=useMemo(()=>{
   const model=scene.clone(true),materials=[];

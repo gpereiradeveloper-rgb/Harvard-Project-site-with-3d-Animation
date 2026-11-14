@@ -1,42 +1,57 @@
-# Harvard Veritas — O arquivo vivo
+# Harvard Veritas — The Living Archive
 
-Uma experiência 3D interativa de Guilherme Galvão, inspirada na curiosidade e na circulação do conhecimento.
+An interactive 3D journey by **Guilherme Galvão** through curiosity, reading and the circulation of knowledge.
 
-O percurso conecta a chegada ao campus, um ateliê de leitura e arquivo em atividade e um álbum com seis volumes exploráveis. A cena reúne recebimento, scanner de caixas, transporte, armazenamento e leitores, com modelos licenciados e uma direção visual em marfim, navy, crimson e latão.
+[**Explore the live experience →**](https://gpereiradeveloper-rgb.github.io/Harvard-Project-site-with-3d-Animation/)
 
-## Abrir o site
+Scroll from the animated opening into a geographic 3D campus map, approach Memorial Church, and discover a working archive. Follow books, people and machinery through a shared receiving operation, inspect the illuminated scanner, then open six interactive volumes.
 
-[Explorar Harvard Veritas](https://gpereiradeveloper-rgb.github.io/Harvard-Project-site-with-3d-Animation/)
+## Explore
 
-Use a rolagem ou as etapas na barra inferior. No ateliê, **Ver o scanner 3D** aproxima a operação do scanner. Os controles permitem pausar os movimentos e escolher a qualidade.
+- **Arrival:** the original Harvard College opening film, delivered in a smaller web edition.
+- **The campus:** a free, interactive MapLibre/OpenFreeMap map with real OpenStreetMap building geography and a scroll-directed approach to Memorial Church.
+- **The atelier:** a connected reading and receiving world with licensed models, physical materials, soft shadows and coordinated animation. Select **Explore the 3D scanner** for a close perspective.
+- **The album:** six volumes and 36 pages of photographs, observations and links to primary Harvard sources.
 
-## Executar localmente
+The public map is cartographic 3D, rather than Google's photorealistic imagery. It requires no API key or billing account. Attribution remains visible. The archived Google Maps demo is available only in local development with `?map=google` and a privately supplied demo key.
 
-Requer Node.js 22.
+## Visual direction
+
+Ivory, navy, crimson and brass connect the editorial design and the miniature world. Bevelled resin surfaces, selective clearcoat, studio reflections and restrained scanner light take inspiration from Vedant Hegde and Alex Bender / Fancy. Their proprietary meshes, textures and shaders are not included, and this project does not claim to reproduce their work exactly.
+
+[Editorial design in Figma](https://www.figma.com/design/5JLgqQ96GqZeNzydUQIA0K?node-id=3-2)
+
+## Performance and motion
+
+The opening film is approximately **0.80 MB on desktop / 0.36 MB on mobile**, compared with the 12.53 MB original. Seven active photographs total approximately **2.27 MB**, compared with 40.23 MB. The two human model downloads total approximately **13.72 MB on desktop / 10.24 MB on mobile**, compared with 41.28 MB, with the same geometry, rigs and authored clips.
+
+Automatic quality uses a bounded drawing buffer, frame-budget adaptation and 30 Hz shadow refresh. High and Cinema remain explicit fixed choices. Scenes stop continuous rendering when inactive. Animation uses one shared clock and pauses without jumping through handling transitions.
+
+The forklift withdraws its full forks from the rack before lowering or turning. The receiving wing includes a clear manoeuvring aisle; pallet openings, fork spacing and deck support heights follow the imported equipment. A sampled regression checks the original equipment envelopes, stocked shelves, parcels, supports and people through both returns.
+
+Performance varies by device, browser and temperature. These changes reduce download and processing cost; they are not a promise of a universal frame rate. The operation is deterministic animation, not a general-purpose rigid-body physics simulation.
+
+## Run locally
+
+Requires Node.js 22 or newer.
 
 ```sh
 npm ci
 npm run dev
-```
-
-```sh
 npm test
-npm run build
 ```
 
-A publicação pelo GitHub Pages usa a branch `gh-pages`, com o site compilado. A branch `main` contém o código-fonte e os ativos licenciados. Para reproduzir seu endereço localmente:
+Build for this repository's GitHub Pages address:
 
 ```sh
 HARVARD_BASE_PATH=/Harvard-Project-site-with-3d-Animation/ npm run build
 HARVARD_BASE_PATH=/Harvard-Project-site-with-3d-Animation/ npm run preview
 ```
 
-## Design e autoria
+`main` contains the complete source and licensed assets. `gh-pages` contains the compiled public site. Dependencies, local configuration and private environment files are excluded.
 
-[Direção editorial no Figma](https://www.figma.com/design/5JLgqQ96GqZeNzydUQIA0K?node-id=3-2).
+## Sources and authorship
 
-Referências de composição e acabamento: Vedant Hegde (Sendoso e OrderGrid) e Alex Bender / Fancy. Os modelos e materiais proprietários desses autores não estão incluídos. Os créditos dos ativos de terceiros e suas licenças acompanham os arquivos em `public/assets/`.
+This is an independent creative study, with no institutional affiliation with Harvard University. The atelier is an artistic setting, not a scan or reconstruction of a Harvard interior. The books link to official historical, library and campus sources. Asset authors, licenses and adaptations are recorded beside the files in `public/assets/`.
 
-Experiência independente, sem vínculo institucional com Harvard University. O ateliê é uma interpretação artística, não uma digitalização de um interior da universidade. O mapa Google de demonstração permanece exclusivo do desenvolvimento local; a publicação oferece a alternativa visual do campus sem incluir a chave privada.
-
-O site publicado é aberto à visitação. Visitantes não recebem permissão para alterar este repositório ou a publicação.
+Visitors can explore the website and view the public source. They are not given permission to change this repository or its published site.

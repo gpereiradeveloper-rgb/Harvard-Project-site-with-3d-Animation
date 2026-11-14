@@ -11,12 +11,12 @@ const smooth = (a, b, value) => {const t = clamp((value - a) / (b - a)); return 
 const seeded = (seed = 1636) => () => {seed = seed * 16807 % 2147483647; return (seed - 1) / 2147483646;};
 
 export const ALBUM_VOLUMES = Object.freeze([
-  {id:'origins', title:'As origens', kicker:'I / 1636', description:'As origens de Harvard e o começo de uma história de conhecimento.', image:'/assets/widener-4k.jpg', source:'https://www.harvard.edu/about/history/', sourceName:'Harvard University · História', color:'#d8cbae', ink:'#3d3540'},
-  {id:'library', title:'A biblioteca', kicker:'II / OS LUGARES', description:'A Widener e a luz da Loker Reading Room, em fotografias originais.', image:'/assets/loker-4k.jpg', source:'https://library.harvard.edu/libraries/widener', sourceName:'Harvard Library · Widener', color:'#263b4b', ink:'#e3d0a1'},
-  {id:'architecture', title:'Arquitetura', kicker:'III / FORMA E MEMÓRIA', description:'Observar a Memorial Church, seus ritmos, materiais e histórias.', image:'/assets/memorial-church-front.jpg', source:'https://memorialchurch.harvard.edu/history-0', sourceName:'Harvard · Memorial Church', color:'#65706c', ink:'#eee1bf'},
-  {id:'collections', title:'O acervo', kicker:'IV / ENTRE PÁGINAS', description:'Livros, coleções e caminhos de pesquisa na Harvard Library.', image:'/assets/loker-4k.jpg', source:'https://library.harvard.edu/collections/gutenberg-bible', sourceName:'Harvard Library · Gutenberg Bible', color:'#b09b6c', ink:'#3e3440'},
-  {id:'campus', title:'O campus', kicker:'V / CAMBRIDGE', description:'Lugares e perspectivas para continuar descobrindo Harvard.', image:'/assets/memorial-church-inscription.jpg', source:'https://www.harvard.edu/visit/maps-directions/', sourceName:'Harvard University · Mapas', color:'#4b5b4d', ink:'#eee2bd'},
-  {id:'research', title:'Novas ideias', kicker:'VI / DESCOBRIR', description:'Uma pergunta, uma fonte, uma nova possibilidade de leitura.', image:'/assets/loker-4k.jpg', source:'https://www.harvard.edu/in-focus/', sourceName:'Harvard University · In Focus', color:'#4a4858', ink:'#eadbb5'},
+  {id:'origins', title:'Origins', kicker:'I / 1636', description:'The origins of Harvard and the beginning of a story of knowledge.', image:'/assets/widener-4k-web.jpg', source:'https://www.harvard.edu/about/history/', sourceName:'Harvard University · History', color:'#d8cbae', ink:'#3d3540'},
+  {id:'library', title:'The library', kicker:'II / PLACES', description:'Widener and the light of the Loker Reading Room, in original photographs.', image:'/assets/loker-4k-web.jpg', source:'https://library.harvard.edu/libraries/widener', sourceName:'Harvard Library · Widener', color:'#263b4b', ink:'#e3d0a1'},
+  {id:'architecture', title:'Architecture', kicker:'III / FORM & MEMORY', description:'Look closely at Memorial Church, its rhythms, materials, and stories.', image:'/assets/memorial-church-front-web.jpg', source:'https://memorialchurch.harvard.edu/history-0', sourceName:'Harvard · Memorial Church', color:'#65706c', ink:'#eee1bf'},
+  {id:'collections', title:'Collections', kicker:'IV / BETWEEN PAGES', description:'Books, collections, and paths for research at Harvard Library.', image:'/assets/loker-4k-web.jpg', source:'https://library.harvard.edu/collections/gutenberg-bible', sourceName:'Harvard Library · Gutenberg Bible', color:'#b09b6c', ink:'#3e3440'},
+  {id:'campus', title:'Campus life', kicker:'V / CAMBRIDGE', description:'Places and perspectives to keep discovering Harvard.', image:'/assets/memorial-church-inscription-web.jpg', source:'https://www.harvard.edu/visit/maps-directions/', sourceName:'Harvard University · Maps', color:'#4b5b4d', ink:'#eee2bd'},
+  {id:'research', title:'Research', kicker:'VI / DISCOVER', description:'A question, a source, a new way into a story.', image:'/assets/loker-4k-web.jpg', source:'https://www.harvard.edu/in-focus/', sourceName:'Harvard University · In Focus', color:'#4a4858', ink:'#eadbb5'},
 ]);
 
 function canvasTexture(width, height, painter, color = true) {
@@ -56,11 +56,11 @@ function pageMap(side,portrait) {
   return canvasTexture(1664,2048,(ctx,w,h)=>{
     drawPaper(ctx,w,h);
     if(portrait){ctx.translate(w/2,h/2);ctx.rotate(Math.PI/2);ctx.translate(-h/2,-w/2);[w,h]=[h,w];}
-    ctx.textAlign='left';ctx.fillStyle='#85714b';ctx.font='23px Georgia,serif';ctx.fillText(side==='left'?'HARVARD · UM ATLAS DE IDEIAS':'SEIS VOLUMES · MUITOS CAMINHOS',126,143);
-    ctx.fillStyle='#303b46';ctx.font='112px Georgia,serif';ctx.fillText(side==='left'?'O conhecimento':'Escolha um',126,300);ctx.font='italic 109px Georgia,serif';ctx.fillText(side==='left'?'abre caminhos.':'novo capítulo.',126,423);
+    ctx.textAlign='left';ctx.fillStyle='#85714b';ctx.font='23px Georgia,serif';ctx.fillText(side==='left'?'HARVARD · AN ATLAS OF IDEAS':'SIX VOLUMES · MANY PATHS',126,143);
+    ctx.fillStyle='#303b46';ctx.font='112px Georgia,serif';ctx.fillText(side==='left'?'Knowledge':'Choose a',126,300);ctx.font='italic 109px Georgia,serif';ctx.fillText(side==='left'?'opens new paths.':'new chapter.',126,423);
     ctx.strokeStyle='#a188575f';ctx.lineWidth=1.5;ctx.beginPath();ctx.moveTo(126,479);ctx.lineTo(w-126,479);ctx.stroke();
-    ctx.fillStyle='#8f7952';ctx.font='27px Georgia,serif';ctx.textAlign='center';ctx.fillText(side==='left'?'ORIGENS · BIBLIOTECA · ARQUITETURA':'ACERVO · CAMPUS · NOVAS IDEIAS',w/2,h-238);
-    ctx.font='italic 31px Georgia,serif';ctx.fillStyle='#7e6a4b';ctx.fillText(side==='left'?'Um lugar para guardar novas perguntas.':'Toque em um volume para abrir sua história.',w/2,h-166);
+    ctx.fillStyle='#8f7952';ctx.font='27px Georgia,serif';ctx.textAlign='center';ctx.fillText(side==='left'?'ORIGINS · LIBRARY · ARCHITECTURE':'COLLECTIONS · CAMPUS · RESEARCH',w/2,h-238);
+    ctx.font='italic 31px Georgia,serif';ctx.fillStyle='#7e6a4b';ctx.fillText(side==='left'?'A place to keep new questions.':'Choose a volume to open its story.',w/2,h-166);
     ctx.font='20px Georgia,serif';ctx.fillStyle='#a38b61';ctx.fillText(side==='left'?'I':'II',w/2,h-93);
   });
 }
@@ -72,7 +72,7 @@ function outerCoverMap() {
     ctx.strokeStyle='#b69b63';ctx.lineWidth=4;ctx.strokeRect(158,158,w-316,h-316);ctx.lineWidth=1.5;ctx.strokeRect(183,183,w-366,h-366);
     ctx.fillStyle='#d9c59b';ctx.textAlign='center';ctx.font='41px Georgia,serif';ctx.fillText('CAMBRIDGE · MASSACHUSETTS',w/2,506);
     ctx.strokeStyle='#c5ac77';drawShield(ctx,w/2,1225,3.0);
-    ctx.font='306px Georgia,serif';ctx.fillText('HARVARD',w/2,2198);ctx.font='italic 161px Georgia,serif';ctx.fillText('Um atlas de ideias.',w/2,2487);
+    ctx.font='306px Georgia,serif';ctx.fillText('HARVARD',w/2,2198);ctx.font='italic 161px Georgia,serif';ctx.fillText('An atlas of ideas.',w/2,2487);
     ctx.beginPath();ctx.moveTo(w*.43,2820);ctx.lineTo(w*.57,2820);ctx.stroke();ctx.font='93px Georgia,serif';ctx.fillText('VERITAS',w/2,3146);ctx.font='53px Georgia,serif';ctx.fillText('EST. 1636',w/2,3570);
   });
 }
@@ -85,7 +85,7 @@ function coverMap(volume){return canvasTexture(768,1280,(ctx,w,h)=>{
   ctx.strokeStyle=volume.ink;ctx.globalAlpha=.5;ctx.lineWidth=1.8;ctx.strokeRect(38,38,w-76,h-76);ctx.strokeRect(47,47,w-94,h-94);ctx.globalAlpha=1;ctx.fillStyle=volume.ink;ctx.textAlign='center';ctx.font='29px Georgia,serif';ctx.fillText('HARVARD',w/2,143);ctx.font='23px Georgia,serif';ctx.fillText(volume.kicker,w/2,216);
   let font=91;while(font>58){ctx.font=`${font}px Georgia,serif`;if(ctx.measureText(volume.title).width<w-120)break;font-=2;}ctx.fillText(volume.title,w/2,390);
   ctx.fillStyle=volume.ink;ctx.globalAlpha=.12;ctx.fillRect(94,478,w-188,491);ctx.globalAlpha=.55;ctx.lineWidth=1;ctx.strokeRect(85,469,w-170,509);ctx.globalAlpha=1;
-  ctx.fillStyle=volume.ink;ctx.font='italic 26px Georgia,serif';ctx.fillText('Um volume para descobrir.',w/2,1095);ctx.font='21px Georgia,serif';ctx.fillText('VERITAS',w/2,1173);
+  ctx.fillStyle=volume.ink;ctx.font='italic 26px Georgia,serif';ctx.fillText('A volume to discover.',w/2,1095);ctx.font='21px Georgia,serif';ctx.fillText('VERITAS',w/2,1173);
 });}
 
 function assembled(frame,order) {
@@ -104,7 +104,7 @@ function Bookmark({frame,order,reduced,color}) {
 
 function ArchiveNote({side,portrait,fabric,frame,reduced}) {
   const ref=useRef(),order=side==='left'?0:1;
-  const texture=useMemo(()=>canvasTexture(1024,640,(ctx,w,h)=>{drawPaper(ctx,w,h);ctx.textAlign='left';ctx.fillStyle='#43505a';ctx.font='italic 72px Georgia,serif';ctx.fillText(order?'Uma nova pergunta.':'Notas do atlas.',90,175);ctx.strokeStyle='#b09b7044';ctx.lineWidth=1.4;for(let y=250;y<540;y+=76){ctx.beginPath();ctx.moveTo(95,y);ctx.lineTo(w-100-(y%3)*17,y);ctx.stroke();}ctx.font='21px Georgia,serif';ctx.fillStyle='#9b8254';ctx.fillText('HARVARD · VERITAS',95,574);}),[order]);
+  const texture=useMemo(()=>canvasTexture(1024,640,(ctx,w,h)=>{drawPaper(ctx,w,h);ctx.textAlign='left';ctx.fillStyle='#43505a';ctx.font='italic 72px Georgia,serif';ctx.fillText(order?'A new question.':'Notes from the atlas.',90,175);ctx.strokeStyle='#b09b7044';ctx.lineWidth=1.4;for(let y=250;y<540;y+=76){ctx.beginPath();ctx.moveTo(95,y);ctx.lineTo(w-100-(y%3)*17,y);ctx.stroke();}ctx.font='21px Georgia,serif';ctx.fillStyle='#9b8254';ctx.fillText('HARVARD · VERITAS',95,574);}),[order]);
   const geometry=useMemo(()=>new THREE.PlaneGeometry(1.18,.78,18,10),[]),base=useMemo(()=>new Float32Array(geometry.attributes.position.array),[geometry]);
   useEffect(()=>()=>{texture.dispose();geometry.dispose();},[texture,geometry]);
   useFrame(()=>{
@@ -131,7 +131,7 @@ function MiniVolume({volume,index,side,portrait,fabric,frame,selected,hovered,on
   const lift=useRef(),cover=useRef(),phase=useRef(0),hover=useRef(0),ambientWeight=useRef(0),delivered=useRef(false),order=index+(side==='right'?3:0);
   const {invalidate}=useThree();
   const texture=useMemo(()=>coverMap(volume),[volume]);
-  const interior=useMemo(()=>canvasTexture(768,1280,(ctx,w,h)=>{drawPaper(ctx,w,h);ctx.textAlign='center';ctx.fillStyle='#34434b';ctx.font='65px Georgia,serif';ctx.fillText(volume.title,w/2,410);ctx.font='italic 38px Georgia,serif';ctx.fillText('A descoberta continua.',w/2,620);ctx.fillStyle='#a18a5d';ctx.font='31px Georgia,serif';ctx.fillText(volume.kicker,w/2,993);}),[volume]);
+  const interior=useMemo(()=>canvasTexture(768,1280,(ctx,w,h)=>{drawPaper(ctx,w,h);ctx.textAlign='center';ctx.fillStyle='#34434b';ctx.font='65px Georgia,serif';ctx.fillText(volume.title,w/2,410);ctx.font='italic 38px Georgia,serif';ctx.fillText('Discovery continues.',w/2,620);ctx.fillStyle='#a18a5d';ctx.font='31px Georgia,serif';ctx.fillText(volume.kicker,w/2,993);}),[volume]);
   useEffect(()=>{let live=true;localImage(volume.image).then(image=>{if(!live||!image)return;const ctx=texture.image.getContext('2d'),x=94,y=478,w=580,h=491,ratio=w/h;let sw=image.width,sh=image.height,sx=0,sy=0;if(sw/sh>ratio){sw=sh*ratio;sx=(image.width-sw)/2;}else{sh=sw/ratio;sy=(image.height-sh)/2;}ctx.drawImage(image,sx,sy,sw,sh,x,y,w,h);texture.needsUpdate=true;invalidate();});return()=>{live=false;};},[volume,texture,invalidate]);
   useEffect(()=>()=>{texture.dispose();interior.dispose();},[texture,interior]);
   useEffect(()=>{if(!selected)delivered.current=false;},[selected]);
@@ -224,7 +224,7 @@ function AlbumScene({motion,quality,reduced,paused,active,selected,hovered,onHov
 }
 
 function AlbumFallback({onVolume}) {
-  return <div className="ha3-fallback"><p className="ha3-eyebrow">HARVARD · UM ATLAS DE IDEIAS</p><h2>Escolha um volume.</h2><p>A leitura permanece disponível neste navegador.</p><div>{ALBUM_VOLUMES.map(volume=><button key={volume.id} onClick={()=>onVolume?.(volume.id)}>{volume.title}<span aria-hidden="true">↗</span></button>)}</div></div>;
+  return <div className="ha3-fallback"><p className="ha3-eyebrow">HARVARD · AN ATLAS OF IDEAS</p><h2>Choose a volume.</h2><p>You can still read the volumes in this browser.</p><div>{ALBUM_VOLUMES.map(volume=><button key={volume.id} onClick={()=>onVolume?.(volume.id)}>{volume.title}<span aria-hidden="true">↗</span></button>)}</div></div>;
 }
 
 class AlbumBoundary extends React.Component {
@@ -242,10 +242,10 @@ export default function HarvardAlbum3D({motion,quality='high',reduced=false,paus
   useEffect(()=>()=>clearTimeout(resetTimer.current),[]);
   const select=id=>{if(!active||selected)return;if(failed){callback.current?.(id);return;}clearTimeout(resetTimer.current);delivered.current=false;setSelected(id);};
   const handoff=id=>{if(delivered.current)return;delivered.current=true;callback.current?.(id);resetTimer.current=setTimeout(()=>{setSelected(null);setHovered(null);},350);};
-  return <section className={`harvard-album-3d ${opened?'ha3-open':'ha3-closed'} ${selected?'ha3-selecting':''}`} aria-label="Álbum de Harvard com seis volumes interativos" data-active={active}>
-    <div className="ha3-canvas"><AlbumBoundary onVolume={onVolume} onFailure={()=>setFailed(true)}><Canvas dpr={profile.dpr} shadows={{type:THREE.PCFSoftShadowMap}} frameloop={active?'always':'demand'} camera={{position:[0,1.35,16.3],fov:36,near:.1,far:65}} gl={{alpha:true,antialias:true,powerPreference:'high-performance'}} fallback={<span aria-hidden="true">Álbum visual de Harvard.</span>} onCreated={({gl})=>{gl.domElement.setAttribute('aria-hidden','true');gl.setClearColor('#000000',0);gl.outputColorSpace=THREE.SRGBColorSpace;gl.toneMapping=THREE.ACESFilmicToneMapping;gl.toneMappingExposure=1.08;}}><Suspense fallback={null}><AlbumScene motion={motion||zero.current} quality={quality} reduced={reduced} paused={paused} active={active} selected={selected} hovered={hovered} onHover={setHovered} onSelect={select} onDelivered={handoff} onOpened={setOpened} onReady={onReady}/></Suspense></Canvas></AlbumBoundary></div>
-    <div className="ha3-instruction" aria-hidden="true"><span>{opened?'SEIS VOLUMES. NOVAS PERSPECTIVAS.':'UM ÁLBUM PARA DESCOBRIR.'}</span><p>{selected?'Abrindo o volume…':opened?'Escolha um livro. Continue a descoberta.':'Role para abrir — ou escolha um volume.'}</p></div>
-    <nav className="ha3-volume-nav" aria-label="Volumes do álbum">{ALBUM_VOLUMES.map((volume,index)=><button key={volume.id} onClick={()=>select(volume.id)} onPointerEnter={()=>setHovered(volume.id)} onPointerLeave={()=>setHovered(null)} onFocus={()=>setHovered(volume.id)} onBlur={()=>setHovered(null)} disabled={Boolean(selected)||!active} aria-label={`Abrir ${volume.title}`}><span>{String(index+1).padStart(2,'0')}</span>{volume.title}</button>)}</nav>
-    <p className="ha3-sr" role="status" aria-live="polite">{selected?`Abrindo ${ALBUM_VOLUMES.find(v=>v.id===selected)?.title}`:opened?'Álbum aberto. Selecione um dos seis volumes.':'Álbum fechado. Role para abrir ou escolha um volume nos controles.'}</p>
+  return <section className={`harvard-album-3d ${opened?'ha3-open':'ha3-closed'} ${selected?'ha3-selecting':''}`} aria-label="Harvard album with six interactive volumes" data-active={active}>
+    <div className="ha3-canvas"><AlbumBoundary onVolume={onVolume} onFailure={()=>setFailed(true)}><Canvas dpr={profile.dpr} shadows={{type:THREE.PCFSoftShadowMap}} frameloop={active?'always':'demand'} camera={{position:[0,1.35,16.3],fov:36,near:.1,far:65}} gl={{alpha:true,antialias:true,powerPreference:'high-performance'}} fallback={<span aria-hidden="true">Harvard’s visual album.</span>} onCreated={({gl})=>{gl.domElement.setAttribute('aria-hidden','true');gl.setClearColor('#000000',0);gl.outputColorSpace=THREE.SRGBColorSpace;gl.toneMapping=THREE.ACESFilmicToneMapping;gl.toneMappingExposure=1.08;}}><Suspense fallback={null}><AlbumScene motion={motion||zero.current} quality={quality} reduced={reduced} paused={paused} active={active} selected={selected} hovered={hovered} onHover={setHovered} onSelect={select} onDelivered={handoff} onOpened={setOpened} onReady={onReady}/></Suspense></Canvas></AlbumBoundary></div>
+    <div className="ha3-instruction" aria-hidden="true"><span>{opened?'SIX VOLUMES. NEW PERSPECTIVES.':'AN ALBUM TO DISCOVER.'}</span><p>{selected?'Opening the volume…':opened?'Choose a book. Keep discovering.':'Scroll to open — or choose a volume.'}</p></div>
+    <nav className="ha3-volume-nav" aria-label="Album volumes">{ALBUM_VOLUMES.map((volume,index)=><button key={volume.id} onClick={()=>select(volume.id)} onPointerEnter={()=>setHovered(volume.id)} onPointerLeave={()=>setHovered(null)} onFocus={()=>setHovered(volume.id)} onBlur={()=>setHovered(null)} disabled={Boolean(selected)||!active} aria-label={`Open ${volume.title}`}><span>{String(index+1).padStart(2,'0')}</span>{volume.title}</button>)}</nav>
+    <p className="ha3-sr" role="status" aria-live="polite">{selected?`Opening ${ALBUM_VOLUMES.find(v=>v.id===selected)?.title}`:opened?'Album open. Choose one of the six volumes.':'Album closed. Scroll to open it or choose a volume from the controls.'}</p>
   </section>;
 }

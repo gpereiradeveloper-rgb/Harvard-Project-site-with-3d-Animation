@@ -5,7 +5,7 @@ import {useViewportRenderQuality} from './RenderQuality';
 
 const clamp=n=>Math.max(0,Math.min(1,n));
 const smooth=(a,b,n)=>{const t=clamp((n-a)/(b-a));return t*t*(3-2*t);};
-const PHOTO='/assets/memorial-church-front.jpg';
+const PHOTO='/assets/memorial-church-front-web.jpg';
 // This is a photographic projection with authored depth, not a scanned interior.
 // Ground and foreground retain the source camera's exact framing at progress=0.
 function Projection({motion,active,reduced,paused,onReady}){

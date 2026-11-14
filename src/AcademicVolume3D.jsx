@@ -189,7 +189,7 @@ function VolumeScene({motion, reduced, paused, active, quality, onReady, onChapt
       if (sourceRatio > targetRatio) {sw = image.height * targetRatio; sx = (image.width - sw) / 2;} else {sh = image.width / targetRatio; sy = (image.height - sh) / 2;}
       ctx.drawImage(image, sx, sy, sw, sh, x, y, width, height); maps.library.needsUpdate = true; maps.backs[1].needsUpdate = true; invalidate();
     };
-    image.src = '/assets/loker-4k.jpg';
+    image.src = '/assets/loker-4k-web.jpg';
     return () => {live = false; image.onload = null;};
   }, [maps, invalidate]);
   useEffect(() => () => {for (const [name, texture] of Object.entries(maps)) if (name !== 'backs') texture.dispose(); maps.backs.forEach(t => t.dispose());}, [maps]);

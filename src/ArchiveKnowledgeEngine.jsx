@@ -14,7 +14,7 @@ export function archiveKnowledgeAt(seconds){
  const p=((seconds%CYCLE)+CYCLE)%CYCLE;
  return{
   phase:p,task:p<5?'aguardar-coleta':p<14?'receber':p<28?'catalogar':'preservar',
-  status:[p<5?'Aguarda coleta':'1 volume coletado',p<14?'Aguarda chegada':p<20?'Volume na bandeja':'1 volume catalogado',p<28?'Aguarda depósito':'1 volume arquivado'],
+  status:[p<5?'Awaiting pickup':'1 volume collected',p<14?'Awaiting arrival':p<20?'Volume on the tray':'1 volume cataloged',p<28?'Awaiting storage':'1 volume archived'],
   bars:[ramp(p,3,7),ramp(p,12,20),ramp(p,26,34)],
   flow:[ramp(p,5,14),ramp(p,20,28)],
   stage:p<5?0:p<14?1:p<28?2:3,
@@ -106,17 +106,17 @@ function makePanel(mats){
   const text=(str,x,y,size=25,color='#203c35',weight=500,align='left')=>{
    context.font=`${weight} ${size}px system-ui, -apple-system, sans-serif`;context.fillStyle=color;context.textAlign=align;context.fillText(str,x,y);
   };
-  text('FLUXO DO CONHECIMENTO',66,91,41,'#18382f',700);
-  text('HARVARD LIBRARY · CONHECIMENTO EM MOVIMENTO',69,129,22,'#50665c',500);
+  text('THE FLOW OF KNOWLEDGE',66,91,41,'#18382f',700);
+  text('HARVARD LIBRARY · KNOWLEDGE IN MOTION',69,129,22,'#50665c',500);
   text('VERITAS',1910,121,22,'#29473b',600,'center');
-  ['RECEBER','CATALOGAR','PRESERVAR'].forEach((title,i)=>{
+  ['RECEIVE','CATALOG','PRESERVE'].forEach((title,i)=>{
    const cx=405+i*619;
    text(`0${i+1} / ${title}`,cx,232,26,'#264b3e',700,'center');
    text(state.status[i],cx,466,23,'#3d5649',550,'center');
   });
-  text('COLETA',405,578,18,'#385547',650,'center');
-  text('REGISTRO',1024,578,18,'#385547',650,'center');
-  text('ARQUIVO',1643,578,18,'#385547',650,'center');
+  text('PICKUP',405,578,18,'#385547',650,'center');
+  text('RECORD',1024,578,18,'#385547',650,'center');
+  text('ARCHIVE',1643,578,18,'#385547',650,'center');
   texture.needsUpdate=true;
  };
  paint(archiveKnowledgeAt(0));
@@ -179,7 +179,7 @@ function ArchiveRaisedGraph({assets,time}){
   const curves=series.map(row=>new THREE.CatmullRomCurve3(row.map((y,i)=>new THREE.Vector3(-1.49+i*.425,y,.15)),false,'centripetal'));
   const tubes=curves.map(c=>new THREE.TubeGeometry(c,112,.012,8,false));
   const canvas=document.createElement('canvas');canvas.width=1536;canvas.height=640;const c=canvas.getContext('2d');
-  c.clearRect(0,0,1536,640);c.fillStyle='#26363e';c.font='600 41px Arial';c.fillText('COLEÇÕES EM MOVIMENTO',72,91);c.font='23px Arial';c.fillStyle='#766345';c.fillText('RECEBER',78,147);c.fillStyle='#a51c30';c.fillText('PRESERVAR',312,147);
+  c.clearRect(0,0,1536,640);c.fillStyle='#26363e';c.font='600 41px Arial';c.fillText('COLLECTIONS IN MOTION',72,91);c.font='23px Arial';c.fillStyle='#766345';c.fillText('RECEIVE',78,147);c.fillStyle='#a51c30';c.fillText('PRESERVE',312,147);
   c.strokeStyle='#9b9b9555';c.lineWidth=1.4;
   for(let i=0;i<5;i++){const y=215+i*77;c.beginPath();c.moveTo(105,y);c.lineTo(1450,y);c.stroke();}
   c.fillStyle='#647173';c.font='20px Arial';['I','II','III','IV','V','VI','VII','VIII'].forEach((s,i)=>c.fillText(s,123+i*184,597));

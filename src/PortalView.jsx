@@ -2,7 +2,7 @@ import React,{useEffect,useMemo} from 'react';
 import {useFrame,useThree} from '@react-three/fiber';
 import {useTexture} from '@react-three/drei';
 import * as THREE from 'three';
-export function librarySource(gl,width){return width>760&&gl.capabilities.maxTextureSize>=16384?'/assets/loker-native.jpg':'/assets/loker-4k.jpg';}
+export function librarySource(gl,width){return width>760&&gl.capabilities.maxTextureSize>=16384?'/assets/loker-native.jpg':'/assets/loker-4k-web.jpg';}
 export function yardSource(gl,width){return width>760&&gl.capabilities.maxTextureSize>=8192?'/assets/harvard-yard-8k.jpg':'/assets/harvard-yard-4k.jpg';}
 /** A live window samples the same view as its destination, preserving the join. */
 export default function PortalView({geometry,type='yard',motion}){

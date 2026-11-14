@@ -4,14 +4,14 @@ import {RoundedBox, useGLTF} from '@react-three/drei';
 import {mergeGeometries} from 'three/addons/utils/BufferGeometryUtils.js';
 import * as THREE from 'three';
 import {ImportedScholar} from './ArchiveReadyModels';
-import {supplyChainAt,SUPPLY_PALLET_SCALE,SUPPLY_SCANNER,SUPPLY_CASE_SIZE} from './ArchiveSupplyChain';
+import {supplyChainAt,SUPPLY_PALLET_SCALE,SUPPLY_SCANNER,SUPPLY_CASE_SIZE,SUPPLY_FORK_INSET,supplyCradleHeight} from './ArchiveSupplyChain';
 
 const BASE = '/assets/warehouse-models/';
 const URLS = {forklift: BASE+'forklift.glb', jack: BASE+'pallet-jack.glb', rack: BASE+'rack.glb', scanner: BASE+'barcode-scanner.glb', crate: BASE+'cardboard_box_01-1k-web.glb'};
-const FLOOR = .095, FORK_X = 7.10, RACK_X = 10.70, RACK_Z = -3.65;
+const FLOOR = .095, FORK_X = 7.10, RACK_X = 10.70, RACK_Z = -6.40;
 const STATION_Z = -2.65, STATION_A = FORK_X, STATION_B = 8.95, STATION_TOP = .1325;
 const CRATE_HEIGHT = .3417995572090149 / .5158704221248627;
-export const WAREHOUSE_BOUNDS = {x:[6.45,12.4], z:[-4.65,1.05], floor:FLOOR};
+export const WAREHOUSE_BOUNDS = {x:[6.45,13.5], z:[-7.40,1.05], floor:FLOOR};
 const clock = time => Math.max(0, Number(typeof time==='number'?time:time?.current)||0);
 const smooth = (t,a,b) => {const p=THREE.MathUtils.clamp((t-a)/(b-a),0,1);return p*p*(3-2*p);};
 
@@ -44,6 +44,7 @@ function mergeModel(scene, kind='static', filter=()=>true, offset=new THREE.Vect
     const key = classifier(kind,mesh);
     if(!groups.has(key)) groups.set(key, {parts:new Map(),bounds:new THREE.Box3()});
     const group=groups.get(key), geometry=mesh.geometry.clone().applyMatrix4(mesh.matrixWorld);
+    if(kind==='forklift'&&/^Fork_(blade|upright)/.test(mesh.name)){geometry.computeBoundingBox();geometry.translate(geometry.boundingBox.getCenter(new THREE.Vector3()).x<0?SUPPLY_FORK_INSET:-SUPPLY_FORK_INSET,0,0);}
     geometry.translate(-offset.x,-offset.y,-offset.z); geometry.computeBoundingBox();group.bounds.union(geometry.boundingBox);
     if(!group.parts.has(mesh.material.uuid)) group.parts.set(mesh.material.uuid,{material:mesh.material,list:[]});
     group.parts.get(mesh.material.uuid).list.push(geometry);
@@ -133,11 +134,11 @@ function StockRack(){
  const items=useMemo(()=>[-1,1].flatMap(side=>pack([RACK_X+side*.68,FLOOR+.3525,RACK_Z],.4)),[]);
  return <><StaticReady url={URLS.rack} position={[RACK_X,FLOOR,RACK_Z]} filter={lowerPalletsAndSteel}/><RealCrates items={items}/></>;
 }
-function ReceivingStations(){
+function ReceivingStations({time}){
  const ref=useRef(),{scene}=useGLTF(URLS.rack);
  const wood=useMemo(()=>{let material;scene.traverse(mesh=>{if(mesh.isMesh&&/^Pallet_/.test(mesh.name))material=mesh.material;});return material;},[scene]);
- useLayoutEffect(()=>{const o=new THREE.Object3D();let i=0;for(const [x,z]of [[7.10,-2.65],[8.7,-1.25],[11.3,-1.60]])for(const dx of [-.36,.36]){o.position.set(x+dx,FLOOR+.1325/2,z);o.scale.set(.08,.1325,.12);o.updateMatrix();ref.current.setMatrixAt(i++,o.matrix);}ref.current.instanceMatrix.needsUpdate=true;ref.current.computeBoundingSphere();},[]);
- return <instancedMesh ref={ref} args={[undefined,wood,6]} castShadow receiveShadow name="Fixed low pallet cradles under the actual central bearers"><boxGeometry/></instancedMesh>;
+ useFrame(()=>{const o=new THREE.Object3D();let i=0;for(const [station,[x,z]]of [[7.10,-2.65],[8.7,-1.25],[8.5,-6.40]].entries()){const h=supplyCradleHeight(clock(time),station);for(const dx of [-.46,.46]){o.position.set(x+dx,FLOOR+h/2-(h<.001?.003:0),z);o.scale.set(.05,Math.max(.001,h),.12);o.updateMatrix();ref.current.setMatrixAt(i++,o.matrix);}}ref.current.instanceMatrix.needsUpdate=true;ref.current.computeBoundingSphere();});
+ return <instancedMesh ref={ref} args={[undefined,wood,6]} castShadow receiveShadow name="Retracting pallet pedestals — flush steering lane after pickup"><boxGeometry/></instancedMesh>;
 }
 
 /** Original Kenney CC0 scanner/cover/conveyor meshes, with studio materials. */
@@ -174,10 +175,10 @@ function ScannerGate({time}) {
    let bx=625;for(let i=0;i<48;i++){const width=[3,7,3,11,5,3,9][i%7];c.fillRect(bx,37,width,86);bx+=width+3;}
    c.fillStyle='#d7d0e6';c.beginPath();c.roundRect(48,218,286,286,30);c.fill();c.strokeStyle='#8d283e';c.lineWidth=13;
    c.strokeRect(117,277,145,123);c.beginPath();c.moveTo(117,277);c.lineTo(190,241);c.lineTo(262,277);c.moveTo(190,241);c.lineTo(190,366);c.moveTo(117,400);c.lineTo(190,437);c.lineTo(262,400);c.stroke();
-   c.fillStyle='#5e6261';c.font='500 37px sans-serif';c.fillText('VOLUMES CONFERIDOS',382,247);c.fillStyle='#293337';c.font='600 151px sans-serif';c.fillText(String(scan.count).padStart(2,'0')+' / 05',376,422);
-   c.fillStyle=scan.active?'#8d283e':'#747876';c.font='600 42px sans-serif';c.fillText(scan.active?'LENDO VOLUME '+String(scan.caseId+1).padStart(2,'0'):'LEITURA TRIDIMENSIONAL',382,497);
+   c.fillStyle='#5e6261';c.font='500 37px sans-serif';c.fillText('CASES CHECKED',382,247);c.fillStyle='#293337';c.font='600 151px sans-serif';c.fillText(String(scan.count).padStart(2,'0')+' / 05',376,422);
+   c.fillStyle=scan.active?'#8d283e':'#747876';c.font='600 42px sans-serif';c.fillText(scan.active?'SCANNING CASE '+String(scan.caseId+1).padStart(2,'0'):'3D DIMENSION CHECK',382,497);
    c.fillStyle='#dddcd5';c.fillRect(48,559,928,8);c.fillStyle='#8d283e';c.fillRect(48,559,928*scan.count/scan.total,8);
-   c.fillStyle='#293337';c.font='500 55px sans-serif';c.fillText('30 × 27 × 40 cm',48,660);c.fillStyle='#8b8d87';c.font='28px sans-serif';c.fillText('RECEBIMENTO  /  VERITAS',48,715);display.texture.needsUpdate=true;
+   c.fillStyle='#293337';c.font='500 55px sans-serif';c.fillText('30 × 27 × 40 cm',48,660);c.fillStyle='#8b8d87';c.font='28px sans-serif';c.fillText('RECEIVING  /  VERITAS',48,715);display.texture.needsUpdate=true;
   }
   const moving=state.cases.some(c=>c.host==='scanner-conveyor'),offset=moving?(clock(time)*.34)%.11:0;
   for(let i=0;i<16;i++){matrix.position.set(9.76+(i*.11+offset)%1.76,1.018,-.65);matrix.scale.set(.008,.005,.53);matrix.updateMatrix();ribs.current.setMatrixAt(i,matrix.matrix);}ribs.current.instanceMatrix.needsUpdate=true;
@@ -220,12 +221,12 @@ function ScannerGate({time}) {
 }
 
 function WarehouseFloor() {
-  return <group name="Continuous warehouse extension — 5.95m by 5.70m">
-    <RoundedBox args={[5.95,.40,5.70]} radius={.045} smoothness={2} position={[9.425,-.14,-1.80]} castShadow receiveShadow>
+  return <group name="Continuous warehouse extension — 5.95m by 8.45m">
+    <RoundedBox args={[7.05,.40,8.45]} radius={.045} smoothness={2} position={[9.975,-.14,-3.175]} castShadow receiveShadow>
       <meshStandardMaterial color="#dedbd2" roughness={.72}/>
     </RoundedBox>
-    <mesh position={[9.425,.0775,-1.8]} receiveShadow><boxGeometry args={[5.88,.035,5.63]}/><meshPhysicalMaterial color="#bfc7c7" roughness={.38} metalness={.04} clearcoat={.35} clearcoatRoughness={.35}/></mesh>
-    {[6.48,12.37].map(x=><mesh key={x} position={[x,.103,-1.8]}><boxGeometry args={[.025,.013,5.61]}/><meshStandardMaterial color="#bb9c60" metalness={.65} roughness={.4}/></mesh>)}
+    <mesh position={[9.975,.0775,-3.175]} receiveShadow><boxGeometry args={[6.98,.035,8.38]}/><meshPhysicalMaterial color="#bfc7c7" roughness={.38} metalness={.04} clearcoat={.35} clearcoatRoughness={.35}/></mesh>
+    {[6.48,13.47].map(x=><mesh key={x} position={[x,.103,-3.175]}><boxGeometry args={[.025,.013,8.36]}/><meshStandardMaterial color="#bb9c60" metalness={.65} roughness={.4}/></mesh>)}
     {[8.55,9.35].map(x=><mesh key={x} position={[x,.102,-.85]}><boxGeometry args={[.025,.01,3.15]}/><meshStandardMaterial color="#c8a768" roughness={.62}/></mesh>)}
   </group>;
 }
@@ -251,7 +252,7 @@ function HandlingScene({time}){
   Object.assign(gl.domElement.dataset,{worldWarehouseTask:state.task,worldWarehouseForkliftX:f.position[0].toFixed(3),worldWarehouseForkliftZ:f.position[2].toFixed(3),worldWarehouseForkliftLift:f.lift.toFixed(3),worldWarehouseJackX:j.position[0].toFixed(3),worldWarehouseJackZ:j.position[2].toFixed(3),worldWarehouseLoadIdentity:'two-persistent-pallets-eight-shared-cases',worldWarehousePallet0Support:state.pallets[0].host,worldWarehousePallet1Support:state.pallets[1].host,worldWarehouseComplete:String(state.complete),worldScannerCount:String(state.scanner.count),worldScannerCase:String(state.scanner.caseId??''),worldScannerActive:String(state.scanner.active),worldWarehouseSteering:f.steering.toFixed(3)});
  },-2);
  return <group name="Coordinated receiving warehouse — one finite remittance">
-  <WarehouseFloor/><StockRack/><ReceivingStations/><ScannerGate time={time}/>
+  <WarehouseFloor/><StockRack/><ReceivingStations time={time}/><ScannerGate time={time}/>
   <group ref={forklift} position={[7.10,FLOOR,.05]} rotation={[0,Math.PI,0]}><ReadyEquipment kind="forklift" motion={forkMotion}/><group ref={forkActor}><ImportedScholar actorRef={forkActor} pose={forkPose} time={time} variant={2} worker/></group></group>
   <group ref={jack} position={[9.15,FLOOR,-1.25]} rotation={[0,-Math.PI/2,0]}><ReadyEquipment kind="jack" motion={jackMotion}/></group>
   {[0,1].map(i=><group key={i} ref={o=>{palletRefs.current[i]=o;}} name={'Persistent incoming pallet '+i}><ReadyPallet scale={SUPPLY_PALLET_SCALE}/></group>)}

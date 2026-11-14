@@ -14,16 +14,16 @@ export default function ArchiveEditorial({phase = 'world', className = ''}) {
   return (
     <>
       <aside className={`archive-editorial archive-editorial--world ${className}`} aria-hidden={phase !== 'world'}>
-        <p className="archive-editorial__index"><span>02</span>O ateliê de ideias</p>
-        <h2 className="archive-editorial__title">O saber<br /><em>ganha vida.</em></h2>
-        <p className="archive-editorial__description">Livros que chegam. Ideias que circulam.<br />Conhecimento que encontra seu lugar.</p>
-        <p className="archive-editorial__direction"><span>Role para explorar</span><DirectionArrow /></p>
+        <p className="archive-editorial__index"><span>02</span>The atelier of ideas</p>
+        <h2 className="archive-editorial__title">Knowledge<br /><em>comes to life.</em></h2>
+        <p className="archive-editorial__description">Books arrive. Ideas circulate.<br />Knowledge finds its place.</p>
+        <p className="archive-editorial__direction"><span>Scroll to explore</span><DirectionArrow /></p>
       </aside>
       <aside className={`archive-editorial archive-editorial--passage ${className}`} aria-hidden={phase !== 'passage'}>
-        <p className="archive-editorial__index"><span>03</span>Entre páginas</p>
-        <h2 className="archive-editorial__title">Uma página.<br /><em>Novos mundos.</em></h2>
-        <p className="archive-editorial__description">Entre memórias e descobertas,<br />cada volume abre um caminho.</p>
-        <p className="archive-editorial__direction"><span>Continue até o álbum</span><DirectionArrow /></p>
+        <p className="archive-editorial__index"><span>03</span>Between pages</p>
+        <h2 className="archive-editorial__title">One page.<br /><em>New worlds.</em></h2>
+        <p className="archive-editorial__description">Between memories and discoveries,<br />every volume opens a path.</p>
+        <p className="archive-editorial__direction"><span>Continue to the album</span><DirectionArrow /></p>
       </aside>
     </>
   );

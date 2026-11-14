@@ -1,0 +1,130 @@
+[
+  {
+    "output": "ready-models/sam-locomotion-runtime.glb",
+    "triangles": 52870,
+    "clips": 7,
+    "exactTriangleAttributes": true,
+    "exactRigAndAnimation": true,
+    "fitBoundsPreserved": true
+  },
+  {
+    "output": "ready-models/harper-walk-runtime.glb",
+    "triangles": 62646,
+    "clips": 1,
+    "exactTriangleAttributes": true,
+    "exactRigAndAnimation": true,
+    "fitBoundsPreserved": true
+  },
+  {
+    "output": "ready-models/sam-locomotion-runtime-mobile.glb",
+    "triangles": 52870,
+    "clips": 7,
+    "exactTriangleAttributes": true,
+    "exactRigAndAnimation": true,
+    "fitBoundsPreserved": true
+  },
+  {
+    "output": "ready-models/harper-walk-runtime-mobile.glb",
+    "triangles": 62646,
+    "clips": 1,
+    "exactTriangleAttributes": true,
+    "exactRigAndAnimation": true,
+    "fitBoundsPreserved": true
+  },
+  {
+    "output": "study-devices/macbook-pro-13-runtime.glb",
+    "triangles": 18510,
+    "clips": 1,
+    "exactTriangleAttributes": true,
+    "exactRigAndAnimation": true,
+    "fitBoundsPreserved": true
+  },
+  {
+    "output": "study-devices/ipad-mini-6-runtime.glb",
+    "triangles": 11148,
+    "clips": 0,
+    "exactTriangleAttributes": true,
+    "exactRigAndAnimation": true,
+    "fitBoundsPreserved": true
+  },
+  {
+    "output": "study-devices/jansport-backpack-runtime.glb",
+    "triangles": 14836,
+    "clips": 0,
+    "exactTriangleAttributes": true,
+    "exactRigAndAnimation": true,
+    "fitBoundsPreserved": true
+  },
+  {
+    "output": "warehouse-models/cardboard_box_01-1k-runtime.glb",
+    "triangles": 14488,
+    "clips": 0,
+    "exactTriangleAttributes": true,
+    "exactRigAndAnimation": true,
+    "fitBoundsPreserved": true
+  },
+  {
+    "output": "ready-models/sam-locomotion-runtime-webp.glb",
+    "triangles": 52870,
+    "clips": 7,
+    "exactTriangleAttributes": true,
+    "exactRigAndAnimation": true,
+    "fitBoundsPreserved": true
+  },
+  {
+    "output": "ready-models/harper-walk-runtime-webp.glb",
+    "triangles": 62646,
+    "clips": 1,
+    "exactTriangleAttributes": true,
+    "exactRigAndAnimation": true,
+    "fitBoundsPreserved": true
+  },
+  {
+    "output": "ready-models/sam-locomotion-runtime-mobile-webp.glb",
+    "triangles": 52870,
+    "clips": 7,
+    "exactTriangleAttributes": true,
+    "exactRigAndAnimation": true,
+    "fitBoundsPreserved": true
+  },
+  {
+    "output": "ready-models/harper-walk-runtime-mobile-webp.glb",
+    "triangles": 62646,
+    "clips": 1,
+    "exactTriangleAttributes": true,
+    "exactRigAndAnimation": true,
+    "fitBoundsPreserved": true
+  },
+  {
+    "output": "study-devices/macbook-pro-13-runtime-webp.glb",
+    "triangles": 18510,
+    "clips": 1,
+    "exactTriangleAttributes": true,
+    "exactRigAndAnimation": true,
+    "fitBoundsPreserved": true
+  },
+  {
+    "output": "study-devices/ipad-mini-6-runtime-webp.glb",
+    "triangles": 11148,
+    "clips": 0,
+    "exactTriangleAttributes": true,
+    "exactRigAndAnimation": true,
+    "fitBoundsPreserved": true
+  },
+  {
+    "output": "study-devices/jansport-backpack-runtime-webp.glb",
+    "triangles": 14836,
+    "clips": 0,
+    "exactTriangleAttributes": true,
+    "exactRigAndAnimation": true,
+    "fitBoundsPreserved": true
+  },
+  {
+    "output": "warehouse-models/cardboard_box_01-1k-runtime-webp.glb",
+    "triangles": 14488,
+    "clips": 0,
+    "exactTriangleAttributes": true,
+    "exactRigAndAnimation": true,
+    "fitBoundsPreserved": true
+  }
+]

@@ -2,9 +2,10 @@ import React,{Suspense,useEffect,useMemo} from 'react';
 import {useGLTF} from '@react-three/drei';
 import * as THREE from 'three';
 import ArchiveRigidBatch from './ArchiveRigidBatch';
+import {runtimeAssetUrl} from './RuntimeAssets';
 const ROOT='/assets/study-devices/';
 function DeviceAsset({type='laptop',...props}){
- const {scene,animations}=useGLTF(ROOT+(type==='tablet'?'ipad-mini-6-web.glb':'macbook-pro-13-web.glb'));
+ const {scene,animations}=useGLTF(runtimeAssetUrl(ROOT+(type==='tablet'?'ipad-mini-6-runtime.glb':'macbook-pro-13-runtime.glb')));
  const prepared=useMemo(()=>{
   const product=scene.clone(true),object=new THREE.Group(),owned=[],materials=new Map();
   object.add(product);

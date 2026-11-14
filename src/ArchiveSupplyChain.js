@@ -8,6 +8,8 @@ export const SUPPLY_STREET=-.89;
 export const SUPPLY_CASE_SIZE=[.30,.265,.40];
 export const SUPPLY_PALLET_SCALE=.9;
 export const SUPPLY_PALLET_HEIGHT=.11925;
+export const SUPPLY_PALLET_DECK_UNDERSIDE=.08775;
+export const SUPPLY_FORK_INSET=.07;
 const PI=Math.PI;
 const clamp=x=>Math.max(0,Math.min(1,x));
 const ease=(t,a,b)=>{const p=clamp((t-a)/(b-a));return clamp(p*p*p*(p*(p*6-15)+10));};
@@ -24,7 +26,7 @@ function route(points,t,a,b,offset=0){const c=curve(points),f=ease(t,a,b),p=c.ge
 const rampProgress=u=>{const r=.12,A=x=>x*x*x-.5*x*x*x*x;if(u<r)return r*A(u/r)/(1-r);if(u>1-r)return 1-r*A((1-u)/r)/(1-r);return(u-r/2)/(1-r);};
 export function supplyRampHeight(z){return mix(SUPPLY_FLOOR,SUPPLY_STREET,rampProgress(clamp((z-1.05)/3.85)));}
 export function supplyRampSlope(z){const u=clamp((z-1.05)/3.85),r=.12;let v=1;if(u<r){const p=u/r;v=p*p*(3-2*p);}else if(u>1-r){const p=(1-u)/r;v=p*p*(3-2*p);}return-.985/3.85*v/(1-r);}
-export function supplyFloorHeight(x,z){if(x>=10.75&&x<=12.25&&z>=1.05&&z<=4.9)return supplyRampHeight(z);return x>=6.45&&x<=12.4&&z<=1.05?SUPPLY_FLOOR:SUPPLY_STREET;}
+export function supplyFloorHeight(x,z){if(x>=10.75&&x<=12.25&&z>=1.05&&z<=4.9)return supplyRampHeight(z);return x>=6.45&&x<=13.5&&z<=1.05?SUPPLY_FLOOR:SUPPLY_STREET;}
 const robotRoute=[[10.5,0,.75],[11.7,0,.80],[11.75,0,2.0],[11.7,0,4.9],[10.85,0,5.35]];
 const porterRoute=[[9.35,0,6.85],[10.45,0,6.85],[11.55,0,5.35],[11.7,0,4.90],[11.7,0,1.05],[12.0,0,.20]];
 function groundTravel(points,t,a,b,reverse=false,robot=false){const c=curve(points),f=ease(t,a,b),u=reverse?1-f:f,p=c.getPointAt(u),v=c.getTangentAt(u);p.y=supplyFloorHeight(p.x,p.z);const tangent=reverse?v.clone().negate():v;return{position:p.toArray(),yaw:robot?Math.atan2(-tangent.z,tangent.x):Math.atan2(tangent.x,tangent.z),tilt:robot&&p.z>1.05&&p.z<4.9?Math.atan2(supplyRampSlope(p.z)*tangent.z,Math.hypot(tangent.x,tangent.z)):0,pitch:!robot&&p.z>1.05&&p.z<4.9?-Math.atan2(supplyRampSlope(p.z)*tangent.z,Math.hypot(tangent.x,tangent.z)):0,distance:c.getLength()*f,moving:t>a&&t<b};}
@@ -32,11 +34,16 @@ function actor(position,yaw=0){return{position:[...position],yaw,crouch:0,walkin
 const loaderHome=[8.72,SUPPLY_STREET,6.74],loaderMeet=[10.30,SUPPLY_STREET,5.35];
 const receiverHome=[9.4,SUPPLY_FLOOR,.84];
 const palletCells=[[-.16,0,-.21],[.16,0,-.21],[-.16,0,.21],[.16,0,.21]];
-const intake=[8.7,SUPPLY_FLOOR+.1325,-1.25],stage=[7.10,SUPPLY_FLOOR+.1325,-2.65],empty=[11.3,SUPPLY_FLOOR+.1325,-1.60];
+const intake=[8.7,SUPPLY_FLOOR+.1325,-1.25],stage=[7.10,SUPPLY_FLOOR+.1325,-2.65],empty=[8.5,SUPPLY_FLOOR+.1325,-6.40];
 const forkliftHome=[7.10,SUPPLY_FLOOR,.05],forkPickup=[7.10,SUPPLY_FLOOR,-.75];
 function palletCase(pallet,index){return add(pallet.position,rot([palletCells[index][0],SUPPLY_PALLET_HEIGHT,palletCells[index][2]],pallet.yaw));}
 function carry(a){return add(a.position,rot([0,.96-.58*a.crouch,.36],a.yaw));}
 function actorMove(a,points,t,start,end,face){const s=route(points,t,start,end);Object.assign(a,s,{walking:s.moving});if(face!==undefined)a.yaw=angleMix(a.yaw,face,ease(t,end-.7,end));return a;}
+/** Flush staging pedestals retract after pickup, leaving the steering lane clear. */
+export function supplyCradleHeight(seconds,index){
+ const t=Math.max(0,seconds),extension=index===0?ease(t,90,93)*(1-ease(t,104,106))+ease(t,220,223)*(1-ease(t,234,236)):index===1?1-ease(t,84,86)+ease(t,160,162)*(1-ease(t,214,216)):1-ease(t,152,154);
+ return .1325*clamp(extension);
+}
 function robotState(t){
  let s=groundTravel(robotRoute,t,0,10,false,true);
  if(t>=10&&t<43)s=groundTravel(robotRoute,10,0,10,false,true);
@@ -70,27 +77,46 @@ function porterState(t){let s={position:[9.35,SUPPLY_STREET,6.85],yaw:-PI/2,dist
  return s;
 }
 function porterSocket(porter,upper=false){return porterCargoSocket(porter.position,porter.yaw,upper?1:0,porter.pitch||0);}
-function forkState(t,index){const start=index?232:102,stockX=index?11.38:10.02;let s={position:[...forkliftHome],yaw:PI,lift:-.015,distance:0,moving:false};
- if(t>=start&&t<start+2)s=Object.assign(route([forkliftHome,forkPickup],t,start,start+2),{yaw:PI,lift:mix(-.015,0,ease(t,start+1.5,start+2))});
- else if(t>=start+2&&t<start+4)s={...s,position:[...forkPickup],lift:mix(0,.17,ease(t,start+2,start+4))};
- else if(t>=start+4&&t<start+8)s=Object.assign(route([forkPickup,[7.10,SUPPLY_FLOOR,.05]],t,start+4,start+8),{yaw:PI,lift:.17});
- else if(t>=start+8&&t<start+22){s=route([[7.10,SUPPLY_FLOOR,.05],[8.15,SUPPLY_FLOOR,-.4],[stockX,SUPPLY_FLOOR,-1.75]],t,start+8,start+22,PI);s.yaw=angleMix(PI,s.yaw,ease(t,start+8,start+10));s.yaw=angleMix(s.yaw,PI,ease(t,start+20,start+22));s.lift=.17;}
- else if(t>=start+22&&t<start+28)s={...s,position:[stockX,SUPPLY_FLOOR,-1.75],lift:mix(.17,1.4075,ease(t,start+22,start+28))};
- else if(t>=start+28&&t<start+30)s={...s,position:[stockX,SUPPLY_FLOOR,-1.75],lift:1.4075};
- else if(t>=start+30&&t<start+34)s=Object.assign(route([[stockX,SUPPLY_FLOOR,-1.75],[stockX,SUPPLY_FLOOR,-.65]],t,start+30,start+34),{yaw:PI,lift:mix(1.4075,.05,ease(t,start+31,start+34))});
- else if(t>=start+34&&t<start+44){s=route([[stockX,SUPPLY_FLOOR,-.65],[9.2,SUPPLY_FLOOR,-.15],forkliftHome],t,start+34,start+44,PI);s.yaw=angleMix(PI,s.yaw,ease(t,start+34,start+36));s.yaw=angleMix(s.yaw,PI,ease(t,start+42,start+44));s.lift=.05;}
+// Tangent-aligned forward lane: two rounded corners are completed before any
+// fork or pallet enters the rack. Returning follows the same reserved lane in
+// reverse gear, rather than sweeping the mast across the receiving conveyor.
+function forkliftLane(stockX,u){
+ const r1=.9,r2=.85,startZ=-1.50,turnZ=-1.55,eastZ=turnZ-r1,endZ=eastZ-r2;
+ const lengths=[startZ-turnZ,r1*PI/2,stockX-r2-(7.10+r1),r2*PI/2,-endZ-3.30];
+ const total=lengths.reduce((a,b)=>a+b,0);let d=clamp(u)*total;
+ if(d<=lengths[0])return{position:[7.10,SUPPLY_FLOOR,startZ-d],yaw:PI};d-=lengths[0];
+ if(d<=lengths[1]){const a=d/r1;return{position:[7.10+r1-r1*Math.cos(a),SUPPLY_FLOOR,turnZ-r1*Math.sin(a)],yaw:PI-a};}d-=lengths[1];
+ if(d<=lengths[2])return{position:[7.10+r1+d,SUPPLY_FLOOR,eastZ],yaw:PI/2};d-=lengths[2];
+ if(d<=lengths[3]){const a=d/r2;return{position:[stockX-r2+r2*Math.sin(a),SUPPLY_FLOOR,eastZ-r2*(1-Math.cos(a))],yaw:PI/2+a};}
+ return{position:[stockX,SUPPLY_FLOOR,-3.30],yaw:PI};
+}
+function forkState(t,index){
+ const start=index?232:102,stockX=index?11.38:10.02,hold=[stockX,SUPPLY_FLOOR,-3.30],dock=[stockX,SUPPLY_FLOOR,-4.50],laneStart=[7.10,SUPPLY_FLOOR,-1.50];
+ let s={position:[...forkliftHome],yaw:PI,lift:-.015,distance:0,moving:false};
+ if(t>=start&&t<start+2)s=Object.assign(route([forkliftHome,forkPickup],t,start,start+2),{yaw:PI,lift:mix(-.015,.08775,ease(t,start+1.5,start+2))});
+ else if(t>=start+2&&t<start+4)s={...s,position:[...forkPickup],lift:mix(.08775,.25775,ease(t,start+2,start+4))};
+ else if(t>=start+4&&t<start+8)s=Object.assign(route([forkPickup,laneStart],t,start+4,start+8),{yaw:PI,lift:.25775});
+ else if(t>=start+8&&t<start+20)s={...s,...forkliftLane(stockX,ease(t,start+8,start+20)),lift:.25775,moving:true};
+ else if(t>=start+20&&t<start+26)s={...s,position:hold,lift:mix(.25775,1.49525,ease(t,start+20,start+26))};
+ else if(t>=start+26&&t<start+29)s={...s,position:lerp(hold,dock,ease(t,start+26,start+29)),lift:1.49525,moving:true};
+ else if(t>=start+29&&t<start+30)s={...s,position:dock,lift:mix(1.49525,1.47525,ease(t,start+29,start+30))};
+ else if(t>=start+30&&t<start+34)s={...s,position:lerp(dock,hold,ease(t,start+30,start+34)),lift:1.47525,moving:true};
+ else if(t>=start+34&&t<start+36)s={...s,position:hold,lift:mix(1.47525,.05,ease(t,start+34,start+36))};
+ else if(t>=start+36&&t<start+42)s={...s,...forkliftLane(stockX,1-ease(t,start+36,start+42)),lift:.05,moving:true};
+ else if(t>=start+42&&t<start+44)s={...s,position:lerp(laneStart,forkliftHome,ease(t,start+42,start+44)),lift:.05,moving:true};
  if(t>=start+44)s.lift=.05;return s;
 }
-function forkliftState(t){const s=t<232?forkState(t,0):forkState(t,1);if(t>=146&&t<232)s.lift=mix(.05,-.015,ease(t,222,232));return s;}
+
+function forkliftState(t){const s=t<232?forkState(t,0):forkState(t,1);if(t>=146&&t<232)s.lift=mix(.05,-.015,ease(t,146,148));return s;}
 function palletState(t,index,forklift){const start=index?232:102,move=index?214:84;let p={id:index,position:index?[...empty]:[...intake],yaw:index?-PI/2:0,host:index?'empty-pallet-cradle':'intake-cradle'};
- if(index&&t>=152&&t<162){p.position=lerp(empty,intake,ease(t,152,162));p.yaw=angleMix(-PI/2,0,ease(t,152,158));p.host='pallet-jack';}
+ if(index&&t>=152&&t<162){p.position=t<158?lerp(empty,[8.5,intake[1],-3.05],ease(t,152,158)):t<159?[8.5,intake[1],-3.05]:lerp([8.5,intake[1],-3.05],intake,ease(t,159,162));p.yaw=angleMix(-PI/2,0,ease(t,158,159));p.host='pallet-jack';}
  else if(index&&t>=162){p.position=[...intake];p.yaw=0;p.host='intake-cradle';}
  if(t>=move&&t<move+2){p.position=[intake[0],mix(intake[1],intake[1]+.025,ease(t,move,move+2)),intake[2]];p.yaw=angleMix(0,PI/2,ease(t,move,move+2));p.host='pallet-jack';}
- else if(t>=move+2&&t<move+9){const travel=route([[intake[0],intake[1]+.025,intake[2]],[intake[0],intake[1]+.025,-1.8],[8.3,intake[1]+.025,-2.65],[stage[0],intake[1]+.025,stage[2]]],t,move+2,move+9);p.position=travel.position;p.yaw=mix(PI/2,0,ease(t,move+2,move+4));p.host='pallet-jack';}
- else if(t>=move+9&&t<move+12){p.position=[stage[0],mix(intake[1]+.025,stage[1],ease(t,move+9,move+12)),stage[2]];p.host='pallet-jack';}
- else if(t>=move+12&&t<start+2){p.position=[...stage];p.host='forklift-cradle';}
- else if(t>=start+2&&t<start+30){p.position=add(forklift.position,rot([0,.1325+forklift.lift,1.90],forklift.yaw));p.yaw=forklift.yaw-PI;p.host='forklift';}
- else if(t>=start+30){p.position=[index?11.38:10.02,SUPPLY_FLOOR+1.54,-3.65];p.yaw=0;p.host='upper-stock-rack';}
+ else if(t>=move+2&&t<move+9){const travel=route([[intake[0],intake[1]+.025,intake[2]],[intake[0],intake[1]+.025,-1.8],[8.3,intake[1]+.025,-2.65],[stage[0],intake[1]+.025,stage[2]]],t,move+2,move+9);p.position=travel.position;p.yaw=PI/2;p.host='pallet-jack';}
+ else if(t>=move+9&&t<move+12){p.position=[stage[0],mix(intake[1]+.025,stage[1],ease(t,move+9,move+12)),stage[2]];p.yaw=PI/2;p.host='pallet-jack';}
+ else if(t>=move+12&&t<start+2){p.position=[...stage];p.yaw=PI/2;p.host='forklift-cradle';}
+ else if(t>=start+2&&t<start+29){p.position=add(forklift.position,rot([0,.1325+forklift.lift-SUPPLY_PALLET_DECK_UNDERSIDE,1.90],forklift.yaw));p.yaw=forklift.yaw-PI/2;p.host='forklift';}
+ else if(t>=start+29){p.position=[index?11.38:10.02,SUPPLY_FLOOR+1.54,-6.40];p.yaw=PI/2;p.host='upper-stock-rack';}
  return p;
 }
 function jackState(t,pallets){
@@ -103,12 +129,12 @@ function jackState(t,pallets){
  if(t>=212&&t<214)return Object.assign(route([idle,dock],t,212,214),{yaw:-PI/2,lift:0});
  const follows=t>=84&&t<96?0:t>=152&&t<162?1:t>=214&&t<226?1:null;
  if(follows!==null){const p=pallets[follows];s.yaw=p.yaw-PI/2;s.position=add(p.position,rot([0,-(p.position[1]-SUPPLY_FLOOR),-.45],s.yaw));s.lift=p.position[1]-SUPPLY_FLOOR-.1225;s.moving=t>=86&&t<93||t>=152&&t<162||t>=216&&t<223;s.distance=distance(p.position,t>=152&&t<162?empty:intake);}
- else if(t>=96&&t<100)s=Object.assign(route([[7.55,SUPPLY_FLOOR,-2.65],[7.9,SUPPLY_FLOOR,-3.05],[7.85,SUPPLY_FLOOR,-3.95],[7.55,SUPPLY_FLOOR,-3.95]],t,96,100),{yaw:-PI/2,lift:0});
- else if(t>=100&&t<146)s={...s,position:[7.55,SUPPLY_FLOOR,-3.95],lift:0};
- else if(t>=146&&t<152)s=Object.assign(route([[7.55,SUPPLY_FLOOR,-3.95],[7.85,SUPPLY_FLOOR,-2.6],[9.0,SUPPLY_FLOOR,-1.7],[11.3,SUPPLY_FLOOR,-1.15]],t,146,152),{yaw:angleMix(-PI/2,-PI,ease(t,150,152)),lift:0});
+ else if(t>=96&&t<100)s=Object.assign(route([[7.10,SUPPLY_FLOOR,-3.10],[7.2,SUPPLY_FLOOR,-4.0],[7.55,SUPPLY_FLOOR,-5.20]],t,96,100),{yaw:angleMix(0,-PI/2,ease(t,96,100)),lift:0});
+ else if(t>=100&&t<146)s={...s,position:[7.55,SUPPLY_FLOOR,-5.20],lift:0};
+ else if(t>=146&&t<152)s=Object.assign(route([[7.55,SUPPLY_FLOOR,-5.20],[8.1,SUPPLY_FLOOR,-5.4],[8.5,SUPPLY_FLOOR,-5.95]],t,146,152),{yaw:angleMix(-PI/2,-PI,ease(t,146,148)),lift:0});
  else if(t>=162&&t<214)s={...s,position:[intake[0]+.45,SUPPLY_FLOOR,intake[2]]};
- else if(t>=226&&t<230)s=Object.assign(route([[7.55,SUPPLY_FLOOR,-2.65],[7.9,SUPPLY_FLOOR,-3.05],[7.85,SUPPLY_FLOOR,-3.95],[7.55,SUPPLY_FLOOR,-3.95]],t,226,230),{yaw:-PI/2,lift:0});
- else if(t>=230)s={...s,position:[7.55,SUPPLY_FLOOR,-3.95],lift:0};
+ else if(t>=226&&t<230)s=Object.assign(route([[7.10,SUPPLY_FLOOR,-3.10],[7.2,SUPPLY_FLOOR,-4.0],[7.55,SUPPLY_FLOOR,-5.20]],t,226,230),{yaw:angleMix(0,-PI/2,ease(t,226,230)),lift:0});
+ else if(t>=230)s={...s,position:[7.55,SUPPLY_FLOOR,-5.20],lift:0};
  return s;
 }
 const receiving=[
@@ -216,7 +242,7 @@ export function motionKinematics(kind,seconds){
    const current=rawEquipment(kind,i/rate),dx=current.position[0]-previous.position[0],dz=current.position[2]-previous.position[2];
    const heading=angleMix(previous.yaw,current.yaw,.5),travel=dx*Math.sin(heading)+dz*Math.cos(heading);signed+=travel;
    const speed=travel*rate,turn=Math.atan2(Math.sin(current.yaw-previous.yaw),Math.cos(current.yaw-previous.yaw))*rate;
-   const steering=Math.abs(speed)>.006?Math.max(-.62,Math.min(.62,Math.atan((kind==='forklift'?-1.1:.6)*turn/speed))):0;
+   const steering=Math.abs(speed)>.006?Math.max(kind==='forklift'?-1.15:-.62,Math.min(kind==='forklift'?1.15:.62,Math.atan((kind==='forklift'?-1.1:.6)*turn/speed))):0;
    track.push({distance:signed,speed,steering});previous=current;
   }
   kinematicTracks.set(kind,{rate,track});

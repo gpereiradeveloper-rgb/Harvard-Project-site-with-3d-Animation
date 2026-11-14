@@ -36,10 +36,10 @@ export function getRenderQualityProfile({
   const manual = selected !== 'auto';
   const maxPixels = selected === 'cinema' ? 16_000_000
     : selected === 'high' ? 12_000_000
-    : mobile ? 3_000_000 : 7_000_000;
+    : mobile ? 1_300_000 : 3_500_000;
   const preferredDpr = selected === 'cinema' ? Math.max(2.5, nativeDpr)
     : selected === 'high' ? Math.max(2, Math.min(nativeDpr, 2.5))
-    : Math.min(nativeDpr, mobile ? 1.5 : 1.75);
+    : Math.min(nativeDpr, mobile ? 1.25 : 1.5);
   const dimensionLimit = Math.max(1, positive(maxDimension, 8192));
   const dpr = Math.min(preferredDpr, Math.sqrt(maxPixels / (w * h)), dimensionLimit / w, dimensionLimit / h);
   const renderWidth = Math.max(1, Math.floor(w * dpr));

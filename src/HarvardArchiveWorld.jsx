@@ -1,6 +1,7 @@
 import React,{Suspense,useEffect,useMemo,useRef,useState} from 'react';
 import './HarvardArchiveWorld.css';
 import {Canvas,useFrame,useThree} from '@react-three/fiber';
+import ArchiveFrameBudget from './ArchiveFrameBudget';
 import {Environment,Html,Lightformer,RoundedBox} from '@react-three/drei';
 import {EffectComposer,N8AO,Bloom} from '@react-three/postprocessing';
 import * as THREE from 'three';
@@ -274,7 +275,7 @@ function Rod({p,r=.035,h=1,mat,rotation}){
 function AtelierPlinth({assets}){
  const parts=useMemo(()=>{
   const make=(inset,depth,bevel)=>{
-   const points=[[-6.62+inset,-5.22+inset],[12.55-inset,-5.22+inset],[12.55-inset,1.16-inset],[6.61-inset,1.16-inset],[6.61-inset,5.22-inset],[-6.62+inset,5.22-inset]];
+   const points=[[-6.62+inset,-5.22+inset],[6.40+inset,-5.22+inset],[6.40+inset,-7.92+inset],[13.65-inset,-7.92+inset],[13.65-inset,1.16-inset],[6.61-inset,1.16-inset],[6.61-inset,5.22-inset],[-6.62+inset,5.22-inset]];
    const shape=new THREE.Shape();points.forEach(([x,z],i)=>i?shape.lineTo(x,-z):shape.moveTo(x,-z));shape.closePath();
    const geometry=new THREE.ExtrudeGeometry(shape,{depth,steps:1,bevelEnabled:true,bevelThickness:bevel,bevelSize:bevel,bevelSegments:3,curveSegments:3});
    geometry.rotateX(-Math.PI/2);geometry.computeBoundingSphere();return geometry;
@@ -298,17 +299,17 @@ function ReceivingArchitecture({assets}){
   const add=(mat,p,s)=>pieces.push({mat,p,s});
   // Structural panelling sits behind the real rack and scanner; the entire
   // working front remains open so tasks are readable from the overview.
-  add('ivory',[9.49,1.70,-4.85],[5.92,3.22,.18]);
-  add('ink',[9.49,.53,-4.735],[5.92,.82,.075]);
-  add('gold',[9.49,.97,-4.679],[5.92,.027,.023]);
-  for(const x of[6.64,8.49,10.48,12.34]){
+  add('ivory',[10.04,1.70,-4.85],[7.02,3.22,.18]);
+  add('ink',[10.04,.53,-4.735],[7.02,.82,.075]);
+  add('gold',[10.04,.97,-4.679],[7.02,.027,.023]);
+  for(const x of[6.64,8.49,10.48,13.44]){
    add('ivory',[x,1.72,-4.67],[.13,3.28,.24]);
    add('gold',[x+.09,1.75,-4.535],[.018,2.94,.025]);
    add('ink',[x,.22,-4.65],[.24,.29,.29]);
   }
-  add('ink',[9.49,3.38,-4.69],[6.13,.20,.36]);
-  add('gold',[9.49,3.51,-4.65],[6.13,.035,.36]);
-  add('ivory',[9.49,3.61,-4.70],[6.27,.15,.42]);
+  add('ink',[10.04,3.38,-4.69],[7.23,.20,.36]);
+  add('gold',[10.04,3.51,-4.65],[7.23,.035,.36]);
+  add('ivory',[10.04,3.61,-4.70],[7.37,.15,.42]);
   // Recessed crimson enamel panels and an ivory architrave give the receiving
   // wing the same miniature architecture and depth as the reading room.
   for(const x of[7.59,9.48,11.40]){
@@ -316,13 +317,13 @@ function ReceivingArchitecture({assets}){
    add('wine',[x,2.73,-4.679],[1.39,.50,.035]);
    add('gold',[x,2.43,-4.642],[1.49,.018,.026]);
   }
-  return Object.entries(pieces.reduce((all,{mat,p,s})=>{(all[mat]??=[]).push({p,s});return all;},{}));
+  return Object.entries(pieces.reduce((all,{mat,p,s})=>{(all[mat]??=[]).push({p:[p[0],p[1],p[2]-2.75],s});return all;},{}));
  },[]);
  return <group name="Open receiving wing with raised Harvard enamel and brass architecture">
   {details.map(([mat,items])=><Batch key={mat} items={items} geometry={assets.box} material={m[mat]}/>)}
-  <Plaque position={[7.59,2.72,-4.64]} title="ACERVO" subtitle="RECEBER · CONFERIR · CATALOGAR" width={1.25}/>
-  <Plaque position={[9.48,2.72,-4.64]} title="VERITAS" subtitle="HARVARD LIBRARY · 1636" width={1.25}/>
-  <Plaque position={[11.40,2.72,-4.64]} title="COLEÇÕES" subtitle="PRESERVAR · COMPARTILHAR" width={1.25}/>
+  <Plaque position={[7.59,2.72,-7.39]} title="ARCHIVE" subtitle="RECEIVE · INSPECT · CATALOG" width={1.25}/>
+  <Plaque position={[9.48,2.72,-7.39]} title="VERITAS" subtitle="HARVARD LIBRARY · 1636" width={1.25}/>
+  <Plaque position={[11.40,2.72,-7.39]} title="COLLECTIONS" subtitle="PRESERVE · SHARE" width={1.25}/>
  </group>;
 }
 
@@ -390,7 +391,7 @@ function OpenFolio({assets,time}){
   c.fillStyle='#9c8152';c.fillRect(235,190,42,2);c.strokeStyle='#8f9278';
   c.beginPath();c.arc(256,315,91,0,Math.PI*2);c.stroke();c.beginPath();c.ellipse(256,315,40,91,0,0,Math.PI*2);c.stroke();
   c.textAlign='left';c.fillStyle=INK;c.font='15px Georgia';
-  ['O conhecimento começa com uma pergunta.','Entre livros, memórias e descobertas,','cada geração encontra novas maneiras','de compreender e transformar o mundo.'].forEach((line,i)=>c.fillText(line,93,452+i*23));
+  ['Knowledge begins with a question.','Through books, memories, and discoveries,','each generation finds new ways','to understand and change the world.'].forEach((line,i)=>c.fillText(line,93,452+i*23));
   c.textAlign='center';
   c.fillStyle='#9c8152';c.font='15px Georgia';c.fillText('HARVARD · 1636',256,584);
   const tex=new THREE.CanvasTexture(canvas);tex.colorSpace=THREE.SRGBColorSpace;tex.anisotropy=8;return tex;
@@ -413,8 +414,8 @@ function ArchiveMotion({assets,time,motion}){
  const prints=useMemo(()=>{
   const make=(w,h,paint)=>{const c=document.createElement('canvas');c.width=w;c.height=h;paint(c.getContext('2d'),w,h);const t=new THREE.CanvasTexture(c);t.colorSpace=THREE.SRGBColorSpace;t.anisotropy=8;return t;};
   return{
-   label:make(1024,256,(c,w,h)=>{c.fillStyle='#e6dcc5';c.fillRect(0,0,w,h);c.fillStyle=INK;c.textAlign='center';c.font='52px Georgia';c.fillText('VI · HISTÓRIAS',w/2,113);c.font='25px Georgia';c.fillText('HARVARD / 1636',w/2,178);}),
-   cover:make(1536,2048,(c,w,h)=>{c.fillStyle='#253644';c.fillRect(0,0,w,h);const r=randomGenerator(1915);for(let i=0;i<35000;i++){c.fillStyle=r()>.5?'#ffffff08':'#00000012';c.fillRect(r()*w,r()*h,1,r()*8+1);}c.strokeStyle='#b79b66';c.lineWidth=5;c.strokeRect(82,90,w-164,h-180);c.lineWidth=1.5;c.strokeRect(105,113,w-210,h-226);c.fillStyle='#d6bf8c';c.textAlign='center';c.font='80px Georgia';c.fillText('HARVARD',w/2,535);c.font='130px Georgia';c.fillText('VERITAS',w/2,1030);c.font='36px Georgia';c.fillText('UM ATLAS DE IDEIAS',w/2,1140);c.font='40px Georgia';c.fillText('1636',w/2,1770);}),
+   label:make(1024,256,(c,w,h)=>{c.fillStyle='#e6dcc5';c.fillRect(0,0,w,h);c.fillStyle=INK;c.textAlign='center';c.font='52px Georgia';c.fillText('VI · STORIES',w/2,113);c.font='25px Georgia';c.fillText('HARVARD / 1636',w/2,178);}),
+   cover:make(1536,2048,(c,w,h)=>{c.fillStyle='#253644';c.fillRect(0,0,w,h);const r=randomGenerator(1915);for(let i=0;i<35000;i++){c.fillStyle=r()>.5?'#ffffff08':'#00000012';c.fillRect(r()*w,r()*h,1,r()*8+1);}c.strokeStyle='#b79b66';c.lineWidth=5;c.strokeRect(82,90,w-164,h-180);c.lineWidth=1.5;c.strokeRect(105,113,w-210,h-226);c.fillStyle='#d6bf8c';c.textAlign='center';c.font='80px Georgia';c.fillText('HARVARD',w/2,535);c.font='130px Georgia';c.fillText('VERITAS',w/2,1030);c.font='36px Georgia';c.fillText('AN ATLAS OF IDEAS',w/2,1140);c.font='40px Georgia';c.fillText('1636',w/2,1770);}),
   };
  },[]);
  useEffect(()=>()=>Object.values(prints).forEach(t=>t.dispose()),[prints]);
@@ -467,7 +468,7 @@ function Globe({assets,time}){
   for(let lon=0;lon<2048;lon+=2048/24){c.beginPath();c.moveTo(lon,0);c.lineTo(lon,1024);c.stroke();}
   for(let lat=0;lat<1024;lat+=1024/12){c.beginPath();c.moveTo(0,lat);c.lineTo(2048,lat);c.stroke();}
   c.textAlign='center';c.font='500 19px Georgia';c.fillStyle='#e4eef0';
-  [[-128,3,'PACÍFICO'],[-29,7,'ATLÂNTICO'],[82,-20,'ÍNDICO']].forEach(([lon,lat,name])=>c.fillText(name,(lon+180)/360*2048,(90-lat)/180*1024));
+  [[-128,3,'PACIFIC'],[-29,7,'ATLANTIC'],[82,-20,'INDIAN']].forEach(([lon,lat,name])=>c.fillText(name,(lon+180)/360*2048,(90-lat)/180*1024));
   const color=new THREE.CanvasTexture(canvas),height=new THREE.CanvasTexture(relief);
   color.colorSpace=THREE.SRGBColorSpace;color.anisotropy=8;height.colorSpace=THREE.NoColorSpace;
   return {color,height};
@@ -649,9 +650,9 @@ function ArchiveHotspot({position,id,kicker,name,onSelect,motion,focused}){
   return[THREE.MathUtils.clamp((p.x*.5+.5)*viewport.width,margin,viewport.width-margin),THREE.MathUtils.clamp((-p.y*.5+.5)*viewport.height,80,viewport.height-76)];
  };
  return <Html position={position} center calculatePosition={calculatePosition} zIndexRange={[9,3]} style={{pointerEvents:'none'}}>
-  <button ref={button} type="button" onClick={()=>onSelect?.(id)} aria-label={'Explorar '+name} className="archive-world-hotspot">
+  <button ref={button} type="button" onClick={()=>onSelect?.(id)} aria-label={'Explore '+name} className="archive-world-hotspot">
    <span className="archive-world-hotspot__number">{kicker.slice(0,2)}</span>
-   <span className="archive-world-hotspot__caption">{{origins:'As origens',library:'Biblioteca',collections:'Coleções'}[id]}<span aria-hidden="true">↗</span></span>
+   <span className="archive-world-hotspot__caption">{{origins:'Origins',library:'The library',collections:'Collections'}[id]}<span aria-hidden="true">↗</span></span>
   </button>
  </Html>;
 }
@@ -667,7 +668,7 @@ function Director({motion,onReady,reduced,focused}){
  const inspect=useMemo(()=>import.meta.env.DEV?new URLSearchParams(window.location.search).get('inspect'):null,[]);
  const {camera,size,gl}=useThree(),ready=useRef(false),focusBlend=useRef(0),overlayHidden=useRef(false),previous=useRef({p:-1,width:0,height:0,reduced:null});
  useEffect(()=>()=>gl.domElement.closest('.harvard-journey')?.classList.remove('has-receiving-focus'),[gl]);
- const vectors=useMemo(()=>({target:new THREE.Vector3(),base:new THREE.Vector3(),direction:new THREE.Vector3(),right:new THREE.Vector3(),screenUp:new THREE.Vector3(),offset:new THREE.Vector3(),up:new THREE.Vector3(0,0,-1),entry:new THREE.Vector3(4.23,1.65,-2.18),receivingPosition:new THREE.Vector3(),receivingTarget:new THREE.Vector3(9.4,1.2,-2.1),corners:[-6.9,12.8].flatMap(x=>[-.9,5.2].flatMap(y=>[-5.5,9.45].map(z=>new THREE.Vector3(x,y,z)))),path:new THREE.CatmullRomCurve3([new THREE.Vector3(),new THREE.Vector3(10,11,9),new THREE.Vector3(6.1,6,-.2),new THREE.Vector3(4.3,3.6,-1.6),new THREE.Vector3(4.23,2.4,-2.18),new THREE.Vector3(4.23,1.72,-2.18)],false,'centripetal')}),[]);
+ const vectors=useMemo(()=>({target:new THREE.Vector3(),base:new THREE.Vector3(),direction:new THREE.Vector3(),right:new THREE.Vector3(),screenUp:new THREE.Vector3(),offset:new THREE.Vector3(),up:new THREE.Vector3(0,0,-1),entry:new THREE.Vector3(4.23,1.65,-2.18),receivingPosition:new THREE.Vector3(),receivingTarget:new THREE.Vector3(9.4,1.2,-2.1),corners:[-6.9,13.9].flatMap(x=>[-.9,5.2].flatMap(y=>[-8.1,9.45].map(z=>new THREE.Vector3(x,y,z)))),path:new THREE.CatmullRomCurve3([new THREE.Vector3(),new THREE.Vector3(10,11,9),new THREE.Vector3(6.1,6,-.2),new THREE.Vector3(4.3,3.6,-1.6),new THREE.Vector3(4.23,2.4,-2.18),new THREE.Vector3(4.23,1.72,-2.18)],false,'centripetal')}),[]);
  useFrame((_,dt)=>{
   const p=clamp(motion.progress),portrait=size.width/size.height<1.1;
   const goal=focused&&p<.67?1:0;
@@ -764,8 +765,9 @@ function RenderMetrics({active}){
 }
 
 function AtelierStudioLight({quality}){
+ const {size}=useThree();
  const aim=useMemo(()=>{const target=new THREE.Object3D();target.position.set(2.5,.5,1.0);return target;},[]);
- const shadowSize=quality==='cinema'?4096:quality==='auto'?1536:2048;
+ const shadowSize=quality==='cinema'?4096:quality==='auto'?(size.width<760?1024:1536):2048;
  return <>
   <primitive object={aim}/>
   <ambientLight intensity={.06}/><hemisphereLight args={['#f5f7ff','#9ca7af',.52]}/>
@@ -780,7 +782,7 @@ function AtelierStudioLight({quality}){
  </>;
 }
 
-function Scene({motion,reduced,paused,active,onReady,onSelect,quality,focused,onFocus,focusButton}){
+function Scene({motion,reduced,paused,active,onReady,onSelect,quality,focused,onFocus,focusButton,onAutoScale}){
  const {gl}=useThree();
  const qa=useMemo(()=>import.meta.env.DEV?new URLSearchParams(window.location.search):null,[]);
  const time=useRef(Math.max(0,Number(qa?.get('worldTime'))||0)),assets=useMemo(materialAssets,[]);
@@ -798,6 +800,7 @@ function Scene({motion,reduced,paused,active,onReady,onSelect,quality,focused,on
  },-100);
  return <>
   <color attach="background" args={['#f5f4ef']}/>
+  <ArchiveFrameBudget quality={quality} active={active} paused={paused||reduced} motion={motion} onScale={onAutoScale}/>
   <AtelierStudioLight quality={quality}/>
   <mesh rotation={[-Math.PI/2,0,0]} position={[0,-.91,0]} receiveShadow><planeGeometry args={[200,200]}/><meshStandardMaterial color="#f5f4ef" roughness={.82}/></mesh>
   <AtelierPlinth assets={assets}/>
@@ -817,12 +820,12 @@ function Scene({motion,reduced,paused,active,onReady,onSelect,quality,focused,on
   <ArchiveScholars assets={assets} time={time}/><ArchivePress assets={assets} time={time}/>
   <ArchiveKinetics time={time} materials={assets.mats} reduced={reduced}/></PlacedObjects>
   <ArchiveCourier assets={assets} time={time}/><ArchiveStreetPorter assets={assets} time={time}/><ArchiveGroundLogistics assets={assets} time={time}/>
-  <ArchiveKnowledgeEngine assets={assets} time={time} position={[8.5,3.7,-4.55]}/>
-  <Plaque position={[-1.24,4.64,-3.97]} title="O ATELIÊ DE IDEIAS" subtitle="HARVARD · UM MUNDO DE POSSIBILIDADES" width={4.0}/>
-  <Plaque position={[0,-.52,5.287]} title="VERITAS" subtitle="UM ARQUIVO VIVO · 1636" width={2.5}/>
-  <ArchiveHotspot focused={focused} motion={motion} position={[-4.6,4.7,-3.1]} id="origins" kicker="01 / AS ORIGENS" name="O começo de uma ideia" onSelect={onSelect}/>
-  <ArchiveHotspot focused={focused} motion={motion} position={[-3.9,.22,3.9]} id="library" kicker="02 / A BIBLIOTECA" name="Abra o conhecimento" onSelect={onSelect}/>
-  <ArchiveHotspot focused={focused} motion={motion} position={[4.3,3.8,-2.2]} id="collections" kicker="03 / AS COLEÇÕES" name="Histórias para descobrir" onSelect={onSelect}/>
+  <ArchiveKnowledgeEngine assets={assets} time={time} position={[8.5,3.7,-7.30]}/>
+  <Plaque position={[-1.24,4.64,-3.97]} title="THE IDEAS ATELIER" subtitle="HARVARD · A WORLD OF POSSIBILITIES" width={4.0}/>
+  <Plaque position={[0,-.52,5.287]} title="VERITAS" subtitle="A LIVING ARCHIVE · 1636" width={2.5}/>
+  <ArchiveHotspot focused={focused} motion={motion} position={[-4.6,4.7,-3.1]} id="origins" kicker="01 / ORIGINS" name="Origins" onSelect={onSelect}/>
+  <ArchiveHotspot focused={focused} motion={motion} position={[-3.9,.22,3.9]} id="library" kicker="02 / THE LIBRARY" name="The library" onSelect={onSelect}/>
+  <ArchiveHotspot focused={focused} motion={motion} position={[4.3,3.8,-2.2]} id="collections" kicker="03 / COLLECTIONS" name="Collections" onSelect={onSelect}/>
   <Director motion={motion} onReady={onReady} reduced={reduced} focused={focused}/>
   <ReceivingFocusVisibility motion={motion} active={active} focused={focused} onFocus={onFocus} button={focusButton}/>
   <EffectComposer multisampling={quality==='cinema'?4:quality==='auto'?0:2} enableNormalPass={false}>
@@ -834,11 +837,12 @@ function Scene({motion,reduced,paused,active,onReady,onSelect,quality,focused,on
 }
 
 export default function HarvardArchiveWorld({motion=EMPTY_MOTION,quality='high',reduced=false,paused=false,active=true,onReady,onSelect}){
- const profile=useViewportRenderQuality(quality),[focused,setFocused]=useState(false),focusButton=useRef();
- return <div className="archive-world-canvas-stage" onKeyDown={event=>{if(event.key==='Escape'&&focused){event.preventDefault();setFocused(false);}}}><Canvas shadows={{type:THREE.PCFSoftShadowMap}} dpr={profile.dpr} frameloop={active?'always':'demand'} camera={{position:[30,34,34],fov:18,near:.006,far:250}} gl={{antialias:false,alpha:false,powerPreference:'high-performance'}} onCreated={({gl})=>{gl.toneMapping=THREE.ACESFilmicToneMapping;gl.toneMappingExposure=.88;gl.transmissionResolutionScale=.35;gl.setClearColor('#f5f4ef',1);}} style={{width:'100%',height:'100%',touchAction:'pan-y'}}>
-  <Scene motion={motion} reduced={reduced} paused={paused} active={active} onReady={onReady} onSelect={onSelect} quality={quality} focused={focused} onFocus={setFocused} focusButton={focusButton}/>
+ const profile=useViewportRenderQuality(quality),[focused,setFocused]=useState(false),[autoScale,setAutoScale]=useState(1),focusButton=useRef();
+ useEffect(()=>setAutoScale(1),[quality]);
+ return <div className="archive-world-canvas-stage" onKeyDown={event=>{if(event.key==='Escape'&&focused){event.preventDefault();setFocused(false);}}}><Canvas shadows={{type:THREE.PCFSoftShadowMap}} dpr={quality==='auto'?profile.dpr*autoScale:profile.dpr} frameloop={active?'always':'demand'} camera={{position:[30,34,34],fov:18,near:.006,far:250}} gl={{antialias:false,alpha:false,powerPreference:'high-performance'}} onCreated={({gl})=>{gl.toneMapping=THREE.ACESFilmicToneMapping;gl.toneMappingExposure=.88;gl.transmissionResolutionScale=.35;gl.setClearColor('#f5f4ef',1);}} style={{width:'100%',height:'100%',touchAction:'pan-y'}}>
+  <Scene motion={motion} reduced={reduced} paused={paused} active={active} onReady={onReady} onSelect={onSelect} quality={quality} focused={focused} onFocus={setFocused} focusButton={focusButton} onAutoScale={setAutoScale}/>
  </Canvas>
  <button ref={focusButton} className="archive-receiving-focus" type="button" aria-pressed={focused} onClick={()=>setFocused(value=>!value)}>
-  <span aria-hidden="true">{focused?'↙':'⌗'}</span>{focused?'Voltar ao ateliê':'Ver o scanner 3D'}<span aria-hidden="true">{focused?'':'↗'}</span>
+  <span aria-hidden="true">{focused?'↙':'⌗'}</span>{focused?'Back to the atelier':'Explore the 3D scanner'}<span aria-hidden="true">{focused?'':'↗'}</span>
  </button></div>;
 }

@@ -36,7 +36,7 @@ test('receiving staff clear the imported forklift body, rack and conveyor; ramp 
   const s=supplyChainAt(n/100),j=s.jack,operator=[j.position[0]-Math.sin(j.yaw)*1.13,j.position[1],j.position[2]-Math.cos(j.yaw)*1.13];
   for(const point of [s.receiver.position,operator]){
    assert.ok(rectangleDistance(point,s.forklift,[-.6097,.6097,-.96,1.07])>=.20,`forklift torso clearance at ${s.t}`);
-   assert.ok(rectangleDistance(point,fixed,[9.35,12.05,-4.2,-3.1])>=.20,`rack torso clearance at ${s.t}`);
+   assert.ok(rectangleDistance(point,fixed,[9.35,12.05,-6.95,-5.85])>=.20,`rack torso clearance at ${s.t}`);
    assert.ok(rectangleDistance(point,fixed,[9.74,11.50,-.915,-.385])>=.20,`conveyor torso clearance at ${s.t}`);
   }
   assert.ok(operator[0]<=12.2,'operator outside platform edge');

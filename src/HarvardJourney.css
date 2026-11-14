@@ -93,3 +93,8 @@
 .archive-world-hotspot:focus-visible{outline:2px solid #a51c30;outline-offset:4px}
 .harvard-journey.is-world .hj-controls{background:#f8f6f0eb;border-color:#192d3626;border-radius:2px;color:#29383c}
 @media(max-width:760px){.archive-world-hotspot__number{width:28px;height:28px}.archive-world-hotspot__caption{display:none}.harvard-journey.is-world .hj-controls nav{background:#f8f6f0ed;border-color:#192d3626}}
+
+/* The public campus is a live map; no intervening photograph or album prompt. */
+.hj-map-layer{background:#ebe4d6}
+.hj-map-unavailable{gap:18px}
+.hj-map-unavailable p{max-width:660px;font-size:clamp(24px,4vw,44px)}

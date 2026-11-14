@@ -282,3 +282,14 @@ https://news.harvard.edu/gazette/story/2020/04/360-degree-virtual-tour-simulates
 https://library.harvard.edu/libraries/widener
 https://my.matterport.com/show/?m=fs3gQv7n1QG
 https://research.nvidia.com/labs/adlr/DLSS5/
+
+
+## Release update — 14 November 2026
+
+- Public journey: animated cover → MapLibre/OpenFreeMap geographic 3D campus → Memorial Church approach → atelier → interactive album. Removed the intervening static-photo/album-prompt screen. Google demo remains development-only by explicit query; no billing enabled.
+- English interface, all six volumes/36 pages, scanner display, scene signs, accessibility labels and matching Figma editorial screens.
+- Expanded receiving wing for full-size forklift turning clearance; forks enter pallet bearer gaps, support the deck, withdraw above shelf beams before lowering, and settle below the second approaching pallet before it reaches staging.
+- Full operation sampled at 50 Hz against imported forklift/rack envelopes, stock, receiving cartons, supports and staff; both return sequences pass. All 16 automated tests passed. Production build with GitHub Pages subpath passed.
+- Opening: 12.53 MB → 0.80 MB desktop / 0.36 MB mobile. Active photos: 40.23 → 2.27 MB. Human pair: 41.28 → 13.72 MB desktop / 10.24 MB mobile. WebP decoder probe with PNG/JPEG fallback; original geometry, rig and clip data verified unchanged.
+- Auto DPR bounded/adaptive, shadow refresh up to 30 Hz; manual High/Cinema preserved. Cached rig matrix propagation reduces the isolated solver microbenchmark by about 39%, with zero measured posed-matrix difference in the comparison. This is not a whole-site frame-rate claim.
+- Final live UI verification and social publication status are recorded separately; a successful build alone does not establish universal mobile performance or zero bugs.
