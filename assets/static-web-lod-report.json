@@ -1,0 +1,639 @@
+[
+  {
+    "source": "public/assets/ready-models/encyclopedias/book_encyclopedia_set_01_2k.gltf",
+    "output": "public/assets/ready-models/encyclopedias/book_encyclopedia_web.gltf",
+    "before": 67306,
+    "after": 9433,
+    "reduction": 0.8598490476331977,
+    "maxError": 0.005993588827550411,
+    "errorLimit": 0.006,
+    "sourceSha256": "6c8c76560ca8e3c28516c0831545db903111bea069ce569579c2848a2e781bed",
+    "outputSha256": "102e9ea13de5708439f8589f68a2ced3148cf8b91ba061dfd89ffe31a84f9c01",
+    "sourceVertexAndTextureBytesPreserved": true,
+    "primitives": [
+      {
+        "mesh": "Cube.004",
+        "primitive": 0,
+        "before": 2260,
+        "after": 316,
+        "relativeError": 0.005941597279161215
+      },
+      {
+        "mesh": "Cube.004",
+        "primitive": 1,
+        "before": 1132,
+        "after": 169,
+        "relativeError": 0.005984599236398935
+      },
+      {
+        "mesh": "Cube.049",
+        "primitive": 0,
+        "before": 2260,
+        "after": 316,
+        "relativeError": 0.005415587220340967
+      },
+      {
+        "mesh": "Cube.049",
+        "primitive": 1,
+        "before": 1104,
+        "after": 154,
+        "relativeError": 0.005682550370693207
+      },
+      {
+        "mesh": "Cube.050",
+        "primitive": 0,
+        "before": 2260,
+        "after": 316,
+        "relativeError": 0.005295328330248594
+      },
+      {
+        "mesh": "Cube.050",
+        "primitive": 1,
+        "before": 1104,
+        "after": 153,
+        "relativeError": 0.00481380382552743
+      },
+      {
+        "mesh": "Cube.051",
+        "primitive": 0,
+        "before": 2260,
+        "after": 316,
+        "relativeError": 0.0054750400595366955
+      },
+      {
+        "mesh": "Cube.051",
+        "primitive": 1,
+        "before": 1104,
+        "after": 153,
+        "relativeError": 0.00521031953394413
+      },
+      {
+        "mesh": "Cube.052",
+        "primitive": 0,
+        "before": 2258,
+        "after": 315,
+        "relativeError": 0.0052474127151072025
+      },
+      {
+        "mesh": "Cube.052",
+        "primitive": 1,
+        "before": 1104,
+        "after": 153,
+        "relativeError": 0.004160911310464144
+      },
+      {
+        "mesh": "Cube.053",
+        "primitive": 0,
+        "before": 2260,
+        "after": 316,
+        "relativeError": 0.005249800626188517
+      },
+      {
+        "mesh": "Cube.053",
+        "primitive": 1,
+        "before": 1104,
+        "after": 154,
+        "relativeError": 0.0038508097641170025
+      },
+      {
+        "mesh": "Cube.054",
+        "primitive": 0,
+        "before": 2260,
+        "after": 316,
+        "relativeError": 0.005461973138153553
+      },
+      {
+        "mesh": "Cube.054",
+        "primitive": 1,
+        "before": 1104,
+        "after": 153,
+        "relativeError": 0.005689650774002075
+      },
+      {
+        "mesh": "Cube.055",
+        "primitive": 0,
+        "before": 2260,
+        "after": 316,
+        "relativeError": 0.005341454409062862
+      },
+      {
+        "mesh": "Cube.055",
+        "primitive": 1,
+        "before": 1104,
+        "after": 154,
+        "relativeError": 0.004566330462694168
+      },
+      {
+        "mesh": "Cube.056",
+        "primitive": 0,
+        "before": 2260,
+        "after": 316,
+        "relativeError": 0.005300301127135754
+      },
+      {
+        "mesh": "Cube.056",
+        "primitive": 1,
+        "before": 1104,
+        "after": 153,
+        "relativeError": 0.004319061059504747
+      },
+      {
+        "mesh": "Cube.057",
+        "primitive": 0,
+        "before": 2260,
+        "after": 316,
+        "relativeError": 0.005376240238547325
+      },
+      {
+        "mesh": "Cube.057",
+        "primitive": 1,
+        "before": 1104,
+        "after": 154,
+        "relativeError": 0.004380219150334597
+      },
+      {
+        "mesh": "Cube.058",
+        "primitive": 0,
+        "before": 2260,
+        "after": 316,
+        "relativeError": 0.005166484043002129
+      },
+      {
+        "mesh": "Cube.058",
+        "primitive": 1,
+        "before": 1104,
+        "after": 154,
+        "relativeError": 0.003628081874921918
+      },
+      {
+        "mesh": "Cube.059",
+        "primitive": 0,
+        "before": 2260,
+        "after": 316,
+        "relativeError": 0.005299112759530544
+      },
+      {
+        "mesh": "Cube.059",
+        "primitive": 1,
+        "before": 1104,
+        "after": 153,
+        "relativeError": 0.004841142799705267
+      },
+      {
+        "mesh": "Cube.060",
+        "primitive": 0,
+        "before": 2260,
+        "after": 316,
+        "relativeError": 0.005967738572508097
+      },
+      {
+        "mesh": "Cube.060",
+        "primitive": 1,
+        "before": 1104,
+        "after": 164,
+        "relativeError": 0.005993588827550411
+      },
+      {
+        "mesh": "Cube.061",
+        "primitive": 0,
+        "before": 2260,
+        "after": 316,
+        "relativeError": 0.005735930986702442
+      },
+      {
+        "mesh": "Cube.061",
+        "primitive": 1,
+        "before": 1104,
+        "after": 153,
+        "relativeError": 0.005990058649331331
+      },
+      {
+        "mesh": "Cube.062",
+        "primitive": 0,
+        "before": 2260,
+        "after": 316,
+        "relativeError": 0.005763098131865263
+      },
+      {
+        "mesh": "Cube.062",
+        "primitive": 1,
+        "before": 1104,
+        "after": 172,
+        "relativeError": 0.005969756282866001
+      },
+      {
+        "mesh": "Cube.063",
+        "primitive": 0,
+        "before": 2260,
+        "after": 316,
+        "relativeError": 0.005491828080266714
+      },
+      {
+        "mesh": "Cube.063",
+        "primitive": 1,
+        "before": 1104,
+        "after": 154,
+        "relativeError": 0.0052321371622383595
+      },
+      {
+        "mesh": "Cube.064",
+        "primitive": 0,
+        "before": 2260,
+        "after": 316,
+        "relativeError": 0.005478193052113056
+      },
+      {
+        "mesh": "Cube.064",
+        "primitive": 1,
+        "before": 1104,
+        "after": 153,
+        "relativeError": 0.0059454478323459625
+      },
+      {
+        "mesh": "Cube.065",
+        "primitive": 0,
+        "before": 2260,
+        "after": 316,
+        "relativeError": 0.005420824978500605
+      },
+      {
+        "mesh": "Cube.065",
+        "primitive": 1,
+        "before": 1104,
+        "after": 154,
+        "relativeError": 0.004777694121003151
+      },
+      {
+        "mesh": "Cube.066",
+        "primitive": 0,
+        "before": 2260,
+        "after": 316,
+        "relativeError": 0.0051817623898386955
+      },
+      {
+        "mesh": "Cube.066",
+        "primitive": 1,
+        "before": 1104,
+        "after": 153,
+        "relativeError": 0.004243392031639814
+      },
+      {
+        "mesh": "Cube.067",
+        "primitive": 0,
+        "before": 2260,
+        "after": 316,
+        "relativeError": 0.005380864720791578
+      },
+      {
+        "mesh": "Cube.067",
+        "primitive": 1,
+        "before": 1104,
+        "after": 154,
+        "relativeError": 0.005292946472764015
+      }
+    ]
+  },
+  {
+    "source": "public/assets/ready-models/potted-plant/potted_plant_01_2k.gltf",
+    "output": "public/assets/ready-models/potted-plant/potted_plant_01_web.gltf",
+    "before": 176226,
+    "after": 56629,
+    "reduction": 0.6786569518686232,
+    "maxError": 0.003997412975877523,
+    "errorLimit": 0.004,
+    "sourceSha256": "41357028b8a7861c596cadc51c8793448c18c42e8d84d834ebe7993b5b30c924",
+    "outputSha256": "d18e5bde0a93a559a60caf84442b9aebaf1a5e5edce1e1f5c84f2921d78a1e4c",
+    "sourceVertexAndTextureBytesPreserved": true,
+    "primitives": [
+      {
+        "mesh": "potted_plant_01_base_low",
+        "primitive": 0,
+        "before": 7008,
+        "after": 1548,
+        "relativeError": 0.003983556292951107
+      },
+      {
+        "mesh": "Circle.008",
+        "primitive": 0,
+        "before": 56878,
+        "after": 30790,
+        "relativeError": 0.0039059300906956196
+      },
+      {
+        "mesh": "Circle.002",
+        "primitive": 0,
+        "before": 5440,
+        "after": 3444,
+        "relativeError": 0.003997412975877523
+      },
+      {
+        "mesh": "Plane.070",
+        "primitive": 0,
+        "before": 106900,
+        "after": 20847,
+        "relativeError": 0.0020713130943477154
+      }
+    ]
+  },
+  {
+    "source": "public/assets/warehouse-models/cardboard_box_01-1k.glb",
+    "output": "public/assets/warehouse-models/cardboard_box_01-1k-web.glb",
+    "before": 16952,
+    "after": 14488,
+    "reduction": 0.14535158093440304,
+    "maxError": 0.002983690705150366,
+    "errorLimit": 0.003,
+    "sourceSha256": "6c496c2c0e3baf27af5b4f80485e7123bec4b42b2a9455c5a3921879e21876eb",
+    "outputSha256": "544fba8c317dca00c63b308b343fc2898a2499c73869051c25652aeabe610095",
+    "sourceVertexAndTextureBytesPreserved": true,
+    "primitives": [
+      {
+        "mesh": "cardboard_box_01",
+        "primitive": 0,
+        "before": 16952,
+        "after": 14488,
+        "relativeError": 0.002983690705150366
+      }
+    ]
+  },
+  {
+    "source": "public/assets/study-devices/macbook-pro-13.glb",
+    "output": "public/assets/study-devices/macbook-pro-13-web.glb",
+    "before": 77065,
+    "after": 18510,
+    "reduction": 0.75981314474794,
+    "maxError": 0.001999695785343647,
+    "errorLimit": 0.002,
+    "sourceSha256": "a7a8e9aa65bf7844f399c02772f72c4bd44e8dd02da846042c73c6d227ee2fb5",
+    "outputSha256": "712dd5f288837d70592c6caf8b196947056150bfbfce04ff3b706d4fb9fc71bf",
+    "sourceVertexAndTextureBytesPreserved": true,
+    "primitives": [
+      {
+        "mesh": "Object_0",
+        "primitive": 0,
+        "before": 884,
+        "after": 194,
+        "relativeError": 0.0012193875154480338
+      },
+      {
+        "mesh": "Object_1",
+        "primitive": 0,
+        "before": 948,
+        "after": 206,
+        "relativeError": 0.0007731385994702578
+      },
+      {
+        "mesh": "Object_2",
+        "primitive": 0,
+        "before": 30,
+        "after": 30,
+        "relativeError": 0
+      },
+      {
+        "mesh": "Object_3",
+        "primitive": 0,
+        "before": 2,
+        "after": 2,
+        "relativeError": 0
+      },
+      {
+        "mesh": "Object_4",
+        "primitive": 0,
+        "before": 2820,
+        "after": 1235,
+        "relativeError": 0.001999695785343647
+      },
+      {
+        "mesh": "Object_5",
+        "primitive": 0,
+        "before": 106,
+        "after": 96,
+        "relativeError": 0.0019318029517307878
+      },
+      {
+        "mesh": "Object_6",
+        "primitive": 0,
+        "before": 30,
+        "after": 30,
+        "relativeError": 0
+      },
+      {
+        "mesh": "Object_7",
+        "primitive": 0,
+        "before": 14,
+        "after": 14,
+        "relativeError": 0
+      },
+      {
+        "mesh": "Object_8",
+        "primitive": 0,
+        "before": 1237,
+        "after": 272,
+        "relativeError": 0.000060804708482464775
+      },
+      {
+        "mesh": "Object_9",
+        "primitive": 0,
+        "before": 7582,
+        "after": 2189,
+        "relativeError": 0.0019522637594491243
+      },
+      {
+        "mesh": "Object_10",
+        "primitive": 0,
+        "before": 37639,
+        "after": 8280,
+        "relativeError": 0.0003661629161797464
+      },
+      {
+        "mesh": "Object_11",
+        "primitive": 0,
+        "before": 5397,
+        "after": 1187,
+        "relativeError": 0.0007522354135289788
+      },
+      {
+        "mesh": "Object_12",
+        "primitive": 0,
+        "before": 1176,
+        "after": 390,
+        "relativeError": 0.0012107852380722761
+      },
+      {
+        "mesh": "Object_13",
+        "primitive": 0,
+        "before": 190,
+        "after": 40,
+        "relativeError": 0.0015933781396597624
+      },
+      {
+        "mesh": "Object_14",
+        "primitive": 0,
+        "before": 158,
+        "after": 43,
+        "relativeError": 0.001959166955202818
+      },
+      {
+        "mesh": "Object_15",
+        "primitive": 0,
+        "before": 344,
+        "after": 231,
+        "relativeError": 0.001989792799577117
+      },
+      {
+        "mesh": "Object_16",
+        "primitive": 0,
+        "before": 2,
+        "after": 2,
+        "relativeError": 0
+      },
+      {
+        "mesh": "Object_17",
+        "primitive": 0,
+        "before": 11278,
+        "after": 2480,
+        "relativeError": 0.0011935337679460645
+      },
+      {
+        "mesh": "Object_18",
+        "primitive": 0,
+        "before": 7024,
+        "after": 1545,
+        "relativeError": 0.0008616312989033759
+      },
+      {
+        "mesh": "Object_19",
+        "primitive": 0,
+        "before": 204,
+        "after": 44,
+        "relativeError": 0.0015365674626082182
+      }
+    ]
+  },
+  {
+    "source": "public/assets/study-devices/ipad-mini-6.glb",
+    "output": "public/assets/study-devices/ipad-mini-6-web.glb",
+    "before": 39462,
+    "after": 11148,
+    "reduction": 0.7175003801125133,
+    "maxError": 0.0019997090566903353,
+    "errorLimit": 0.002,
+    "sourceSha256": "a462088b7bd84b7752802c109beee04110047c3b1a4f355624c863f790e93d5e",
+    "outputSha256": "8ea3e7a14f7ecc5933cdba3ee5a7a57670ad206678cc340f48fcc2f99c88c7b1",
+    "sourceVertexAndTextureBytesPreserved": true,
+    "primitives": [
+      {
+        "mesh": "iPad Mini_BaseColor_0",
+        "primitive": 0,
+        "before": 10735,
+        "after": 3521,
+        "relativeError": 0.0019868225790560246
+      },
+      {
+        "mesh": "iPad Mini_BaseColorMatte_0",
+        "primitive": 0,
+        "before": 56,
+        "after": 15,
+        "relativeError": 0.0018442607251927257
+      },
+      {
+        "mesh": "iPad Mini_CamGray_0",
+        "primitive": 0,
+        "before": 2714,
+        "after": 650,
+        "relativeError": 0.0011427414137870073
+      },
+      {
+        "mesh": "iPad Mini_Speaker/Mic_0",
+        "primitive": 0,
+        "before": 1050,
+        "after": 252,
+        "relativeError": 0.0005152654484845698
+      },
+      {
+        "mesh": "iPad Mini_Flash_0",
+        "primitive": 0,
+        "before": 542,
+        "after": 542,
+        "relativeError": 0
+      },
+      {
+        "mesh": "iPad Mini_Bezel_0",
+        "primitive": 0,
+        "before": 313,
+        "after": 90,
+        "relativeError": 0.0018767723813652992
+      },
+      {
+        "mesh": "iPad Mini_CamGlass_0",
+        "primitive": 0,
+        "before": 62,
+        "after": 39,
+        "relativeError": 0.0019992017187178135
+      },
+      {
+        "mesh": "iPad Mini_Cam1_0",
+        "primitive": 0,
+        "before": 756,
+        "after": 320,
+        "relativeError": 0.0019997090566903353
+      },
+      {
+        "mesh": "iPad Mini_CamBlack_0",
+        "primitive": 0,
+        "before": 64,
+        "after": 64,
+        "relativeError": 0
+      },
+      {
+        "mesh": "iPad Mini_Port_0",
+        "primitive": 0,
+        "before": 356,
+        "after": 182,
+        "relativeError": 0.001986967632547021
+      },
+      {
+        "mesh": "iPad Mini_Screen_0",
+        "primitive": 0,
+        "before": 72,
+        "after": 17,
+        "relativeError": 0.001398600754328072
+      },
+      {
+        "mesh": "iPad Mini_Lens_0",
+        "primitive": 0,
+        "before": 990,
+        "after": 236,
+        "relativeError": 0.0014095519436523318
+      },
+      {
+        "mesh": "iPad Mini_BaseColorLogo_0",
+        "primitive": 0,
+        "before": 21752,
+        "after": 5220,
+        "relativeError": 0.0005587094346992671
+      }
+    ]
+  },
+  {
+    "source": "public/assets/study-devices/jansport-backpack.glb",
+    "output": "public/assets/study-devices/jansport-backpack-web.glb",
+    "before": 30092,
+    "after": 14836,
+    "reduction": 0.5069785989631796,
+    "maxError": 0.003945603966712952,
+    "errorLimit": 0.004,
+    "sourceSha256": "450b23b958a6a820ad667c2bab0f44e720258ff7e6d966f7cca06e30ac750032",
+    "outputSha256": "9c1047ffb3e53955511f059e38695dd7dc236fa11b14d0f5b0066f4d94d99d4d",
+    "sourceVertexAndTextureBytesPreserved": true,
+    "primitives": [
+      {
+        "mesh": "scan",
+        "primitive": 0,
+        "before": 30092,
+        "after": 14836,
+        "relativeError": 0.003945603966712952
+      }
+    ]
+  }
+]
