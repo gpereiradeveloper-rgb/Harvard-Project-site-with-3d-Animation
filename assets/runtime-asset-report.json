@@ -1,0 +1,1288 @@
+[
+  {
+    "source": "ready-models/sam-locomotion-crowd-lod.glb",
+    "output": "ready-models/sam-locomotion-runtime.glb",
+    "sourceBytes": 22192232,
+    "runtimeBytes": 10532944,
+    "savedFraction": 0.5253769877676117,
+    "removedUnusedVertices": 24499,
+    "maxTextureDimension": 2048,
+    "sourceSha256": "c361a2ef5de81bc1d1074cf979448d2c97f4cf846b5269791ff938a5c80ca521",
+    "runtimeSha256": "46e05b9b577143f6e530a43c9761cc06a6698296ad95c46b37695608ba636003",
+    "images": [
+      {
+        "image": 0,
+        "before": 89619,
+        "after": 89619,
+        "sourceDimensions": {
+          "pixelWidth": 512,
+          "pixelHeight": 512
+        },
+        "maxDimension": 2048,
+        "alphaOrDataProtected": true
+      },
+      {
+        "image": 1,
+        "before": 91600,
+        "after": 91600,
+        "sourceDimensions": {
+          "pixelWidth": 512,
+          "pixelHeight": 512
+        },
+        "maxDimension": 2048,
+        "alphaOrDataProtected": true
+      },
+      {
+        "image": 2,
+        "before": 1056,
+        "after": 1056,
+        "sourceDimensions": {
+          "pixelWidth": 128,
+          "pixelHeight": 128
+        },
+        "maxDimension": 2048,
+        "alphaOrDataProtected": false
+      },
+      {
+        "image": 3,
+        "before": 610817,
+        "after": 108979,
+        "sourceDimensions": {
+          "pixelWidth": 1024,
+          "pixelHeight": 1024
+        },
+        "maxDimension": 2048,
+        "alphaOrDataProtected": false
+      },
+      {
+        "image": 4,
+        "before": 6036834,
+        "after": 2224073,
+        "sourceDimensions": {
+          "pixelWidth": 4096,
+          "pixelHeight": 4096
+        },
+        "maxDimension": 2048,
+        "alphaOrDataProtected": true
+      },
+      {
+        "image": 5,
+        "before": 3730636,
+        "after": 739234,
+        "sourceDimensions": {
+          "pixelWidth": 2048,
+          "pixelHeight": 2048
+        },
+        "maxDimension": 2048,
+        "alphaOrDataProtected": false
+      },
+      {
+        "image": 6,
+        "before": 875473,
+        "after": 875473,
+        "sourceDimensions": {
+          "pixelWidth": 1024,
+          "pixelHeight": 1024
+        },
+        "maxDimension": 2048,
+        "alphaOrDataProtected": true
+      },
+      {
+        "image": 7,
+        "before": 1335772,
+        "after": 331989,
+        "sourceDimensions": {
+          "pixelWidth": 1024,
+          "pixelHeight": 1024
+        },
+        "maxDimension": 2048,
+        "alphaOrDataProtected": false
+      },
+      {
+        "image": 8,
+        "before": 2354146,
+        "after": 2354146,
+        "sourceDimensions": {
+          "pixelWidth": 2048,
+          "pixelHeight": 2048
+        },
+        "maxDimension": 2048,
+        "alphaOrDataProtected": true
+      },
+      {
+        "image": 9,
+        "before": 1799930,
+        "after": 528639,
+        "sourceDimensions": {
+          "pixelWidth": 2048,
+          "pixelHeight": 2048
+        },
+        "maxDimension": 2048,
+        "alphaOrDataProtected": false
+      }
+    ]
+  },
+  {
+    "source": "ready-models/harper-walk-crowd-lod.glb",
+    "output": "ready-models/harper-walk-runtime.glb",
+    "sourceBytes": 19090712,
+    "runtimeBytes": 9523328,
+    "savedFraction": 0.5011538595312737,
+    "removedUnusedVertices": 24356,
+    "maxTextureDimension": 2048,
+    "sourceSha256": "f5ac86d3c78b0818b4545226124fe7a7c8fc8c068bdb3fc0d63dc5d5f3183177",
+    "runtimeSha256": "5b5685beeaca47d337c1ec85bd26ac17c100c8775fe7e6ff29bb5b0ca58f550c",
+    "images": [
+      {
+        "image": 0,
+        "before": 19381,
+        "after": 19381,
+        "sourceDimensions": {
+          "pixelWidth": 512,
+          "pixelHeight": 512
+        },
+        "maxDimension": 2048,
+        "alphaOrDataProtected": true
+      },
+      {
+        "image": 1,
+        "before": 91600,
+        "after": 91600,
+        "sourceDimensions": {
+          "pixelWidth": 512,
+          "pixelHeight": 512
+        },
+        "maxDimension": 2048,
+        "alphaOrDataProtected": true
+      },
+      {
+        "image": 2,
+        "before": 1935,
+        "after": 1935,
+        "sourceDimensions": {
+          "pixelWidth": 128,
+          "pixelHeight": 128
+        },
+        "maxDimension": 2048,
+        "alphaOrDataProtected": false
+      },
+      {
+        "image": 3,
+        "before": 4716109,
+        "after": 909246,
+        "sourceDimensions": {
+          "pixelWidth": 2048,
+          "pixelHeight": 2048
+        },
+        "maxDimension": 2048,
+        "alphaOrDataProtected": false
+      },
+      {
+        "image": 4,
+        "before": 610817,
+        "after": 108979,
+        "sourceDimensions": {
+          "pixelWidth": 1024,
+          "pixelHeight": 1024
+        },
+        "maxDimension": 2048,
+        "alphaOrDataProtected": false
+      },
+      {
+        "image": 5,
+        "before": 1945326,
+        "after": 328518,
+        "sourceDimensions": {
+          "pixelWidth": 2048,
+          "pixelHeight": 2048
+        },
+        "maxDimension": 2048,
+        "alphaOrDataProtected": false
+      },
+      {
+        "image": 6,
+        "before": 875473,
+        "after": 875473,
+        "sourceDimensions": {
+          "pixelWidth": 1024,
+          "pixelHeight": 1024
+        },
+        "maxDimension": 2048,
+        "alphaOrDataProtected": true
+      },
+      {
+        "image": 7,
+        "before": 714208,
+        "after": 257006,
+        "sourceDimensions": {
+          "pixelWidth": 1024,
+          "pixelHeight": 1024
+        },
+        "maxDimension": 2048,
+        "alphaOrDataProtected": false
+      },
+      {
+        "image": 8,
+        "before": 3501561,
+        "after": 3501561,
+        "sourceDimensions": {
+          "pixelWidth": 2048,
+          "pixelHeight": 2048
+        },
+        "maxDimension": 2048,
+        "alphaOrDataProtected": true
+      },
+      {
+        "image": 9,
+        "before": 1799930,
+        "after": 528639,
+        "sourceDimensions": {
+          "pixelWidth": 2048,
+          "pixelHeight": 2048
+        },
+        "maxDimension": 2048,
+        "alphaOrDataProtected": false
+      }
+    ]
+  },
+  {
+    "source": "ready-models/sam-locomotion-crowd-lod.glb",
+    "output": "ready-models/sam-locomotion-runtime-mobile.glb",
+    "sourceBytes": 22192232,
+    "runtimeBytes": 6713492,
+    "savedFraction": 0.6974845973131499,
+    "removedUnusedVertices": 24499,
+    "maxTextureDimension": 1024,
+    "sourceSha256": "c361a2ef5de81bc1d1074cf979448d2c97f4cf846b5269791ff938a5c80ca521",
+    "runtimeSha256": "455338b8953b641fa3981c403ce939253aed991289e7ab461f7f33dd0a2c39d5",
+    "images": [
+      {
+        "image": 0,
+        "before": 89619,
+        "after": 89619,
+        "sourceDimensions": {
+          "pixelWidth": 512,
+          "pixelHeight": 512
+        },
+        "maxDimension": 1024,
+        "alphaOrDataProtected": true
+      },
+      {
+        "image": 1,
+        "before": 91600,
+        "after": 91600,
+        "sourceDimensions": {
+          "pixelWidth": 512,
+          "pixelHeight": 512
+        },
+        "maxDimension": 1024,
+        "alphaOrDataProtected": true
+      },
+      {
+        "image": 2,
+        "before": 1056,
+        "after": 1056,
+        "sourceDimensions": {
+          "pixelWidth": 128,
+          "pixelHeight": 128
+        },
+        "maxDimension": 1024,
+        "alphaOrDataProtected": false
+      },
+      {
+        "image": 3,
+        "before": 610817,
+        "after": 108979,
+        "sourceDimensions": {
+          "pixelWidth": 1024,
+          "pixelHeight": 1024
+        },
+        "maxDimension": 1024,
+        "alphaOrDataProtected": false
+      },
+      {
+        "image": 4,
+        "before": 6036834,
+        "after": 564403,
+        "sourceDimensions": {
+          "pixelWidth": 4096,
+          "pixelHeight": 4096
+        },
+        "maxDimension": 1024,
+        "alphaOrDataProtected": true
+      },
+      {
+        "image": 5,
+        "before": 3730636,
+        "after": 205144,
+        "sourceDimensions": {
+          "pixelWidth": 2048,
+          "pixelHeight": 2048
+        },
+        "maxDimension": 1024,
+        "alphaOrDataProtected": false
+      },
+      {
+        "image": 6,
+        "before": 875473,
+        "after": 875473,
+        "sourceDimensions": {
+          "pixelWidth": 1024,
+          "pixelHeight": 1024
+        },
+        "maxDimension": 1024,
+        "alphaOrDataProtected": true
+      },
+      {
+        "image": 7,
+        "before": 1335772,
+        "after": 331989,
+        "sourceDimensions": {
+          "pixelWidth": 1024,
+          "pixelHeight": 1024
+        },
+        "maxDimension": 1024,
+        "alphaOrDataProtected": false
+      },
+      {
+        "image": 8,
+        "before": 2354146,
+        "after": 1050814,
+        "sourceDimensions": {
+          "pixelWidth": 2048,
+          "pixelHeight": 2048
+        },
+        "maxDimension": 1024,
+        "alphaOrDataProtected": true
+      },
+      {
+        "image": 9,
+        "before": 1799930,
+        "after": 206291,
+        "sourceDimensions": {
+          "pixelWidth": 2048,
+          "pixelHeight": 2048
+        },
+        "maxDimension": 1024,
+        "alphaOrDataProtected": false
+      }
+    ]
+  },
+  {
+    "source": "ready-models/harper-walk-crowd-lod.glb",
+    "output": "ready-models/harper-walk-runtime-mobile.glb",
+    "sourceBytes": 19090712,
+    "runtimeBytes": 6357236,
+    "savedFraction": 0.6669984859653217,
+    "removedUnusedVertices": 24356,
+    "maxTextureDimension": 1024,
+    "sourceSha256": "f5ac86d3c78b0818b4545226124fe7a7c8fc8c068bdb3fc0d63dc5d5f3183177",
+    "runtimeSha256": "ca9af2e4d8901051daf977406a728a0b0c06175fd09230a69391445e58b17cd8",
+    "images": [
+      {
+        "image": 0,
+        "before": 19381,
+        "after": 19381,
+        "sourceDimensions": {
+          "pixelWidth": 512,
+          "pixelHeight": 512
+        },
+        "maxDimension": 1024,
+        "alphaOrDataProtected": true
+      },
+      {
+        "image": 1,
+        "before": 91600,
+        "after": 91600,
+        "sourceDimensions": {
+          "pixelWidth": 512,
+          "pixelHeight": 512
+        },
+        "maxDimension": 1024,
+        "alphaOrDataProtected": true
+      },
+      {
+        "image": 2,
+        "before": 1935,
+        "after": 1935,
+        "sourceDimensions": {
+          "pixelWidth": 128,
+          "pixelHeight": 128
+        },
+        "maxDimension": 1024,
+        "alphaOrDataProtected": false
+      },
+      {
+        "image": 3,
+        "before": 4716109,
+        "after": 230984,
+        "sourceDimensions": {
+          "pixelWidth": 2048,
+          "pixelHeight": 2048
+        },
+        "maxDimension": 1024,
+        "alphaOrDataProtected": false
+      },
+      {
+        "image": 4,
+        "before": 610817,
+        "after": 108979,
+        "sourceDimensions": {
+          "pixelWidth": 1024,
+          "pixelHeight": 1024
+        },
+        "maxDimension": 1024,
+        "alphaOrDataProtected": false
+      },
+      {
+        "image": 5,
+        "before": 1945326,
+        "after": 92550,
+        "sourceDimensions": {
+          "pixelWidth": 2048,
+          "pixelHeight": 2048
+        },
+        "maxDimension": 1024,
+        "alphaOrDataProtected": false
+      },
+      {
+        "image": 6,
+        "before": 875473,
+        "after": 875473,
+        "sourceDimensions": {
+          "pixelWidth": 1024,
+          "pixelHeight": 1024
+        },
+        "maxDimension": 1024,
+        "alphaOrDataProtected": true
+      },
+      {
+        "image": 7,
+        "before": 714208,
+        "after": 257006,
+        "sourceDimensions": {
+          "pixelWidth": 1024,
+          "pixelHeight": 1024
+        },
+        "maxDimension": 1024,
+        "alphaOrDataProtected": false
+      },
+      {
+        "image": 8,
+        "before": 3501561,
+        "after": 1572055,
+        "sourceDimensions": {
+          "pixelWidth": 2048,
+          "pixelHeight": 2048
+        },
+        "maxDimension": 1024,
+        "alphaOrDataProtected": true
+      },
+      {
+        "image": 9,
+        "before": 1799930,
+        "after": 206291,
+        "sourceDimensions": {
+          "pixelWidth": 2048,
+          "pixelHeight": 2048
+        },
+        "maxDimension": 1024,
+        "alphaOrDataProtected": false
+      }
+    ]
+  },
+  {
+    "source": "study-devices/macbook-pro-13-web.glb",
+    "output": "study-devices/macbook-pro-13-runtime.glb",
+    "sourceBytes": 3760764,
+    "runtimeBytes": 820448,
+    "savedFraction": 0.7818400729213533,
+    "removedUnusedVertices": 83941,
+    "maxTextureDimension": 2048,
+    "sourceSha256": "712dd5f288837d70592c6caf8b196947056150bfbfce04ff3b706d4fb9fc71bf",
+    "runtimeSha256": "2f27b38529edfda7ab9f4b7149bb2abf435c2820b6769500bf29be46dafbb788",
+    "images": [
+      {
+        "image": 0,
+        "before": 74749,
+        "after": 74749,
+        "sourceDimensions": {
+          "pixelWidth": 1024,
+          "pixelHeight": 512
+        },
+        "maxDimension": 2048,
+        "alphaOrDataProtected": false
+      },
+      {
+        "image": 1,
+        "before": 5919,
+        "after": 5919,
+        "sourceDimensions": {
+          "pixelWidth": 1024,
+          "pixelHeight": 32
+        },
+        "maxDimension": 2048,
+        "alphaOrDataProtected": false
+      }
+    ]
+  },
+  {
+    "source": "study-devices/ipad-mini-6-web.glb",
+    "output": "study-devices/ipad-mini-6-runtime.glb",
+    "sourceBytes": 2055620,
+    "runtimeBytes": 476892,
+    "savedFraction": 0.7680057598194219,
+    "removedUnusedVertices": 45183,
+    "maxTextureDimension": 2048,
+    "sourceSha256": "8ea3e7a14f7ecc5933cdba3ee5a7a57670ad206678cc340f48fcc2f99c88c7b1",
+    "runtimeSha256": "611d6e05bc5e5c892946832c738927166e60ec50841a03cc26c35a1ad2762115",
+    "images": [
+      {
+        "image": 0,
+        "before": 38178,
+        "after": 27769,
+        "sourceDimensions": {
+          "pixelWidth": 256,
+          "pixelHeight": 256
+        },
+        "maxDimension": 2048,
+        "alphaOrDataProtected": false
+      },
+      {
+        "image": 1,
+        "before": 51537,
+        "after": 51537,
+        "sourceDimensions": {
+          "pixelWidth": 512,
+          "pixelHeight": 1024
+        },
+        "maxDimension": 2048,
+        "alphaOrDataProtected": false
+      },
+      {
+        "image": 2,
+        "before": 1021,
+        "after": 1021,
+        "sourceDimensions": {
+          "pixelWidth": 64,
+          "pixelHeight": 32
+        },
+        "maxDimension": 2048,
+        "alphaOrDataProtected": false
+      }
+    ]
+  },
+  {
+    "source": "study-devices/jansport-backpack-web.glb",
+    "output": "study-devices/jansport-backpack-runtime.glb",
+    "sourceBytes": 1346772,
+    "runtimeBytes": 533680,
+    "savedFraction": 0.6037339653631053,
+    "removedUnusedVertices": 10192,
+    "maxTextureDimension": 1024,
+    "sourceSha256": "9c1047ffb3e53955511f059e38695dd7dc236fa11b14d0f5b0066f4d94d99d4d",
+    "runtimeSha256": "73632b545d6b711de2b7cb70784ae7b2c1db5c67c85f75a617c49f1712f4c4bc",
+    "images": [
+      {
+        "image": 0,
+        "before": 302868,
+        "after": 176661,
+        "sourceDimensions": {
+          "pixelWidth": 2048,
+          "pixelHeight": 2048
+        },
+        "maxDimension": 1024,
+        "alphaOrDataProtected": false
+      }
+    ]
+  },
+  {
+    "source": "warehouse-models/cardboard_box_01-1k-web.glb",
+    "output": "warehouse-models/cardboard_box_01-1k-runtime.glb",
+    "sourceBytes": 2254968,
+    "runtimeBytes": 1816672,
+    "savedFraction": 0.19436905534801385,
+    "removedUnusedVertices": 1240,
+    "maxTextureDimension": 1024,
+    "sourceSha256": "544fba8c317dca00c63b308b343fc2898a2499c73869051c25652aeabe610095",
+    "runtimeSha256": "05b32b774c5e88fbf0f72319324cd897b575ff5628aeace2a3d03018b6eeddff",
+    "images": [
+      {
+        "image": 0,
+        "before": 817424,
+        "after": 817424,
+        "sourceDimensions": {
+          "pixelWidth": 1024,
+          "pixelHeight": 1024
+        },
+        "maxDimension": 1024,
+        "alphaOrDataProtected": true
+      },
+      {
+        "image": 1,
+        "before": 567741,
+        "after": 270523,
+        "sourceDimensions": {
+          "pixelWidth": 1024,
+          "pixelHeight": 1024
+        },
+        "maxDimension": 1024,
+        "alphaOrDataProtected": false
+      },
+      {
+        "image": 2,
+        "before": 398433,
+        "after": 398433,
+        "sourceDimensions": {
+          "pixelWidth": 1024,
+          "pixelHeight": 1024
+        },
+        "maxDimension": 1024,
+        "alphaOrDataProtected": true
+      }
+    ]
+  },
+  {
+    "source": "ready-models/sam-locomotion-crowd-lod.glb",
+    "output": "ready-models/sam-locomotion-runtime-webp.glb",
+    "sourceBytes": 22192232,
+    "runtimeBytes": 7494148,
+    "savedFraction": 0.6623076038498517,
+    "removedUnusedVertices": 24499,
+    "maxTextureDimension": 2048,
+    "sourceSha256": "c361a2ef5de81bc1d1074cf979448d2c97f4cf846b5269791ff938a5c80ca521",
+    "runtimeSha256": "4cfeb59779884d6b891adb699da2746a6a2270cb751f012b0c872b4df77b6719",
+    "images": [
+      {
+        "image": 0,
+        "before": 89619,
+        "after": 38534,
+        "sourceDimensions": {
+          "pixelWidth": 512,
+          "pixelHeight": 512
+        },
+        "maxDimension": 2048,
+        "alphaOrDataProtected": true
+      },
+      {
+        "image": 1,
+        "before": 91600,
+        "after": 53760,
+        "sourceDimensions": {
+          "pixelWidth": 512,
+          "pixelHeight": 512
+        },
+        "maxDimension": 2048,
+        "alphaOrDataProtected": true
+      },
+      {
+        "image": 2,
+        "before": 1056,
+        "after": 1056,
+        "sourceDimensions": {
+          "pixelWidth": 128,
+          "pixelHeight": 128
+        },
+        "maxDimension": 2048,
+        "alphaOrDataProtected": false
+      },
+      {
+        "image": 3,
+        "before": 610817,
+        "after": 63130,
+        "sourceDimensions": {
+          "pixelWidth": 1024,
+          "pixelHeight": 1024
+        },
+        "maxDimension": 2048,
+        "alphaOrDataProtected": false
+      },
+      {
+        "image": 4,
+        "before": 6036834,
+        "after": 1580312,
+        "sourceDimensions": {
+          "pixelWidth": 4096,
+          "pixelHeight": 4096
+        },
+        "maxDimension": 2048,
+        "alphaOrDataProtected": true
+      },
+      {
+        "image": 5,
+        "before": 3730636,
+        "after": 476268,
+        "sourceDimensions": {
+          "pixelWidth": 2048,
+          "pixelHeight": 2048
+        },
+        "maxDimension": 2048,
+        "alphaOrDataProtected": false
+      },
+      {
+        "image": 6,
+        "before": 875473,
+        "after": 647438,
+        "sourceDimensions": {
+          "pixelWidth": 1024,
+          "pixelHeight": 1024
+        },
+        "maxDimension": 2048,
+        "alphaOrDataProtected": true
+      },
+      {
+        "image": 7,
+        "before": 1335772,
+        "after": 259348,
+        "sourceDimensions": {
+          "pixelWidth": 1024,
+          "pixelHeight": 1024
+        },
+        "maxDimension": 2048,
+        "alphaOrDataProtected": false
+      },
+      {
+        "image": 8,
+        "before": 2354146,
+        "after": 945770,
+        "sourceDimensions": {
+          "pixelWidth": 2048,
+          "pixelHeight": 2048
+        },
+        "maxDimension": 2048,
+        "alphaOrDataProtected": true
+      },
+      {
+        "image": 9,
+        "before": 1799930,
+        "after": 239878,
+        "sourceDimensions": {
+          "pixelWidth": 2048,
+          "pixelHeight": 2048
+        },
+        "maxDimension": 2048,
+        "alphaOrDataProtected": false
+      }
+    ]
+  },
+  {
+    "source": "ready-models/harper-walk-crowd-lod.glb",
+    "output": "ready-models/harper-walk-runtime-webp.glb",
+    "sourceBytes": 19090712,
+    "runtimeBytes": 6225604,
+    "savedFraction": 0.6738935666726311,
+    "removedUnusedVertices": 24356,
+    "maxTextureDimension": 2048,
+    "sourceSha256": "f5ac86d3c78b0818b4545226124fe7a7c8fc8c068bdb3fc0d63dc5d5f3183177",
+    "runtimeSha256": "84f91ac6d6d3f3ac6e89c04bf8732c527e4a88505b0b44909ef1aac2f5a424fb",
+    "images": [
+      {
+        "image": 0,
+        "before": 19381,
+        "after": 9624,
+        "sourceDimensions": {
+          "pixelWidth": 512,
+          "pixelHeight": 512
+        },
+        "maxDimension": 2048,
+        "alphaOrDataProtected": true
+      },
+      {
+        "image": 1,
+        "before": 91600,
+        "after": 53760,
+        "sourceDimensions": {
+          "pixelWidth": 512,
+          "pixelHeight": 512
+        },
+        "maxDimension": 2048,
+        "alphaOrDataProtected": true
+      },
+      {
+        "image": 2,
+        "before": 1935,
+        "after": 1935,
+        "sourceDimensions": {
+          "pixelWidth": 128,
+          "pixelHeight": 128
+        },
+        "maxDimension": 2048,
+        "alphaOrDataProtected": false
+      },
+      {
+        "image": 3,
+        "before": 4716109,
+        "after": 665346,
+        "sourceDimensions": {
+          "pixelWidth": 2048,
+          "pixelHeight": 2048
+        },
+        "maxDimension": 2048,
+        "alphaOrDataProtected": false
+      },
+      {
+        "image": 4,
+        "before": 610817,
+        "after": 63130,
+        "sourceDimensions": {
+          "pixelWidth": 1024,
+          "pixelHeight": 1024
+        },
+        "maxDimension": 2048,
+        "alphaOrDataProtected": false
+      },
+      {
+        "image": 5,
+        "before": 1945326,
+        "after": 112940,
+        "sourceDimensions": {
+          "pixelWidth": 2048,
+          "pixelHeight": 2048
+        },
+        "maxDimension": 2048,
+        "alphaOrDataProtected": false
+      },
+      {
+        "image": 6,
+        "before": 875473,
+        "after": 647438,
+        "sourceDimensions": {
+          "pixelWidth": 1024,
+          "pixelHeight": 1024
+        },
+        "maxDimension": 2048,
+        "alphaOrDataProtected": true
+      },
+      {
+        "image": 7,
+        "before": 714208,
+        "after": 179084,
+        "sourceDimensions": {
+          "pixelWidth": 1024,
+          "pixelHeight": 1024
+        },
+        "maxDimension": 2048,
+        "alphaOrDataProtected": false
+      },
+      {
+        "image": 8,
+        "before": 3501561,
+        "after": 1351008,
+        "sourceDimensions": {
+          "pixelWidth": 2048,
+          "pixelHeight": 2048
+        },
+        "maxDimension": 2048,
+        "alphaOrDataProtected": true
+      },
+      {
+        "image": 9,
+        "before": 1799930,
+        "after": 239878,
+        "sourceDimensions": {
+          "pixelWidth": 2048,
+          "pixelHeight": 2048
+        },
+        "maxDimension": 2048,
+        "alphaOrDataProtected": false
+      }
+    ]
+  },
+  {
+    "source": "ready-models/sam-locomotion-crowd-lod.glb",
+    "output": "ready-models/sam-locomotion-runtime-mobile-webp.glb",
+    "sourceBytes": 22192232,
+    "runtimeBytes": 5389924,
+    "savedFraction": 0.7571256464874736,
+    "removedUnusedVertices": 24499,
+    "maxTextureDimension": 1024,
+    "sourceSha256": "c361a2ef5de81bc1d1074cf979448d2c97f4cf846b5269791ff938a5c80ca521",
+    "runtimeSha256": "5408514c25583dc69ff29ca1d3ca41e53ec39370e955b1794fa9080fa248b995",
+    "images": [
+      {
+        "image": 0,
+        "before": 89619,
+        "after": 38534,
+        "sourceDimensions": {
+          "pixelWidth": 512,
+          "pixelHeight": 512
+        },
+        "maxDimension": 1024,
+        "alphaOrDataProtected": true
+      },
+      {
+        "image": 1,
+        "before": 91600,
+        "after": 53760,
+        "sourceDimensions": {
+          "pixelWidth": 512,
+          "pixelHeight": 512
+        },
+        "maxDimension": 1024,
+        "alphaOrDataProtected": true
+      },
+      {
+        "image": 2,
+        "before": 1056,
+        "after": 1056,
+        "sourceDimensions": {
+          "pixelWidth": 128,
+          "pixelHeight": 128
+        },
+        "maxDimension": 1024,
+        "alphaOrDataProtected": false
+      },
+      {
+        "image": 3,
+        "before": 610817,
+        "after": 63130,
+        "sourceDimensions": {
+          "pixelWidth": 1024,
+          "pixelHeight": 1024
+        },
+        "maxDimension": 1024,
+        "alphaOrDataProtected": false
+      },
+      {
+        "image": 4,
+        "before": 6036834,
+        "after": 388422,
+        "sourceDimensions": {
+          "pixelWidth": 4096,
+          "pixelHeight": 4096
+        },
+        "maxDimension": 1024,
+        "alphaOrDataProtected": true
+      },
+      {
+        "image": 5,
+        "before": 3730636,
+        "after": 143624,
+        "sourceDimensions": {
+          "pixelWidth": 2048,
+          "pixelHeight": 2048
+        },
+        "maxDimension": 1024,
+        "alphaOrDataProtected": false
+      },
+      {
+        "image": 6,
+        "before": 875473,
+        "after": 647438,
+        "sourceDimensions": {
+          "pixelWidth": 1024,
+          "pixelHeight": 1024
+        },
+        "maxDimension": 1024,
+        "alphaOrDataProtected": true
+      },
+      {
+        "image": 7,
+        "before": 1335772,
+        "after": 259348,
+        "sourceDimensions": {
+          "pixelWidth": 1024,
+          "pixelHeight": 1024
+        },
+        "maxDimension": 1024,
+        "alphaOrDataProtected": false
+      },
+      {
+        "image": 8,
+        "before": 2354146,
+        "after": 423278,
+        "sourceDimensions": {
+          "pixelWidth": 2048,
+          "pixelHeight": 2048
+        },
+        "maxDimension": 1024,
+        "alphaOrDataProtected": true
+      },
+      {
+        "image": 9,
+        "before": 1799930,
+        "after": 182680,
+        "sourceDimensions": {
+          "pixelWidth": 2048,
+          "pixelHeight": 2048
+        },
+        "maxDimension": 1024,
+        "alphaOrDataProtected": false
+      }
+    ]
+  },
+  {
+    "source": "ready-models/harper-walk-crowd-lod.glb",
+    "output": "ready-models/harper-walk-runtime-mobile-webp.glb",
+    "sourceBytes": 19090712,
+    "runtimeBytes": 4848856,
+    "savedFraction": 0.7460096826142472,
+    "removedUnusedVertices": 24356,
+    "maxTextureDimension": 1024,
+    "sourceSha256": "f5ac86d3c78b0818b4545226124fe7a7c8fc8c068bdb3fc0d63dc5d5f3183177",
+    "runtimeSha256": "c4c9d6357c4823ca813b2ac0ea4fa75989336bd89fd177a24c48709ef4706d31",
+    "images": [
+      {
+        "image": 0,
+        "before": 19381,
+        "after": 9624,
+        "sourceDimensions": {
+          "pixelWidth": 512,
+          "pixelHeight": 512
+        },
+        "maxDimension": 1024,
+        "alphaOrDataProtected": true
+      },
+      {
+        "image": 1,
+        "before": 91600,
+        "after": 53760,
+        "sourceDimensions": {
+          "pixelWidth": 512,
+          "pixelHeight": 512
+        },
+        "maxDimension": 1024,
+        "alphaOrDataProtected": true
+      },
+      {
+        "image": 2,
+        "before": 1935,
+        "after": 1935,
+        "sourceDimensions": {
+          "pixelWidth": 128,
+          "pixelHeight": 128
+        },
+        "maxDimension": 1024,
+        "alphaOrDataProtected": false
+      },
+      {
+        "image": 3,
+        "before": 4716109,
+        "after": 170214,
+        "sourceDimensions": {
+          "pixelWidth": 2048,
+          "pixelHeight": 2048
+        },
+        "maxDimension": 1024,
+        "alphaOrDataProtected": false
+      },
+      {
+        "image": 4,
+        "before": 610817,
+        "after": 63130,
+        "sourceDimensions": {
+          "pixelWidth": 1024,
+          "pixelHeight": 1024
+        },
+        "maxDimension": 1024,
+        "alphaOrDataProtected": false
+      },
+      {
+        "image": 5,
+        "before": 1945326,
+        "after": 32990,
+        "sourceDimensions": {
+          "pixelWidth": 2048,
+          "pixelHeight": 2048
+        },
+        "maxDimension": 1024,
+        "alphaOrDataProtected": false
+      },
+      {
+        "image": 6,
+        "before": 875473,
+        "after": 647438,
+        "sourceDimensions": {
+          "pixelWidth": 1024,
+          "pixelHeight": 1024
+        },
+        "maxDimension": 1024,
+        "alphaOrDataProtected": true
+      },
+      {
+        "image": 7,
+        "before": 714208,
+        "after": 179084,
+        "sourceDimensions": {
+          "pixelWidth": 1024,
+          "pixelHeight": 1024
+        },
+        "maxDimension": 1024,
+        "alphaOrDataProtected": false
+      },
+      {
+        "image": 8,
+        "before": 3501561,
+        "after": 606540,
+        "sourceDimensions": {
+          "pixelWidth": 2048,
+          "pixelHeight": 2048
+        },
+        "maxDimension": 1024,
+        "alphaOrDataProtected": true
+      },
+      {
+        "image": 9,
+        "before": 1799930,
+        "after": 182680,
+        "sourceDimensions": {
+          "pixelWidth": 2048,
+          "pixelHeight": 2048
+        },
+        "maxDimension": 1024,
+        "alphaOrDataProtected": false
+      }
+    ]
+  },
+  {
+    "source": "study-devices/macbook-pro-13-web.glb",
+    "output": "study-devices/macbook-pro-13-runtime-webp.glb",
+    "sourceBytes": 3760764,
+    "runtimeBytes": 805460,
+    "savedFraction": 0.7858254333427995,
+    "removedUnusedVertices": 83941,
+    "maxTextureDimension": 2048,
+    "sourceSha256": "712dd5f288837d70592c6caf8b196947056150bfbfce04ff3b706d4fb9fc71bf",
+    "runtimeSha256": "0947ff3a0fe67deec1531a04eb0dd90e2fb2c9ad6a7d13b84f6ed862e2865ffb",
+    "images": [
+      {
+        "image": 0,
+        "before": 74749,
+        "after": 59644,
+        "sourceDimensions": {
+          "pixelWidth": 1024,
+          "pixelHeight": 512
+        },
+        "maxDimension": 2048,
+        "alphaOrDataProtected": false
+      },
+      {
+        "image": 1,
+        "before": 5919,
+        "after": 5919,
+        "sourceDimensions": {
+          "pixelWidth": 1024,
+          "pixelHeight": 32
+        },
+        "maxDimension": 2048,
+        "alphaOrDataProtected": false
+      }
+    ]
+  },
+  {
+    "source": "study-devices/ipad-mini-6-web.glb",
+    "output": "study-devices/ipad-mini-6-runtime-webp.glb",
+    "sourceBytes": 2055620,
+    "runtimeBytes": 467508,
+    "savedFraction": 0.7725708058882479,
+    "removedUnusedVertices": 45183,
+    "maxTextureDimension": 2048,
+    "sourceSha256": "8ea3e7a14f7ecc5933cdba3ee5a7a57670ad206678cc340f48fcc2f99c88c7b1",
+    "runtimeSha256": "b940ddd60d357aed57f85ec1f32a917e1da226fb6dba5bb7a22b5554ebc907af",
+    "images": [
+      {
+        "image": 0,
+        "before": 38178,
+        "after": 24266,
+        "sourceDimensions": {
+          "pixelWidth": 256,
+          "pixelHeight": 256
+        },
+        "maxDimension": 2048,
+        "alphaOrDataProtected": false
+      },
+      {
+        "image": 1,
+        "before": 51537,
+        "after": 45488,
+        "sourceDimensions": {
+          "pixelWidth": 512,
+          "pixelHeight": 1024
+        },
+        "maxDimension": 2048,
+        "alphaOrDataProtected": false
+      },
+      {
+        "image": 2,
+        "before": 1021,
+        "after": 1021,
+        "sourceDimensions": {
+          "pixelWidth": 64,
+          "pixelHeight": 32
+        },
+        "maxDimension": 2048,
+        "alphaOrDataProtected": false
+      }
+    ]
+  },
+  {
+    "source": "study-devices/jansport-backpack-web.glb",
+    "output": "study-devices/jansport-backpack-runtime-webp.glb",
+    "sourceBytes": 1346772,
+    "runtimeBytes": 460652,
+    "savedFraction": 0.6579584369143403,
+    "removedUnusedVertices": 10192,
+    "maxTextureDimension": 1024,
+    "sourceSha256": "9c1047ffb3e53955511f059e38695dd7dc236fa11b14d0f5b0066f4d94d99d4d",
+    "runtimeSha256": "b0846d1749b8a8b72ded41c4433f2b17c2ead10f7a569054e267ca9b12469337",
+    "images": [
+      {
+        "image": 0,
+        "before": 302868,
+        "after": 103508,
+        "sourceDimensions": {
+          "pixelWidth": 2048,
+          "pixelHeight": 2048
+        },
+        "maxDimension": 1024,
+        "alphaOrDataProtected": false
+      }
+    ]
+  },
+  {
+    "source": "warehouse-models/cardboard_box_01-1k-web.glb",
+    "output": "warehouse-models/cardboard_box_01-1k-runtime-webp.glb",
+    "sourceBytes": 2254968,
+    "runtimeBytes": 1736064,
+    "savedFraction": 0.23011590408378302,
+    "removedUnusedVertices": 1240,
+    "maxTextureDimension": 1024,
+    "sourceSha256": "544fba8c317dca00c63b308b343fc2898a2499c73869051c25652aeabe610095",
+    "runtimeSha256": "5310bc9bdea0eb1833f78b95bf9745eed9ddb3c1e3601a8ddb64e747799a05e1",
+    "images": [
+      {
+        "image": 0,
+        "before": 817424,
+        "after": 817424,
+        "sourceDimensions": {
+          "pixelWidth": 1024,
+          "pixelHeight": 1024
+        },
+        "maxDimension": 1024,
+        "alphaOrDataProtected": true
+      },
+      {
+        "image": 1,
+        "before": 567741,
+        "after": 189792,
+        "sourceDimensions": {
+          "pixelWidth": 1024,
+          "pixelHeight": 1024
+        },
+        "maxDimension": 1024,
+        "alphaOrDataProtected": false
+      },
+      {
+        "image": 2,
+        "before": 398433,
+        "after": 398433,
+        "sourceDimensions": {
+          "pixelWidth": 1024,
+          "pixelHeight": 1024
+        },
+        "maxDimension": 1024,
+        "alphaOrDataProtected": true
+      }
+    ]
+  }
+]
