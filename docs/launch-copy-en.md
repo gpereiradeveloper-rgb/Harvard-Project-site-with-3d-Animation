@@ -13,7 +13,9 @@ Source: https://github.com/gpereiradeveloper-rgb/Harvard-Project-site-with-3d-An
 
 Which detail would you explore first? I'd love your feedback.
 
-#CreativeCoding #Threejs #WebGL #InteractiveDesign #3DAnimation
+#CreativeCoding #Threejs #WebGL #InteractiveDesign #3DAnimation #Harvard #HarvardUniversity
+
+Campus inspiration: @Harvard University (select the official page in the mention menu).
 
 ## Dribbble metadata
 
