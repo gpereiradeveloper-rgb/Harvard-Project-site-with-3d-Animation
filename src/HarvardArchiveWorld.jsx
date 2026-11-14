@@ -705,9 +705,10 @@ function Director({motion,onReady,reduced,focused}){
   else camera.position.copy(base);
   if(blend>0){
    const {receivingPosition,receivingTarget}=vectors;
+   receivingTarget.set(10.35,1.3,-.65);
    // A close live perspective on the scanner, its loading side and the rack.
    // Portrait moves back along the same sightline to retain the whole station.
-   receivingPosition.set(6.6,8.3,12.6).multiplyScalar(Math.max(1,.90/Math.max(.25,aspect))).add(receivingTarget);
+   receivingPosition.set(3.6,3.8,5.8).multiplyScalar(Math.max(1,.90/Math.max(.25,aspect))).add(receivingTarget);
    camera.position.lerp(receivingPosition,blend);target.lerp(receivingTarget,blend);
    camera.fov=THREE.MathUtils.lerp(camera.fov,32,blend);camera.up.lerp(new THREE.Vector3(0,1,0),blend).normalize();
   }
